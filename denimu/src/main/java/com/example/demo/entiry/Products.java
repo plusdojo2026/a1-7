@@ -1,5 +1,5 @@
 package com.example.demo.entiry;
 
-public class Product {
+public class Products {
 
 }
