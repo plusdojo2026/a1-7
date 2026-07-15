@@ -25,7 +25,7 @@ public class Products {
 	private Integer userId;
 	@Column(nullable = false)
 	private Integer ap_type;
-	private Boolean check;
+	private Boolean checkBox;
 	@Column(nullable = false)
 	private String name;
 	@Column(nullable = false)
@@ -38,9 +38,9 @@ public class Products {
 	private String valuation;
 	private Integer purchasePrice;
 	private String memo;
-	private Date updated_at;
+	private Date updatedAt;
 	@Column(nullable = false)
-	private Date created_at;
+	private Date createdAt;
 }
 
 
