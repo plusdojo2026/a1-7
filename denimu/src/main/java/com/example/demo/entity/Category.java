@@ -1,4 +1,4 @@
-package com.example.demo.entiry;
+package com.example.demo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,14 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name="Comment")
-public class Comment {
+@Table(name="Category")
+public class Category {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	@Column(nullable = false)
-	private String comment;
-	
+	private String categoryType;
 }
-
-

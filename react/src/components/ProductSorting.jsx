@@ -57,7 +57,15 @@ const ProductSorting = () => {
             </Draggable>
 
             <Droppable id="drop-area">
-                
+                <table id="drop-table">
+                    {used.map((use,index) =>
+                        <tr>{use.name}</tr>
+                    
+                    
+                    
+                    )}
+                    <th>ドロップした名称</th>
+                </table>
             </Droppable>
 
         </DndContext>
