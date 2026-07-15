@@ -21,4 +21,5 @@ public class Category {
 	private Integer id;
 	@Column(nullable = false)
 	private String categoryType;
+	
 }

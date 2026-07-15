@@ -2,7 +2,7 @@ import { DndContext } from "@dnd-kit/core";
 import "../css/ProductSorting.css";
 import Draggable from "./Draggable";
 import Droppable from "./Droppable";
-import { createElement, useState } from "react";
+import { createElement, useEffect, useState } from "react";
 
 const ProductSorting = () => {
 
@@ -33,8 +33,12 @@ const ProductSorting = () => {
 
 
     //商品格納(コントローラーが出来次第データベースのデータを格納)
-    setNotAp({...notAp, [productName]:productName});
-
+    useEffect(() => {
+        setNotAp({
+            [productName]: productName,
+        });
+        }, []
+    );
 
 
     const handleDragEnd = (event) => {
@@ -58,13 +62,13 @@ const ProductSorting = () => {
 
             <Droppable id="drop-area">
                 <table id="drop-table">
+                    <th>ドロップした名称</th>
                     {used.map((use,index) =>
                         <tr>{use.name}</tr>
                     
                     
                     
                     )}
-                    <th>ドロップした名称</th>
                 </table>
             </Droppable>
 
