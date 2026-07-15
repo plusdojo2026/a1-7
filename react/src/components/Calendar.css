@@ -1,0 +1,309 @@
+/* =========================
+   全体
+========================= */
+.calendar-container {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* =========================
+   コメント
+========================= */
+
+.comment-wrapper h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.comment-section {
+  width: 100%;
+  min-height: 45px;
+  border: 1px solid #d6dbe5;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fff;
+  color: #999;
+  box-sizing: border-box;
+}
+
+/* =========================
+   カレンダー
+========================= */
+
+.calendar-wrapper {
+  margin-top: 30px;
+}
+
+.calendar-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* react-calendar */
+
+.react-calendar {
+  width: 100%;
+  border: none;
+  font-family: inherit;
+}
+
+/* 年月 */
+
+.react-calendar__navigation {
+  margin-bottom: 15px;
+}
+
+.react-calendar__navigation button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 曜日 */
+
+.react-calendar__month-view__weekdays {
+  background: #eef1f6;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 10px 0;
+  font-size: 14px;
+  color: #666;
+  text-decoration: none;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+/* 日付 */
+
+.react-calendar__tile {
+  height: 50px;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid #d7dce5;
+  margin: 2px;
+  transition: .2s;
+}
+
+.react-calendar__tile:hover {
+  background: #edf5ff;
+}
+
+.react-calendar__tile--now {
+  background: #dcecff;
+}
+
+.react-calendar__tile--active {
+  background: #2f6fdd !important;
+  color: white;
+  border-radius: 50%;
+}
+
+.react-calendar__tile:enabled:hover {
+  background: #eaf2ff;
+}
+
+/* =========================
+   モーダル
+========================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 430px;
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+/* =========================
+   メニュー画面
+========================= */
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.menu-btn {
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.menu-btn.primary {
+  background: #2f6fdd;
+  color: white;
+}
+
+.menu-btn.secondary {
+  background: #eef3fb;
+  color: #2f6fdd;
+}
+
+/* =========================
+   フォーム
+========================= */
+
+.selected-date {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+  border: 1px solid #d8dde8;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 15px;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #2f6fdd;
+}
+
+/* react-select */
+
+.react-select__control {
+  border-radius: 8px !important;
+  min-height: 42px !important;
+}
+
+.react-select__control--is-focused {
+  border-color: #2f6fdd !important;
+  box-shadow: none !important;
+}
+
+/* =========================
+   星評価
+========================= */
+
+.evaluation-stars {
+  display: flex;
+  gap: 8px;
+}
+
+.evaluation-star {
+  font-size: 28px;
+  color: #bbb;
+  cursor: pointer;
+}
+
+.evaluation-star.active {
+  color: #f6b800;
+}
+
+/* =========================
+   ボタン
+========================= */
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.form-actions button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-back {
+  background: #f2f2f2;
+}
+
+.btn-reset {
+  background: #ffd75d;
+}
+
+.btn-submit {
+  background: #2f6fdd;
+  color: white;
+}
+
+/* =========================
+   履歴
+========================= */
+
+.history-container {
+  text-align: center;
+}
+
+.history-placeholder {
+  color: #999;
+  padding: 40px 0;
+}
