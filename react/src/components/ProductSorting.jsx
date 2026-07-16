@@ -53,13 +53,14 @@ const ProductSorting = () => {
     const handleDragEnd = (event) => {
         const { active, over } = event;
 
+        const type = active.data.current.type;
+
         if (over) {
 
             //未定義リスト
-            if(over.id === 'drop-area'){
+            if(over.id === 'drop-area' && type != 'notAp'){
 
                 const name = active.data.current.name;
-                const type = active.data.current.type;
 
                 console.log(name);
                 setNotAp((notAp) => [...notAp, name]);
@@ -95,7 +96,7 @@ const ProductSorting = () => {
 
 
             //使用リスト
-            if(over.id === 'drop-area1'){
+            if(over.id === 'drop-area1' && type != 'used'){
 
                 const name = active.data.current.name;
                 const type = active.data.current.type;
@@ -142,61 +143,55 @@ const ProductSorting = () => {
 
         <DndContext onDragEnd={handleDragEnd}>
 
-            <head>
-                <title>仕分けリスト</title>
-            </head>
-
             <header>
                 <h1>ムダログ</h1>
             </header>
 
             <hr />
 
-            <body>
 
-                <nav>
-                    <li>使用</li>
-                    <li>捨てる</li>
-                    <li>売る</li>
-                    <li>あげる</li>
-                    <li>その他</li>
-                </nav>
+            <nav className="button-Tab">
+                <button>使用</button>
+                <button>捨てる</button>
+                <button>売る</button>
+                <button>あげる</button>
+                <button>その他</button>
+            </nav>
 
-                <div className="list-Set">
-                    <div className="noAp-Box">
-                        <h3>未適用</h3>
-                        <Droppable id="drop-area">
-                            <div id="notAp-Table">
-                                {notAp.map((notAp,index) =>
-                                    <Draggable key={index} id={notAp} name={notAp} type='notAp'>
-                                        <div>
-                                            {notAp}
-                                        </div>
-                                    </Draggable>
-                                )}
-                            </div>
-                        </Droppable>
-                    </div>
-
-
-                    <div className="used-Box">
-                        <Droppable id="drop-area1">
-                            <div id="used-Table">
-                                {used.map((use,index) =>
-                                    <Draggable key={index} id={use} name={use} type='used'>
-                                        <div>
-                                            {use}
-                                        </div>
-                                    </Draggable>
-                                
-                                
-                                )}
-                            </div>
-                        </Droppable>
-                    </div>
+            <div className="list-Set">
+                <div className="noAp-Box">
+                    <Droppable id="drop-area">
+                        <h3 className="drop-Title">未適用</h3>
+                        <div id="notAp-Table">
+                            {notAp.map((notAp,index) =>
+                                <Draggable key={index} id={notAp} name={notAp} type='notAp'>
+                                    <div>
+                                        {notAp}
+                                    </div>
+                                </Draggable>
+                            )}
+                        </div>
+                    </Droppable>
                 </div>
 
-            </body>
+
+                <div className="used-Box">
+                    <Droppable id="drop-area1">
+                        <h3 className="drop-Title">使う</h3>
+                        <div id="category-Table">
+                            {used.map((use,index) =>
+                                <Draggable key={index} id={use} name={use} type='used'>
+                                    <div className="category-Td">
+                                        {use}
+                                    </div>
+                                </Draggable>
+                            
+                            
+                            )}
+                        </div>
+                    </Droppable>
+                </div>
+            </div>
 
         </DndContext>
     );

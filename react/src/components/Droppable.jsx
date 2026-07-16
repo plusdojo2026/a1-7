@@ -11,9 +11,9 @@ const Droppable = ({ children, id }) => {
       ref={setNodeRef}
       className={`droppable ${isOver ? "over" : ""}`}
     >
-      <h3 className="droppable-title">
+      {/* <h3 className="droppable-title">
         ドロップエリア
-      </h3>
+      </h3> */}
 
       {children}
     </div>
