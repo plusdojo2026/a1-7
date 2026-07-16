@@ -12,8 +12,13 @@
   flex: 1;
   text-align: center;   /* 文字を中央寄せ */
   padding: 1em 0;
-  background: #eee;
   border: 1px solid #ccc;
+}
+
+/* タグの色 */
+.used-Button,.trash-Button,.cell-Button,.give-Button,.other-Button{
+  color: rgb(255, 255, 255);
+  background-color: rgb(165, 165, 165);
 }
 
 
@@ -23,7 +28,7 @@
   margin-right: auto;
   margin-left: auto;
   border: 1px solid rgb(125, 125, 125);
-  background-color: skyblue;
+  background-color: rgb(255, 255, 255);
   cursor: grab;
 }
 
@@ -37,7 +42,7 @@
 }
 
 .droppable.over {
-  background-color: rgb(122, 237, 255);
+  background-color: rgb(208, 248, 254);
 }
 
 .drop-Title{
@@ -69,7 +74,3 @@
 }
 
 
-/* タグの色 */
-.used-Button{
-  background-color: black;
-}

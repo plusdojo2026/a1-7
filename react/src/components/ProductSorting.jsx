@@ -26,6 +26,9 @@ const ProductSorting = () => {
     //その他リスト
     let [other, setOther] = useState([]);
 
+    //チェック済みリスト
+    let [checked,setChecked] = useState([]);
+
     //現在表示しているタブ
     let [active, setActive] = useState("used");
 
@@ -285,6 +288,47 @@ const ProductSorting = () => {
             }
 
 
+            //チェック済みリスト
+            if(over.id === 'drop-area6' && type != 'checked'){
+
+                const name = active.data.current.name;
+
+                console.log(name);
+                setNotAp((notAp) => [...notAp, name]);
+
+                //「未定義」の要素削除用
+                if(type === 'notAp'){
+                    setNotAp(notAp.filter(value => value != name))
+                }
+
+                //「使う」の要素削除用
+                if(type === 'used'){
+                    setUsed(used.filter(value => value != name))
+                }
+
+                //「捨てる」の要素削除用
+                if(type === 'trash'){
+                    setTrash(trash.filter(value => value != name))
+                }
+
+                //「売る」の要素削除用
+                if(type === 'cell'){
+                    setCell(cell.filter(value => value != name))
+                }
+
+                //「あげる」の要素削除用
+                if(type === 'give'){
+                    setGive(give.filter(value => value != name))
+                }
+
+                //「その他」の要素削除用
+                if(type === 'other'){
+                    setOther(other.filter(value => value != name))
+                }
+
+            }
+
+
             console.log(
             `${active.id} を ${over.id} にドロップ`
             );
@@ -305,7 +349,7 @@ const ProductSorting = () => {
 
 
             <nav className="button-Tab">
-                <button onClick={() => setActive("used")} className={active === "used" ? "used-Button" : ""}>使用</button>
+                <button onClick={() => setActive("used")} className={active === "used" ? "used-Button" : ""}>使う</button>
                 <button onClick={() => setActive("trash")} className={active === "trash" ? "trash-Button" : ""}>すてる</button>
                 <button onClick={() => setActive("cell")} className={active === "cell" ? "cell-Button" : ""}>売る</button>
                 <button onClick={() => setActive("give")} className={active === "give" ? "give-Button" : ""}>あげる</button>
@@ -422,6 +466,23 @@ const ProductSorting = () => {
                     </div>
                 )}
 
+            </div>
+
+
+            {/* チェック済みリスト */}
+            <div className="checked-Box">
+                <Droppable id="drop-area6">
+                    <h3 className="drop-Title">チェック済みリスト</h3>
+                    <div id="category-Table">
+                        {checked.map((checkedEle,index) =>
+                            <Draggable key={index} id={checkedEle} name={checkedEle} type='checked'>
+                                {checkedEle}
+                            </Draggable>
+                        
+                        
+                        )}
+                    </div>
+                </Droppable>
             </div>
 
         </DndContext>
