@@ -18,20 +18,22 @@
 
 
 .draggable {
-  width: 150px;
+  width: 90%;
   padding: 10px;
-  margin-bottom: 20px;
+  margin-right: auto;
+  margin-left: auto;
+  border: 1px solid rgb(125, 125, 125);
   background-color: skyblue;
   cursor: grab;
 }
 
 .droppable {
-  width: 200px;
+  width: 100%;
   min-height: 300px;
   padding: 16px;
   background-color: azure;
   border-radius: 10px;
-  border: 2px solid rgb(142, 142, 142);
+  border: 1px solid rgb(198, 198, 198);
 }
 
 .droppable.over {
@@ -46,11 +48,28 @@
 }
 
 .list-Set{
+  width: 100%;
   display: flex;
-  background-color: antiquewhite;
-  gap: 50px;
+  background-color: rgba(194, 218, 216, 0.538);
+  gap: 10px;
 }
 
 .category-Table{
-  margin: auto;
+  width: 100%;
+}
+
+.used-Box{
+  width: 100%;
+  margin: 20px;
+}
+
+.noAp-Box{
+  width: 100%;
+  margin: 20px;
+}
+
+
+/* タグの色 */
+.used-Button{
+  background-color: black;
 }

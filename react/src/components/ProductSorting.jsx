@@ -26,6 +26,9 @@ const ProductSorting = () => {
     //その他リスト
     let [other, setOther] = useState([]);
 
+    //現在表示しているタブ
+    let [active, setActive] = useState("used");
+
     //Json用格納処理
     let inputNotAp = (product) => {
         setNotAp({[product]: product});
@@ -131,6 +134,157 @@ const ProductSorting = () => {
 
             }
 
+
+
+            //すてるリスト
+            if(over.id === 'drop-area2' && type != 'trash'){
+
+                const name = active.data.current.name;
+                const type = active.data.current.type;
+
+                console.log(trash);
+                setTrash((trash) => [...trash, name]);
+
+                //「未定義」の要素削除用
+                if(type === 'notAp'){
+                    setNotAp(notAp.filter(value => value != name))
+                }
+
+                //「使う」の要素削除用
+                if(type === 'used'){
+                    setTrash(used.filter(value => value != name))
+                }
+
+                //「売る」の要素削除用
+                if(type === 'cell'){
+                    setCell(cell.filter(value => value != name))
+                }
+
+                //「あげる」の要素削除用
+                if(type === 'give'){
+                    setGive(give.filter(value => value != name))
+                }
+
+                //「その他」の要素削除用
+                if(type === 'other'){
+                    setOther(other.filter(value => value != name))
+                }
+
+            }
+
+
+            //売るリスト
+            if(over.id === 'drop-area3' && type != 'cell'){
+
+                const name = active.data.current.name;
+                const type = active.data.current.type;
+
+                console.log(cell);
+                setCell((cell) => [...cell, name]);
+
+                //「未定義」の要素削除用
+                if(type === 'notAp'){
+                    setNotAp(notAp.filter(value => value != name))
+                }
+
+                //「使う」の要素削除用
+                if(type === 'used'){
+                    setUsed(used.filter(value => value != name))
+                }
+
+                //「すてる」の要素削除用
+                if(type === 'trash'){
+                    setTrash(trash.filter(value => value != name))
+                }
+
+                //「あげる」の要素削除用
+                if(type === 'give'){
+                    setGive(give.filter(value => value != name))
+                }
+
+                //「その他」の要素削除用
+                if(type === 'other'){
+                    setOther(other.filter(value => value != name))
+                }
+
+            }
+
+
+
+            //あげるリスト
+            if(over.id === 'drop-area4' && type != 'give'){
+
+                const name = active.data.current.name;
+                const type = active.data.current.type;
+
+                console.log(give);
+                setGive((give) => [...give, name]);
+
+                //「未定義」の要素削除用
+                if(type === 'notAp'){
+                    setNotAp(notAp.filter(value => value != name))
+                }
+
+                //「捨てる」の要素削除用
+                if(type === 'trash'){
+                    setTrash(trash.filter(value => value != name))
+                }
+
+                //「使う」の要素削除用
+                if(type === 'used'){
+                    setUsed(used.filter(value => value != name))
+                }
+
+                //「売る」の要素削除用
+                if(type === 'cell'){
+                    setCell(cell.filter(value => value != name))
+                }
+
+                //「その他」の要素削除用
+                if(type === 'other'){
+                    setOther(other.filter(value => value != name))
+                }
+
+            }
+
+
+            //その他リスト
+            if(over.id === 'drop-area5' && type != 'other'){
+
+                const name = active.data.current.name;
+                const type = active.data.current.type;
+
+                console.log(other);
+                setOther((other) => [...other, name]);
+
+                //「未定義」の要素削除用
+                if(type === 'notAp'){
+                    setNotAp(notAp.filter(value => value != name))
+                }
+
+                //「捨てる」の要素削除用
+                if(type === 'trash'){
+                    setTrash(trash.filter(value => value != name))
+                }
+
+                //「売る」の要素削除用
+                if(type === 'cell'){
+                    setCell(cell.filter(value => value != name))
+                }
+
+                //「あげる」の要素削除用
+                if(type === 'give'){
+                    setGive(give.filter(value => value != name))
+                }
+
+                //「使う」の要素削除用
+                if(type === 'used'){
+                    setUsed(used.filter(value => value != name))
+                }
+
+            }
+
+
             console.log(
             `${active.id} を ${over.id} にドロップ`
             );
@@ -151,11 +305,11 @@ const ProductSorting = () => {
 
 
             <nav className="button-Tab">
-                <button>使用</button>
-                <button>捨てる</button>
-                <button>売る</button>
-                <button>あげる</button>
-                <button>その他</button>
+                <button onClick={() => setActive("used")} className={active === "used" ? "used-Button" : ""}>使用</button>
+                <button onClick={() => setActive("trash")} className={active === "trash" ? "trash-Button" : ""}>すてる</button>
+                <button onClick={() => setActive("cell")} className={active === "cell" ? "cell-Button" : ""}>売る</button>
+                <button onClick={() => setActive("give")} className={active === "give" ? "give-Button" : ""}>あげる</button>
+                <button onClick={() => setActive("other")} className={active === "other" ? "other-Button" : ""}>その他</button>
             </nav>
 
             <div className="list-Set">
@@ -174,23 +328,100 @@ const ProductSorting = () => {
                     </Droppable>
                 </div>
 
-
-                <div className="used-Box">
-                    <Droppable id="drop-area1">
-                        <h3 className="drop-Title">使う</h3>
-                        <div id="category-Table">
-                            {used.map((use,index) =>
-                                <Draggable key={index} id={use} name={use} type='used'>
-                                    <div className="category-Td">
+                {/* 使用タブ */}
+                {active === "used" &&(
+                    <div className="used-Box">
+                        <Droppable id="drop-area1">
+                            <h3 className="drop-Title">使う</h3>
+                            <div id="category-Table">
+                                {used.map((use,index) =>
+                                    <Draggable key={index} id={use} name={use} type='used'>
                                         {use}
-                                    </div>
-                                </Draggable>
-                            
-                            
-                            )}
-                        </div>
-                    </Droppable>
-                </div>
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+                )}
+
+
+                {/* すてる */}
+                {active === "trash" &&(
+                    <div className="used-Box">
+                        <Droppable id="drop-area2">
+                            <h3 className="drop-Title">すてる</h3>
+                            <div id="category-Table">
+                                {trash.map((trashEle,index) =>
+                                    <Draggable key={index} id={trashEle} name={trashEle} type='trash'>
+                                        {trashEle}
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+                )}
+
+
+                {/* 売る */}
+                {active === "cell" &&(
+                    <div className="used-Box">
+                        <Droppable id="drop-area3">
+                            <h3 className="drop-Title">売る</h3>
+                            <div id="category-Table">
+                                {cell.map((cellEle,index) =>
+                                    <Draggable key={index} id={cellEle} name={cellEle} type='cell'>
+                                        {cellEle}
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+                )}
+
+
+                {/* あげる */}
+                {active === "give" &&(
+                    <div className="used-Box">
+                        <Droppable id="drop-area4">
+                            <h3 className="drop-Title">あげる</h3>
+                            <div id="category-Table">
+                                {give.map((giveEle,index) =>
+                                    <Draggable key={index} id={giveEle} name={giveEle} type='give'>
+                                        {giveEle}
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+                )}
+
+
+                {/* その他タブ */}
+                {active === "other" &&(
+                    <div className="used-Box">
+                        <Droppable id="drop-area5">
+                            <h3 className="drop-Title">その他</h3>
+                            <div id="category-Table">
+                                {other.map((otherEle,index) =>
+                                    <Draggable key={index} id={otherEle} name={otherEle} type='other'>
+                                        {otherEle}
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+                )}
+
             </div>
 
         </DndContext>
