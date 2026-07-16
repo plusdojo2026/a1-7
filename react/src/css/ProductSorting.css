@@ -15,10 +15,20 @@
   border: 1px solid #ccc;
 }
 
+.button-Tab button:hover{
+  color: aliceblue;
+  background-color: rgb(200, 200, 200);
+}
+
 /* タグの色 */
 .used-Button,.trash-Button,.cell-Button,.give-Button,.other-Button{
   color: rgb(255, 255, 255);
-  background-color: rgb(165, 165, 165);
+  background-color: rgb(137, 137, 137);
+}
+
+.draggable:hover{
+  color: white;
+  background-color: #b6b6b6;
 }
 
 
@@ -55,7 +65,7 @@
 .list-Set{
   width: 100%;
   display: flex;
-  background-color: rgba(194, 218, 216, 0.538);
+  background-color: rgb(255, 255, 255);
   gap: 10px;
 }
 

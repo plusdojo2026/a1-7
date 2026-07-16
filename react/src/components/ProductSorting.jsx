@@ -4,6 +4,8 @@ import Draggable from "./Draggable";
 import Droppable from "./Droppable";
 import { act, createElement, useEffect, useState } from "react";
 
+
+
 const ProductSorting = () => {
 
     let productName = ['商品A','商品B'];
@@ -96,6 +98,11 @@ const ProductSorting = () => {
                     setOther(other.filter(value => value != name))
                 }
 
+                //「チェック済み」の要素削除用
+                if(type === 'checked'){
+                    setChecked(checked.filter(value => value != name))
+                }
+
             }
 
 
@@ -133,6 +140,11 @@ const ProductSorting = () => {
                 //「その他」の要素削除用
                 if(type === 'other'){
                     setOther(other.filter(value => value != name))
+                }
+
+                //「チェック済み」の要素削除用
+                if(type === 'checked'){
+                    setChecked(checked.filter(value => value != name))
                 }
 
             }
@@ -173,6 +185,11 @@ const ProductSorting = () => {
                     setOther(other.filter(value => value != name))
                 }
 
+                //「チェック済み」の要素削除用
+                if(type === 'checked'){
+                    setChecked(checked.filter(value => value != name))
+                }
+
             }
 
 
@@ -208,6 +225,11 @@ const ProductSorting = () => {
                 //「その他」の要素削除用
                 if(type === 'other'){
                     setOther(other.filter(value => value != name))
+                }
+
+                //「チェック済み」の要素削除用
+                if(type === 'checked'){
+                    setChecked(checked.filter(value => value != name))
                 }
 
             }
@@ -248,6 +270,11 @@ const ProductSorting = () => {
                     setOther(other.filter(value => value != name))
                 }
 
+                //「チェック済み」の要素削除用
+                if(type === 'checked'){
+                    setChecked(checked.filter(value => value != name))
+                }
+
             }
 
 
@@ -285,6 +312,11 @@ const ProductSorting = () => {
                     setUsed(used.filter(value => value != name))
                 }
 
+                //「チェック済み」の要素削除用
+                if(type === 'checked'){
+                    setChecked(checked.filter(value => value != name))
+                }
+
             }
 
 
@@ -294,7 +326,7 @@ const ProductSorting = () => {
                 const name = active.data.current.name;
 
                 console.log(name);
-                setNotAp((notAp) => [...notAp, name]);
+                setChecked((checked) => [...checked, name]);
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
