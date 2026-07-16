@@ -2,11 +2,11 @@ import { DndContext } from "@dnd-kit/core";
 import "../css/ProductSorting.css";
 import Draggable from "./Draggable";
 import Droppable from "./Droppable";
-import { createElement, useEffect, useState } from "react";
+import { act, createElement, useEffect, useState } from "react";
 
 const ProductSorting = () => {
 
-    let productName = '商品A';
+    let productName = ['商品A','商品B'];
 
     //未適用リスト
     let [notAp, setNotAp] = useState([]);
@@ -28,24 +28,107 @@ const ProductSorting = () => {
 
     //Json用格納処理
     let inputNotAp = (product) => {
-        setNotAp({ ...notAp, [product.target.name]: product.target.value});
+        setNotAp({[product]: product});
     }
 
+    let inputUsed = (product) => {
+        setUsed({[product]: product});
+    }
+
+    useEffect(() => {
+        setNotAp(productName);
+    },[]);
+
+    console.log(notAp);
 
     //商品格納(コントローラーが出来次第データベースのデータを格納)
-    useEffect(() => {
-        setNotAp({
-            [productName]: productName,
-        });
-        }, []
-    );
+    // useEffect(() => {
+    //     setNotAp({
+    //         [productName]: productName,
+    //     });
+    //     }, []
+    // );
 
 
     const handleDragEnd = (event) => {
         const { active, over } = event;
 
         if (over) {
-            inputNotAp(active.name);
+
+            //未定義リスト
+            if(over.id === 'drop-area'){
+
+                const name = active.data.current.name;
+                const type = active.data.current.type;
+
+                console.log(name);
+                setNotAp((notAp) => [...notAp, name]);
+
+                //「使う」の要素削除用
+                if(type === 'used'){
+                    setUsed(used.filter(value => value != name))
+                }
+
+                //「捨てる」の要素削除用
+                if(type === 'trash'){
+                    setTrash(trash.filter(value => value != name))
+                }
+
+                //「売る」の要素削除用
+                if(type === 'cell'){
+                    setCell(cell.filter(value => value != name))
+                }
+
+                //「あげる」の要素削除用
+                if(type === 'give'){
+                    setGive(give.filter(value => value != name))
+                }
+
+                //「その他」の要素削除用
+                if(type === 'other'){
+                    setOther(other.filter(value => value != name))
+                }
+
+            }
+
+
+
+
+            //使用リスト
+            if(over.id === 'drop-area1'){
+
+                const name = active.data.current.name;
+                const type = active.data.current.type;
+
+                console.log(name);
+                setUsed((used) => [...used, name]);
+
+                //「未定義」の要素削除用
+                if(type === 'notAp'){
+                    setNotAp(notAp.filter(value => value != name))
+                }
+
+                //「捨てる」の要素削除用
+                if(type === 'trash'){
+                    setTrash(trash.filter(value => value != name))
+                }
+
+                //「売る」の要素削除用
+                if(type === 'cell'){
+                    setCell(cell.filter(value => value != name))
+                }
+
+                //「あげる」の要素削除用
+                if(type === 'give'){
+                    setGive(give.filter(value => value != name))
+                }
+
+                //「その他」の要素削除用
+                if(type === 'other'){
+                    setOther(other.filter(value => value != name))
+                }
+
+            }
 
             console.log(
             `${active.id} を ${over.id} にドロップ`
@@ -53,24 +136,67 @@ const ProductSorting = () => {
         }
     };
 
+
+
     return (
+
         <DndContext onDragEnd={handleDragEnd}>
 
-            <Draggable id="product-1">
-            <div value={productName}></div>
-            </Draggable>
+            <head>
+                <title>仕分けリスト</title>
+            </head>
 
-            <Droppable id="drop-area">
-                <table id="drop-table">
-                    <th>ドロップした名称</th>
-                    {used.map((use,index) =>
-                        <tr>{use.name}</tr>
-                    
-                    
-                    
-                    )}
-                </table>
-            </Droppable>
+            <header>
+                <h1>ムダログ</h1>
+            </header>
+
+            <hr />
+
+            <body>
+
+                <nav>
+                    <li>使用</li>
+                    <li>捨てる</li>
+                    <li>売る</li>
+                    <li>あげる</li>
+                    <li>その他</li>
+                </nav>
+
+                <div className="list-Set">
+                    <div className="noAp-Box">
+                        <h3>未適用</h3>
+                        <Droppable id="drop-area">
+                            <div id="notAp-Table">
+                                {notAp.map((notAp,index) =>
+                                    <Draggable key={index} id={notAp} name={notAp} type='notAp'>
+                                        <div>
+                                            {notAp}
+                                        </div>
+                                    </Draggable>
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+
+
+                    <div className="used-Box">
+                        <Droppable id="drop-area1">
+                            <div id="used-Table">
+                                {used.map((use,index) =>
+                                    <Draggable key={index} id={use} name={use} type='used'>
+                                        <div>
+                                            {use}
+                                        </div>
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+                </div>
+
+            </body>
 
         </DndContext>
     );
