@@ -11,6 +11,7 @@ const MyCalendar = () => {
   const [modalStep, setModalStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [comment, setComment] = useState("ここにメモやコメントを表示。");
 
   const formattedSelectedDate = selectedDate 
     ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
@@ -190,7 +191,10 @@ const MyCalendar = () => {
 
   return (
     <div className="calendar-container">
-      {/* ★ 修正：コメント欄部分を丸ごと削除 */}
+      <div className="comment-wrapper">
+        <h3>コメント</h3>
+        <p className='comment-section'>{comment}</p>
+      </div>
 
       <div className="calendar-wrapper">
         <p className="calendar-title">カレンダー</p>
