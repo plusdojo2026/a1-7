@@ -11,7 +11,16 @@ const MyCalendar = () => {
   const [modalStep, setModalStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [comment, setComment] = useState("ここにメモやコメントを表示。");
+
+  //コメント欄
+  const [randomText, setRandomText] = useState('読み込み中...');
+  useEffect(() => {
+    fetch('http://localhost:8080/api/random-text')
+      .then(response => response.text())
+      .then(data => {
+        setRandomText(data);
+      });
+  }, []);
 
   const formattedSelectedDate = selectedDate 
     ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
@@ -25,7 +34,7 @@ const MyCalendar = () => {
 
   const firstForm = {
     id: '',
-    userId: 1, // NOT NULL制約エラー防止のためデフォルトで1を設定
+    userId: 1,
     name: '',
     ap_type: 5, 
     buyDate: '',
@@ -74,7 +83,6 @@ const MyCalendar = () => {
     refreshWasteList();
   }, []);
 
-  // ★ 統一：URLの末尾に「/」を付与
   const refreshWasteList = () => {
     fetch('/api/waste/')
     .then(response => {
@@ -87,7 +95,6 @@ const MyCalendar = () => {
     .catch(err => console.error("データ取得エラー:", err));
   };
 
-  // ★ 統一：URLの末尾に「/」を付与
   const addNewWaste = () => {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
@@ -95,7 +102,6 @@ const MyCalendar = () => {
     const seconds = String(now.getSeconds()).padStart(2, '0');
     const currentTimeStr = `${hours}:${minutes}:${seconds}`;
     
-    // YYYY-MM-DDTHH:mm:ss 形式の現在日時
     const currentDateTimeIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${currentTimeStr}`;
     
     const wasteWithDateTime = {
@@ -104,7 +110,7 @@ const MyCalendar = () => {
       buyDate: `${newWaste.buyDate}T${currentTimeStr}`, 
       sellingPrice: Number(newWaste.sellingPrice),
       purchasePrice: newWaste.purchasePrice ? Number(newWaste.purchasePrice) : null, 
-      valuation: String(newWaste.valuation), // Spring Boot側の String 型に合わせる
+      valuation: String(newWaste.valuation), 
       createdAt: currentDateTimeIso 
     };
 
@@ -119,7 +125,6 @@ const MyCalendar = () => {
     });
   };
 
-  // ★ 統一：URLの末尾に「/」を付与
   const updateWaste = () => {
     const formattedModWaste = {
       ...modWaste,
@@ -139,7 +144,6 @@ const MyCalendar = () => {
     });
   };
 
-  // ★ 統一：URLの末尾に「/」を付与
   const deleteWaste = () => {
     if (!modWaste.id) return;
     axios.post('/api/waste/del/', { id: modWaste.id })
@@ -189,12 +193,19 @@ const MyCalendar = () => {
     setShowModal(!showModal);
   };
 
+
+
+  //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
   return (
-    <div className="calendar-container">
+    <>
       <div className="comment-wrapper">
-        <h3>コメント</h3>
-        <p className='comment-section'>{comment}</p>
-      </div>
+          <p>{randomText}</p>
+        </div>
+    <div className="calendar-container">
+      
 
       <div className="calendar-wrapper">
         <p className="calendar-title">カレンダー</p>
@@ -443,6 +454,8 @@ const MyCalendar = () => {
         </div>
       )}
     </div>
+    </>
+    
   );
 };
 

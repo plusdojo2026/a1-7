@@ -44,7 +44,7 @@ public class SearchController {
 
         // 価格検索（例）
         if (minPrice != null && maxPrice !=null) {
-            return repository.findByPriceBetween(minPrice, maxPrice);
+            return repository.findBySellingPriceBetween(minPrice, maxPrice);
         }
 
         return repository.findAll();

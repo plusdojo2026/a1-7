@@ -39,4 +39,5 @@ public class ProductRestController {
 	    repository.delete(product);
 	    return product; 
 	}
+	
 }
