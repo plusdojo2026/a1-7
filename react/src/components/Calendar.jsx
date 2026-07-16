@@ -8,37 +8,51 @@ import './Calendar.css';
 const MyCalendar = () => {
   const [waste, setWaste] = useState([]);
   const products = window.products || {};
-  const [comment, setComment] = useState("ここにメモやコメントを表示。");
   const [modalStep, setModalStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+
+  //コメント欄
+  const [randomText, setRandomText] = useState('読み込み中...');
+  useEffect(() => {
+    fetch('http://localhost:8080/api/random-text')
+      .then(response => response.text())
+      .then(data => {
+        setRandomText(data);
+      });
+  }, []);
 
   const formattedSelectedDate = selectedDate 
     ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
     : '';
 
-  const dailyWastes = waste.filter(w => w.date === formattedSelectedDate);
+  const dailyWastes = waste.filter(w => {
+    if (!w.buyDate) return false;
+    const dbDateOnly = w.buyDate.substring(0, 10);
+    return dbDateOnly === formattedSelectedDate;
+  });
 
   const firstForm = {
     id: '',
-    userId: products.userId || '',
+    userId: 1,
     name: '',
-    date: '',
-    category: '',
-    price: '',
-    evaluation: 0,
+    ap_type: 5, 
+    buyDate: '',
+    category: 1,
+    sellingPrice: '',
+    valuation: 0,
     purchasePrice: '',
     memo: ''         
   };
 
   const secondForm = {
-    id: products.id || '',
-    userId: products.userId || '',
+    id: products.id,
+    userId: products.userId,
     name: products.name || '',
-    date: products.date || '',
-    category: products.category || '',
-    price: products.price || '',
-    evaluation: products.evaluation || 0,
+    buyDate: products.buyDate,
+    category: products.category,
+    sellingPrice: products.sellingPrice,
+    valuation: products.valuation || 0,
     purchasePrice: products.purchasePrice || '',
     memo: products.memo || ''         
   };
@@ -71,24 +85,56 @@ const MyCalendar = () => {
 
   const refreshWasteList = () => {
     fetch('/api/waste/')
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
     .then(json => setWaste(json || []))
-    .catch(err => console.error(err));
+    .catch(err => console.error("データ取得エラー:", err));
   };
 
   const addNewWaste = () => {
-    axios.post('/api/waste/add/', newWaste)
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const currentTimeStr = `${hours}:${minutes}:${seconds}`;
+    
+    const currentDateTimeIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${currentTimeStr}`;
+    
+    const wasteWithDateTime = {
+      ...newWaste,
+      userId: newWaste.userId || 1,
+      buyDate: `${newWaste.buyDate}T${currentTimeStr}`, 
+      sellingPrice: Number(newWaste.sellingPrice),
+      purchasePrice: newWaste.purchasePrice ? Number(newWaste.purchasePrice) : null, 
+      valuation: String(newWaste.valuation), 
+      createdAt: currentDateTimeIso 
+    };
+
+    axios.post('/api/waste/add/', wasteWithDateTime)
     .then(response => {
       refreshWasteList();
+      setNewWaste(firstForm);
     })
     .catch(err => {
-      console.error(err);
+      console.error("登録エラー詳細:", err.response ? err.response.data : err.message);
       refreshWasteList();
     });
   };
 
   const updateWaste = () => {
-    axios.post('/api/waste/mod', modWaste)
+    const formattedModWaste = {
+      ...modWaste,
+      buyDate: modWaste.buyDate ? modWaste.buyDate.replace(' ', 'T') : null,
+      sellingPrice: Number(modWaste.sellingPrice),
+      purchasePrice: modWaste.purchasePrice ? Number(modWaste.purchasePrice) : null,
+      valuation: String(modWaste.valuation)
+    };
+
+    axios.post('/api/waste/mod/', formattedModWaste)
     .then(response => {
       refreshWasteList();
     })
@@ -98,10 +144,14 @@ const MyCalendar = () => {
     });
   };
 
-  const deleteWaste = (index) => {
-    axios.post('/api/waste/del', {id: dailyWastes[index].id})
+  const deleteWaste = () => {
+    if (!modWaste.id) return;
+    axios.post('/api/waste/del/', { id: modWaste.id })
     .then(response => {
       refreshWasteList();
+    })
+    .catch(err => {
+      console.error(err);
     });
   };
 
@@ -122,7 +172,7 @@ const MyCalendar = () => {
 
     setNewWaste({
       ...firstForm,
-      date: clickedDateStr
+      buyDate: clickedDateStr
     });
 
     setShowModal(true);
@@ -132,7 +182,7 @@ const MyCalendar = () => {
     if (modalStep === 1) {
       setNewWaste({
         ...firstForm,
-        date: formattedSelectedDate
+        buyDate: formattedSelectedDate
       });
     } else if (modalStep === 2) {
       setModWaste(secondForm);
@@ -143,12 +193,19 @@ const MyCalendar = () => {
     setShowModal(!showModal);
   };
 
+
+
+  //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
   return (
-    <div className="calendar-container">
+    <>
       <div className="comment-wrapper">
-        <h3>コメント</h3>
-        <p className='comment-section'>{comment}</p>
-      </div>
+          <p>{randomText}</p>
+        </div>
+    <div className="calendar-container">
+      
 
       <div className="calendar-wrapper">
         <p className="calendar-title">カレンダー</p>
@@ -185,9 +242,9 @@ const MyCalendar = () => {
                         <tbody>
                           {dailyWastes.map((item, index) => (
                             <tr className="wasterow" key={index} onClick={() => modWasteStart(index)}>
-                              <td className="date">{item.date}</td>
+                              <td className="date">{item.buyDate ? item.buyDate.substring(0, 10) : ''}</td>
                               <td className="name">{item.name}</td>
-                              <td className="price">{item.price}</td>
+                              <td className="price">{item.sellingPrice}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -217,7 +274,7 @@ const MyCalendar = () => {
                     <Select
                       options={options}
                       onChange={handleSelectChange}
-                      value={options.find(opt => opt.value === newWaste.category) || null}
+                      value={options.find(opt => opt.value === String(newWaste.category)) || null}
                       placeholder="選択してください"
                       isClearable 
                       className="react-select-container"
@@ -229,8 +286,8 @@ const MyCalendar = () => {
                     <label>価格</label>
                     <input 
                       type="text" 
-                      name="price" 
-                      value={newWaste.price} 
+                      name="sellingPrice" 
+                      value={newWaste.sellingPrice} 
                       onChange={inputNewWaste} 
                       placeholder="価格を入力"
                     />
@@ -238,13 +295,13 @@ const MyCalendar = () => {
 
                   <div className="form-group">
                     <label>評価</label>
-                    <div className="evaluation-stars">
+                    <div className="valuation-stars">
                       {[1, 2, 3, 4, 5].map((starCount) => (
                         <span
                           key={starCount}
-                          className={`evaluation-star ${starCount <= newWaste.evaluation ? 'active' : ''}`}
-                          onClick={() => setNewWaste({ ...newWaste, evaluation: starCount })}>
-                          {starCount <= newWaste.evaluation ? '★' : '☆'}
+                          className={`valuation-star ${starCount <= newWaste.valuation ? 'active' : ''}`}
+                          onClick={() => setNewWaste({ ...newWaste, valuation: starCount })}>
+                          {starCount <= newWaste.valuation ? '★' : '☆'}
                         </span>
                       ))}
                     </div>
@@ -276,9 +333,8 @@ const MyCalendar = () => {
                     <button className="btn-back" onClick={() => setModalStep(0)}>◀ 戻る</button>
                     <button className="btn-reset" onClick={handleReset}>リセット</button>
                     <button className="btn-submit" onClick={() => {
-                      alert('保存しました！');
                       addNewWaste();
-                      setNewWaste(firstForm);
+                      alert('保存しました！');
                       setShowModal(false);
                     }}>✅ 登録</button>
                   </div>
@@ -290,9 +346,13 @@ const MyCalendar = () => {
                   <div className="form-group">
                     <label>日付</label>
                     <input 
-                      type="date" 
-                      name="date" 
-                      value={modWaste.date} 
+                      type="datetime-local" 
+                      name="buyDate" 
+                      value={
+                        modWaste.buyDate 
+                          ? modWaste.buyDate.replace(' ', 'T').substring(0, 16) 
+                          : ''
+                      } 
                       onChange={inputModWaste} 
                       placeholder="日付を選択"
                     />
@@ -302,7 +362,7 @@ const MyCalendar = () => {
                     <input 
                       type="text" 
                       name="name" 
-                      value={modWaste.name} 
+                      value={modWaste.name || ''} 
                       onChange={inputModWaste} 
                       placeholder="商品名を入力"
                     />
@@ -316,7 +376,7 @@ const MyCalendar = () => {
                         ...modWaste,
                         category: selectedOption ? selectedOption.value : ''
                       })}
-                      value={options.find(opt => opt.value === modWaste.category) || null}
+                      value={options.find(opt => opt.value === String(modWaste.category)) || null}
                       placeholder="選択してください"
                       isClearable 
                       className="react-select-container"
@@ -328,8 +388,8 @@ const MyCalendar = () => {
                     <label>価格</label>
                     <input 
                       type="text" 
-                      name="price" 
-                      value={modWaste.price} 
+                      name="sellingPrice" 
+                      value={modWaste.sellingPrice || ''} 
                       onChange={inputModWaste} 
                       placeholder="価格を入力"
                     />
@@ -337,14 +397,14 @@ const MyCalendar = () => {
 
                   <div className="form-group">
                     <label>評価</label>
-                    <div className="evaluation-stars">
+                    <div className="valuation-stars">
                       {[1, 2, 3, 4, 5].map((starCount) => (
                         <span
                           key={starCount}
-                          className={`evaluation-star ${starCount <= modWaste.evaluation ? 'active' : ''}`}
-                          onClick={() => setModWaste({ ...modWaste, evaluation: starCount })}
+                          className={`valuation-star ${starCount <= modWaste.valuation ? 'active' : ''}`}
+                          onClick={() => setModWaste({ ...modWaste, valuation: starCount })}
                         >
-                          {starCount <= modWaste.evaluation ? '★' : '☆'}
+                          {starCount <= modWaste.valuation ? '★' : '☆'}
                         </span>
                       ))}
                     </div>
@@ -355,7 +415,7 @@ const MyCalendar = () => {
                     <input 
                       type="text" 
                       name="purchasePrice" 
-                      value={modWaste.purchasePrice} 
+                      value={modWaste.purchasePrice || ''} 
                       onChange={inputModWaste} 
                       placeholder="買取価格を入力"
                     />
@@ -367,7 +427,7 @@ const MyCalendar = () => {
                       name="memo"
                       placeholder="次回買うものなど自由に入力してください" 
                       rows="3"
-                      value={modWaste.memo}
+                      value={modWaste.memo || ''}
                       onChange={inputModWaste}
                     ></textarea>
                   </div>
@@ -380,6 +440,11 @@ const MyCalendar = () => {
                       updateWaste();
                       setShowModal(false);
                     }}>✅ 保存</button>
+                    <button className="btn-delete" onClick={() => {
+                      alert('削除しました!');
+                      deleteWaste();
+                      setShowModal(false);
+                    }}>削除</button>
                   </div>
                 </div>
               )}
@@ -389,6 +454,8 @@ const MyCalendar = () => {
         </div>
       )}
     </div>
+    </>
+    
   );
 };
 
