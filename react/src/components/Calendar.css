@@ -1,75 +1,113 @@
 /* =========================
-   全体
+   全体コンテナ（画面幅100%をフルに使用）
 ========================= */
 .calendar-container {
   width: 100%;
-  max-width: 420px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
 }
 
 /* =========================
-   コメント
+   💡 アドバイス・コメントエリア
 ========================= */
-
-.comment-wrapper h3 {
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #333;
+.comment-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #2f6fdd;
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 20px auto 10px auto;
+  width: 100%;
+  max-width: 100%;
+  box-shadow: 0 4px 12px rgba(47, 111, 221, 0.05);
+  box-sizing: border-box;
 }
 
-.comment-section {
-  width: 100%;
-  min-height: 45px;
-  border: 1px solid #d6dbe5;
-  border-radius: 6px;
-  padding: 12px;
-  background: #fff;
-  color: #999;
-  box-sizing: border-box;
+.comment-icon {
+  font-size: 24px;
+  background: #edf5ff;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.comment-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+}
+
+.comment-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #2f6fdd;
+  letter-spacing: 1px;
+}
+
+.comment-text {
+  margin: 0;
+  font-size: 14px;
+  color: #4a5568;
+  line-height: 1.6;
+  font-weight: 600;
 }
 
 /* =========================
    カレンダー
 ========================= */
-
 .calendar-wrapper {
-  margin-top: 30px;
+  margin-top: 15px;
+  width: 100%;
 }
 
 .calendar-title {
   text-align: center;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
   margin-bottom: 15px;
   color: #333;
 }
 
-/* react-calendar */
-
+/* react-calendar 本体 */
 .react-calendar {
-  width: 100%;
+  width: 100% !important;
   border: none;
   font-family: inherit;
 }
 
-/* 年月 */
-
+/* 年月ナビゲーション */
 .react-calendar__navigation {
+  display: flex;
   margin-bottom: 15px;
 }
 
 .react-calendar__navigation button {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   color: #333;
+  cursor: pointer;
+  padding: 10px 0;
 }
 
-/* 曜日 */
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #f5f7fa;
+  border-radius: 8px;
+}
 
+/* 曜日ヘッダー */
 .react-calendar__month-view__weekdays {
   background: #eef1f6;
   border-radius: 8px;
@@ -77,9 +115,10 @@
 }
 
 .react-calendar__month-view__weekdays__weekday {
-  padding: 10px 0;
-  font-size: 14px;
+  padding: 12px 0;
+  font-size: 15px;
   color: #666;
+  font-weight: bold;
   text-decoration: none;
 }
 
@@ -87,48 +126,212 @@
   text-decoration: none;
 }
 
-/* 日付 */
+/* 日付グリッド（1行にしっかり7日収めるための最重要設定） */
+.react-calendar__month-view__days {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important; /* 確実に横7列に分割 */
+  gap: 4px !important; /* 隙間はmarginではなくgridのgapで制御 */
+  align-items: stretch !important;
+}
 
+/* 各日付タイル（マージンを排除して1列に収めています） */
 .react-calendar__tile {
-  height: 50px;
+  min-height: 85px !important;
+  max-width: 100% !important; /* 幅がはみ出ないように */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 8px 2px !important;
   border-radius: 8px;
   background: white;
   border: 1px solid #d7dce5;
-  margin: 2px;
-  transition: .2s;
+  margin: 0 !important; /* ← 悪さをしていたmarginを完全排除 */
+  transition: background 0.2s, border-color 0.2s;
+  box-sizing: border-box;
+  position: relative;
 }
 
-.react-calendar__tile:hover {
+/* 日付ナンバー部分 */
+.react-calendar__tile abbr {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  text-decoration: none;
+  margin-bottom: auto;
+}
+
+/* タイルホバー */
+.react-calendar__tile:enabled:hover {
   background: #edf5ff;
+  border-color: #b0d4ff;
+  cursor: pointer;
 }
 
+/* 今日の日付 */
 .react-calendar__tile--now {
-  background: #dcecff;
+  background: #f0f7ff !important;
+  border: 2px solid #2f6fdd !important;
 }
 
+.react-calendar__tile--now abbr {
+  color: #2f6fdd;
+}
+
+/* 日付選択時 */
 .react-calendar__tile--active {
   background: #2f6fdd !important;
-  color: white;
-  border-radius: 50%;
+  border-color: #2f6fdd !important;
 }
 
-.react-calendar__tile:enabled:hover {
-  background: #eaf2ff;
+.react-calendar__tile--active abbr {
+  color: white !important;
+}
+
+/* 選択された日の金額表示を白抜きにする */
+.react-calendar__tile--active .calendar-daily-total {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* 前後の月の日付 */
+.react-calendar__month-view__days__day--neighboringMonth {
+  opacity: 0.35;
+}
+
+/* 日曜・土曜の色付け */
+.tile-sunday abbr {
+  color: #e15252 !important;
+}
+
+.tile-saturday abbr {
+  color: #2f6fdd !important;
+}
+
+.react-calendar__tile--active.tile-sunday abbr,
+.react-calendar__tile--active.tile-saturday abbr {
+  color: #ffffff !important;
 }
 
 /* =========================
-   モーダル
+   💰 浪費額合計表示（文字切れ防止）
 ========================= */
+.calendar-daily-total {
+  display: block;
+  width: 96%;
+  font-size: 10px; /* 7分割に合わせて少しだけ調整 */
+  color: #e15252;
+  font-weight: 700;
+  margin: 6px auto 0 auto !important;
+  padding: 4px 1px;
+  text-align: center;
+  background-color: rgba(225, 82, 82, 0.08);
+  border-radius: 6px;
+  box-sizing: border-box;
 
+  /* 文字見切れを防ぐための自動折り返し */
+  white-space: normal;
+  word-break: break-all;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* =========================
+   📋 登録履歴テーブル
+========================= */
+.history-table-wrapper {
+  margin-top: 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.history-header-title {
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #4a5568;
+  text-align: left;
+}
+
+.waste-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.waste-table th {
+  background: #ffffff;
+  color: #718096;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.waste-table td {
+  padding: 14px 16px;
+  color: #2d3748;
+  border-bottom: 1px solid #f7fafc;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.waste-table .wasterow {
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.waste-table .wasterow:hover {
+  background-color: #f7fafc;
+}
+
+.waste-table tr:last-child td {
+  border-bottom: none;
+}
+
+.date-badge {
+  background: #edf2f7;
+  color: #4a5568;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.waste-table td.name {
+  font-weight: 600;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.waste-table td.price {
+  font-weight: 700;
+  color: #e15252;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+/* =========================
+   モーダル構造
+========================= */
 .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,.45);
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   z-index: 999;
 }
 
@@ -136,9 +339,7 @@
   width: 90%;
   max-width: 430px;
   max-height: 90vh;
-
   overflow-y: auto;
-
   background: white;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,.2);
@@ -148,7 +349,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   padding: 18px 20px;
   border-bottom: 1px solid #eee;
 }
@@ -171,7 +371,6 @@
 /* =========================
    メニュー画面
 ========================= */
-
 .menu-buttons {
   display: flex;
   flex-direction: column;
@@ -197,9 +396,8 @@
 }
 
 /* =========================
-   フォーム
+   フォーム部品
 ========================= */
-
 .selected-date {
   font-weight: bold;
   margin-bottom: 20px;
@@ -231,8 +429,7 @@
   border-color: #2f6fdd;
 }
 
-/* react-select */
-
+/* react-select コントロール */
 .react-select__control {
   border-radius: 8px !important;
   min-height: 42px !important;
@@ -244,28 +441,26 @@
 }
 
 /* =========================
-   星評価
+   評価（星）
 ========================= */
-
-.evaluation-stars {
+.valuation-stars {
   display: flex;
   gap: 8px;
 }
 
-.evaluation-star {
+.valuation-star {
   font-size: 28px;
   color: #bbb;
   cursor: pointer;
 }
 
-.evaluation-star.active {
+.valuation-star.active {
   color: #f6b800;
 }
 
 /* =========================
-   ボタン
+   アクションボタン
 ========================= */
-
 .form-actions {
   display: flex;
   justify-content: space-between;
@@ -296,9 +491,8 @@
 }
 
 /* =========================
-   履歴
+   履歴プレースホルダー
 ========================= */
-
 .history-container {
   text-align: center;
 }

@@ -12,7 +12,6 @@ const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
-  //コメント欄
   const [randomText, setRandomText] = useState('読み込み中...');
   useEffect(() => {
     fetch('http://localhost:8080/api/random-text')
@@ -60,6 +59,8 @@ const MyCalendar = () => {
   const [newWaste, setNewWaste] = useState(firstForm);
   const [modWaste, setModWaste] = useState(secondForm);
 
+  const num = 123; 
+
   const inputNewWaste = (e) => {
     setNewWaste({ ...newWaste, [e.target.name]: e.target.value });
   };
@@ -106,6 +107,7 @@ const MyCalendar = () => {
     
     const wasteWithDateTime = {
       ...newWaste,
+      id: Number(num),
       userId: newWaste.userId || 1,
       buyDate: `${newWaste.buyDate}T${currentTimeStr}`, 
       sellingPrice: Number(newWaste.sellingPrice),
@@ -128,6 +130,7 @@ const MyCalendar = () => {
   const updateWaste = () => {
     const formattedModWaste = {
       ...modWaste,
+      id: Number(num),
       buyDate: modWaste.buyDate ? modWaste.buyDate.replace(' ', 'T') : null,
       sellingPrice: Number(modWaste.sellingPrice),
       purchasePrice: modWaste.purchasePrice ? Number(modWaste.purchasePrice) : null,
@@ -193,269 +196,318 @@ const MyCalendar = () => {
     setShowModal(!showModal);
   };
 
+  const dailyTotalMap = {};
+  waste.forEach(item => {
+    if (item.buyDate) {
+      const dateStr = item.buyDate.substring(0, 10);
+      const price = Number(item.sellingPrice) || 0;
+      dailyTotalMap[dateStr] = (dailyTotalMap[dateStr] || 0) + price;
+    }
+  });
 
+  const tileContent = ({ date, view }) => {
+    if (view === 'month') {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      const dateKey = `${y}-${m}-${d}`;
 
-  //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      const total = dailyTotalMap[dateKey];
+      if (total > 0) {
+        return (
+          <p className="calendar-daily-total">
+            ¥{total.toLocaleString()}
+          </p>
+        );
+      }
+    }
+    return null;
+  };
 
-
+  const getTileClassName = ({ date, view }) => {
+    if (view === 'month') {
+      const day = date.getDay();
+      if (day === 0) return 'tile-sunday';
+      if (day === 6) return 'tile-saturday'; 
+    }
+    return '';
+  };
 
   return (
     <>
+      {/* 💡 アドバイスエリア */}
       <div className="comment-wrapper">
-          <p>{randomText}</p>
+        <div className="comment-icon">💡</div>
+        <div className="comment-content">
+          <span className="comment-label">TODAY'S ADVICE</span>
+          <p className="comment-text">{randomText}</p>
         </div>
-    <div className="calendar-container">
-      
-
-      <div className="calendar-wrapper">
-        <p className="calendar-title">カレンダー</p>
-        <Calendar onClickDay={handleDayClick}/>
       </div>
 
-      {showModal && (
-        <div className="modal-overlay" onClick={toggleModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-
-            <div className="modal-header">
-              <h3>
-                {modalStep === 0 && "メニュー選択"}
-                {modalStep === 1 && "新規登録"}
-                {modalStep === 2 && "登録情報確認"}
-              </h3>
-              <button className="modal-close-btn" onClick={toggleModal}>×</button>
-            </div>
-
-            <div className="modal-body">
-              {modalStep === 0 && (
-                <div className="menu-buttons">
-                  <div className="step-container">
-                    <button className="menu-btn primary" onClick={() => setModalStep(1)}>+ 新規登録</button>
-                    {dailyWastes.length > 0 && (
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>日付</th>
-                            <th>商品名</th>
-                            <th>金額</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {dailyWastes.map((item, index) => (
-                            <tr className="wasterow" key={index} onClick={() => modWasteStart(index)}>
-                              <td className="date">{item.buyDate ? item.buyDate.substring(0, 10) : ''}</td>
-                              <td className="name">{item.name}</td>
-                              <td className="price">{item.sellingPrice}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {modalStep === 1 && (
-                <div className="form-container">
-                  <p className="selected-date">日付: <span>{selectedDate ? selectedDate.toLocaleDateString() : ''}</span></p>
-                  
-                  <div className="form-group">
-                    <label>商品名</label>
-                    <input 
-                      type="text" 
-                      name="name" 
-                      value={newWaste.name} 
-                      onChange={inputNewWaste} 
-                      placeholder="商品名を入力"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>カテゴリー</label>
-                    <Select
-                      options={options}
-                      onChange={handleSelectChange}
-                      value={options.find(opt => opt.value === String(newWaste.category)) || null}
-                      placeholder="選択してください"
-                      isClearable 
-                      className="react-select-container"
-                      classNamePrefix="react-select"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>価格</label>
-                    <input 
-                      type="text" 
-                      name="sellingPrice" 
-                      value={newWaste.sellingPrice} 
-                      onChange={inputNewWaste} 
-                      placeholder="価格を入力"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>評価</label>
-                    <div className="valuation-stars">
-                      {[1, 2, 3, 4, 5].map((starCount) => (
-                        <span
-                          key={starCount}
-                          className={`valuation-star ${starCount <= newWaste.valuation ? 'active' : ''}`}
-                          onClick={() => setNewWaste({ ...newWaste, valuation: starCount })}>
-                          {starCount <= newWaste.valuation ? '★' : '☆'}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label>買取価格</label>
-                    <input 
-                      type="text" 
-                      name="purchasePrice" 
-                      value={newWaste.purchasePrice} 
-                      onChange={inputNewWaste} 
-                      placeholder="買取価格を入力"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>備考</label>
-                    <textarea 
-                      name="memo"
-                      placeholder="次回買うものなど自由に入力してください" 
-                      rows="3"
-                      value={newWaste.memo}
-                      onChange={inputNewWaste}
-                    ></textarea>
-                  </div>
-                  
-                  <div className="form-actions">
-                    <button className="btn-back" onClick={() => setModalStep(0)}>◀ 戻る</button>
-                    <button className="btn-reset" onClick={handleReset}>リセット</button>
-                    <button className="btn-submit" onClick={() => {
-                      addNewWaste();
-                      alert('保存しました！');
-                      setShowModal(false);
-                    }}>✅ 登録</button>
-                  </div>
-                </div>
-              )}
-
-              {modalStep === 2 && (
-                <div className="form-container">
-                  <div className="form-group">
-                    <label>日付</label>
-                    <input 
-                      type="datetime-local" 
-                      name="buyDate" 
-                      value={
-                        modWaste.buyDate 
-                          ? modWaste.buyDate.replace(' ', 'T').substring(0, 16) 
-                          : ''
-                      } 
-                      onChange={inputModWaste} 
-                      placeholder="日付を選択"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>商品名</label>
-                    <input 
-                      type="text" 
-                      name="name" 
-                      value={modWaste.name || ''} 
-                      onChange={inputModWaste} 
-                      placeholder="商品名を入力"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>カテゴリー</label>
-                    <Select
-                      options={options}
-                      onChange={(selectedOption) => setModWaste({
-                        ...modWaste,
-                        category: selectedOption ? selectedOption.value : ''
-                      })}
-                      value={options.find(opt => opt.value === String(modWaste.category)) || null}
-                      placeholder="選択してください"
-                      isClearable 
-                      className="react-select-container"
-                      classNamePrefix="react-select"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>価格</label>
-                    <input 
-                      type="text" 
-                      name="sellingPrice" 
-                      value={modWaste.sellingPrice || ''} 
-                      onChange={inputModWaste} 
-                      placeholder="価格を入力"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>評価</label>
-                    <div className="valuation-stars">
-                      {[1, 2, 3, 4, 5].map((starCount) => (
-                        <span
-                          key={starCount}
-                          className={`valuation-star ${starCount <= modWaste.valuation ? 'active' : ''}`}
-                          onClick={() => setModWaste({ ...modWaste, valuation: starCount })}
-                        >
-                          {starCount <= modWaste.valuation ? '★' : '☆'}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label>買取価格</label>
-                    <input 
-                      type="text" 
-                      name="purchasePrice" 
-                      value={modWaste.purchasePrice || ''} 
-                      onChange={inputModWaste} 
-                      placeholder="買取価格を入力"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>備考</label>
-                    <textarea 
-                      name="memo"
-                      placeholder="次回買うものなど自由に入力してください" 
-                      rows="3"
-                      value={modWaste.memo || ''}
-                      onChange={inputModWaste}
-                    ></textarea>
-                  </div>
-                  
-                  <div className="form-actions">
-                    <button className="btn-back" onClick={() => setModalStep(0) }>◀ 戻る</button>
-                    <button className="btn-reset" onClick={handleReset}>リセット</button>
-                    <button className="btn-submit" onClick={() => {
-                      alert('保存しました！');
-                      updateWaste();
-                      setShowModal(false);
-                    }}>✅ 保存</button>
-                    <button className="btn-delete" onClick={() => {
-                      alert('削除しました!');
-                      deleteWaste();
-                      setShowModal(false);
-                    }}>削除</button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-          </div>
+      <div className="calendar-container">
+        <div className="calendar-wrapper">
+          <p className="calendar-title">カレンダー</p>
+          <Calendar 
+            onClickDay={handleDayClick}
+            tileContent={tileContent}
+            tileClassName={getTileClassName}
+          />
         </div>
-      )}
-    </div>
+
+        {showModal && (
+          <div className="modal-overlay" onClick={toggleModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+
+              <div className="modal-header">
+                <h3>
+                  {modalStep === 0 && "メニュー選択"}
+                  {modalStep === 1 && "新規登録"}
+                  {modalStep === 2 && "登録情報確認"}
+                </h3>
+                <button className="modal-close-btn" onClick={toggleModal}>×</button>
+              </div>
+
+              <div className="modal-body">
+                {modalStep === 0 && (
+                  <div className="menu-buttons">
+                    <div className="step-container">
+                      <button className="menu-btn primary" onClick={() => setModalStep(1)}>+ 新規登録</button>
+                      
+                      {/* 📋 登録履歴テーブル */}
+                      {dailyWastes.length > 0 && (
+                        <div className="history-table-wrapper">
+                          <div className="history-header-title">📋 登録済みの履歴</div>
+                          <table className="waste-table">
+                            <thead>
+                              <tr>
+                                <th>日付</th>
+                                <th>商品名</th>
+                                <th className="text-right">金額</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {dailyWastes.map((item, index) => (
+                                <tr className="wasterow" key={index} onClick={() => modWasteStart(index)}>
+                                  <td className="date">
+                                    <span className="date-badge">
+                                      {item.buyDate ? item.buyDate.substring(5, 10) : ''}
+                                    </span>
+                                  </td>
+                                  <td className="name">{item.name}</td>
+                                  <td className="price text-right">
+                                    ¥{(Number(item.sellingPrice) || 0).toLocaleString()}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {modalStep === 1 && (
+                  <div className="form-container">
+                    <p className="selected-date">日付: <span>{selectedDate ? selectedDate.toLocaleDateString() : ''}</span></p>
+                    
+                    <div className="form-group">
+                      <label>商品名</label>
+                      <input 
+                        type="text" 
+                        name="name" 
+                        value={newWaste.name} 
+                        onChange={inputNewWaste} 
+                        placeholder="商品名を入力"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>カテゴリー</label>
+                      <Select
+                        options={options}
+                        onChange={handleSelectChange}
+                        value={options.find(opt => opt.value === String(newWaste.category)) || null}
+                        placeholder="選択してください"
+                        isClearable 
+                        className="react-select-container"
+                        classNamePrefix="react-select"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>価格</label>
+                      <input 
+                        type="text" 
+                        name="sellingPrice" 
+                        value={newWaste.sellingPrice} 
+                        onChange={inputNewWaste} 
+                        placeholder="価格を入力"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>評価</label>
+                      <div className="valuation-stars">
+                        {[1, 2, 3, 4, 5].map((starCount) => (
+                          <span
+                            key={starCount}
+                            className={`valuation-star ${starCount <= newWaste.valuation ? 'active' : ''}`}
+                            onClick={() => setNewWaste({ ...newWaste, valuation: starCount })}>
+                            {starCount <= newWaste.valuation ? '★' : '☆'}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <label>買取価格</label>
+                      <input 
+                        type="text" 
+                        name="purchasePrice" 
+                        value={newWaste.purchasePrice} 
+                        onChange={inputNewWaste} 
+                        placeholder="買取価格を入力"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>備考</label>
+                      <textarea 
+                        name="memo"
+                        placeholder="次回買うものなど自由に入力してください" 
+                        rows="3"
+                        value={newWaste.memo}
+                        onChange={inputNewWaste}
+                      ></textarea>
+                    </div>
+                    
+                    <div className="form-actions">
+                      <button className="btn-back" onClick={() => setModalStep(0)}>◀ 戻る</button>
+                      <button className="btn-reset" onClick={handleReset}>リセット</button>
+                      <button className="btn-submit" onClick={() => {
+                        addNewWaste();
+                        alert('保存しました！');
+                        setShowModal(false);
+                      }}>✅ 登録</button>
+                    </div>
+                  </div>
+                )}
+
+                {modalStep === 2 && (
+                  <div className="form-container">
+                    <div className="form-group">
+                      <label>日付</label>
+                      <input 
+                        type="datetime-local" 
+                        name="buyDate" 
+                        value={
+                          modWaste.buyDate 
+                            ? modWaste.buyDate.replace(' ', 'T').substring(0, 16) 
+                            : ''
+                        } 
+                        onChange={inputModWaste} 
+                        placeholder="日付を選択"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>商品名</label>
+                      <input 
+                        type="text" 
+                        name="name" 
+                        value={modWaste.name || ''} 
+                        onChange={inputModWaste} 
+                        placeholder="商品名を入力"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>カテゴリー</label>
+                      <Select
+                        options={options}
+                        onChange={(selectedOption) => setModWaste({
+                          ...modWaste,
+                          category: selectedOption ? selectedOption.value : ''
+                        })}
+                        value={options.find(opt => opt.value === String(modWaste.category)) || null}
+                        placeholder="選択してください"
+                        isClearable 
+                        className="react-select-container"
+                        classNamePrefix="react-select"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>価格</label>
+                      <input 
+                        type="text" 
+                        name="sellingPrice" 
+                        value={modWaste.sellingPrice || ''} 
+                        onChange={inputModWaste} 
+                        placeholder="価格を入力"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>評価</label>
+                      <div className="valuation-stars">
+                        {[1, 2, 3, 4, 5].map((starCount) => (
+                          <span
+                            key={starCount}
+                            className={`valuation-star ${starCount <= modWaste.valuation ? 'active' : ''}`}
+                            onClick={() => setModWaste({ ...modWaste, valuation: starCount })}
+                          >
+                            {starCount <= modWaste.valuation ? '★' : '☆'}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <label>買取価格</label>
+                      <input 
+                        type="text" 
+                        name="purchasePrice" 
+                        value={modWaste.purchasePrice || ''} 
+                        onChange={inputModWaste} 
+                        placeholder="買取価格を入力"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>備考</label>
+                      <textarea 
+                        name="memo"
+                        placeholder="次回買うものなど自由に入力してください" 
+                        rows="3"
+                        value={modWaste.memo || ''}
+                        onChange={inputModWaste}
+                      ></textarea>
+                    </div>
+                    
+                    <div className="form-actions">
+                      <button className="btn-back" onClick={() => setModalStep(0) }>◀ 戻る</button>
+                      <button className="btn-reset" onClick={handleReset}>リセット</button>
+                      <button className="btn-submit" onClick={() => {
+                        alert('保存しました！');
+                        updateWaste();
+                        setShowModal(false);
+                      }}>✅ 保存</button>
+                      <button className="btn-delete" onClick={() => {
+                        alert('削除しました!');
+                        deleteWaste();
+                        setShowModal(false);
+                      }}>削除</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </div>
+        )}
+      </div>
     </>
-    
   );
 };
 
