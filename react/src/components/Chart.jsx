@@ -19,218 +19,68 @@ ChartJS.register(
   Legend
 );
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Chart.css";
 
-const graphData = {
-  "2026-07":{
-    //浪費総額
 
-    buy: 6500 + 5900 + 8000 + 810 + 5600,
-    sell: 650 + 590 + 2000 + 0 + 1600,
-
-    // x 軸のラベル
-  labels: ['カテゴリ 1', 'カテゴリ 2', 'カテゴリ 3', 'カテゴリ 4', 'カテゴリ 5'],
-  datasets: [
-    {
-      label: 'カテゴリ別浪費額',
-      // データの値
-      data: [-6500, -5900, -8000, -810, -5600],
-      // グラフの背景色
-      backgroundColor: [
-        // 'rgba(255, 99, 132, 0.2)',
-        // 'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-        // 'rgba(75, 192, 192, 0.2)',
-        // 'rgba(54, 162, 235, 0.2)',
-        // 'rgba(153, 102, 255, 0.2)',
-        // 'rgba(201, 203, 207, 0.2)',
-      ],
-      // グラフの枠線の色
-      borderColor: [
-        // 'rgb(255, 99, 132)',
-        // 'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        // 'rgb(75, 192, 192)',
-        // 'rgb(54, 162, 235)',
-        // 'rgb(153, 102, 255)',
-        // 'rgb(201, 203, 207)',
-      ],
-      // グラフの枠線の太さ
-      borderWidth: 1,
-    },
-    {
-      label: 'カテゴリ別売却額',
-      // データの値
-      data: [650, 590, 2000, 0, 1600],
-      // グラフの背景色
-      backgroundColor: [
-        'rgba(0, 156, 123, 0.2)',
-        // 'rgba(0, 96, 191, 0.2)',
-        // 'rgba(0, 50, 169, 0.2)',
-        // 'rgba(180, 63, 63, 0.2)',
-        // 'rgba(201, 93, 20, 0.2)',
-        // 'rgba(102, 153, 0, 0.2)',
-        // 'rgba(54, 52, 48, 0.2)',
-      ],
-      // グラフの枠線の色
-      borderColor: [
-        'rgb(255, 99, 132)',
-        // 'rgb(255, 159, 64)',
-        // 'rgb(255, 205, 86)',
-        // 'rgb(75, 192, 192)',
-        // 'rgb(54, 162, 235)',
-        // 'rgb(153, 102, 255)',
-        // 'rgb(201, 203, 207)',
-      ],
-      // グラフの枠線の太さ
-      borderWidth: 1,
-    },
-  
-  ],
-  },
-
-    "2026-06":{
-    //浪費総額
-
-    buy: 65000 + 900 + 800 + 810 + 56000,
-    sell: 650 + 590 + 2000 + 0 + 1600,
-
-    // x 軸のラベル
-  labels: ['カテゴリ 1', 'カテゴリ 2', 'カテゴリ 3', 'カテゴリ 4', 'カテゴリ 5'],
-  datasets: [
-    {
-      label: 'カテゴリ別浪費額',
-      // データの値
-      data: [-65000, -900, -800, -810, -56000],
-      // グラフの背景色
-      backgroundColor: [
-        // 'rgba(255, 99, 132, 0.2)',
-        // 'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-        // 'rgba(75, 192, 192, 0.2)',
-        // 'rgba(54, 162, 235, 0.2)',
-        // 'rgba(153, 102, 255, 0.2)',
-        // 'rgba(201, 203, 207, 0.2)',
-      ],
-      // グラフの枠線の色
-      borderColor: [
-        // 'rgb(255, 99, 132)',
-        // 'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        // 'rgb(75, 192, 192)',
-        // 'rgb(54, 162, 235)',
-        // 'rgb(153, 102, 255)',
-        // 'rgb(201, 203, 207)',
-      ],
-      // グラフの枠線の太さ
-      borderWidth: 1,
-    },
-    {
-      label: 'カテゴリ別売却額',
-      // データの値
-      data: [650, 590, 2000, 0, 1600],
-      // グラフの背景色
-      backgroundColor: [
-        'rgba(0, 156, 123, 0.2)',
-        // 'rgba(0, 96, 191, 0.2)',
-        // 'rgba(0, 50, 169, 0.2)',
-        // 'rgba(180, 63, 63, 0.2)',
-        // 'rgba(201, 93, 20, 0.2)',
-        // 'rgba(102, 153, 0, 0.2)',
-        // 'rgba(54, 52, 48, 0.2)',
-      ],
-      // グラフの枠線の色
-      borderColor: [
-        'rgb(255, 99, 132)',
-        // 'rgb(255, 159, 64)',
-        // 'rgb(255, 205, 86)',
-        // 'rgb(75, 192, 192)',
-        // 'rgb(54, 162, 235)',
-        // 'rgb(153, 102, 255)',
-        // 'rgb(201, 203, 207)',
-      ],
-      // グラフの枠線の太さ
-      borderWidth: 1,
-    },
-  
-  ],
-  },
-
-    "2026-05":{
-   //浪費総額
-
-    buy: 500 + 590 + 800 + 810 + 5600,
-    sell: 650 + 590 + 2000 + 0 + 1600,
-
-    // x 軸のラベル
-  labels: ['カテゴリ 1', 'カテゴリ 2', 'カテゴリ 3', 'カテゴリ 4', 'カテゴリ 5'],
-  datasets: [
-    {
-      label: 'カテゴリ別浪費額',
-      // データの値
-      data: [-500, -590, -800, -810, -5600],
-      // グラフの背景色
-      backgroundColor: [
-        // 'rgba(255, 99, 132, 0.2)',
-        // 'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 205, 86, 0.2)',
-        // 'rgba(75, 192, 192, 0.2)',
-        // 'rgba(54, 162, 235, 0.2)',
-        // 'rgba(153, 102, 255, 0.2)',
-        // 'rgba(201, 203, 207, 0.2)',
-      ],
-      // グラフの枠線の色
-      borderColor: [
-        // 'rgb(255, 99, 132)',
-        // 'rgb(255, 159, 64)',
-        'rgb(255, 205, 86)',
-        // 'rgb(75, 192, 192)',
-        // 'rgb(54, 162, 235)',
-        // 'rgb(153, 102, 255)',
-        // 'rgb(201, 203, 207)',
-      ],
-      // グラフの枠線の太さ
-      borderWidth: 1,
-    },
-    {
-      label: 'カテゴリ別売却額',
-      // データの値
-      data: [650, 590, 2000, 0, 1600],
-      // グラフの背景色
-      backgroundColor: [
-        'rgba(0, 156, 123, 0.2)',
-        // 'rgba(0, 96, 191, 0.2)',
-        // 'rgba(0, 50, 169, 0.2)',
-        // 'rgba(180, 63, 63, 0.2)',
-        // 'rgba(201, 93, 20, 0.2)',
-        // 'rgba(102, 153, 0, 0.2)',
-        // 'rgba(54, 52, 48, 0.2)',
-      ],
-      // グラフの枠線の色
-      borderColor: [
-        'rgb(255, 99, 132)',
-        // 'rgb(255, 159, 64)',
-        // 'rgb(255, 205, 86)',
-        // 'rgb(75, 192, 192)',
-        // 'rgb(54, 162, 235)',
-        // 'rgb(153, 102, 255)',
-        // 'rgb(201, 203, 207)',
-      ],
-      // グラフの枠線の太さ
-      borderWidth: 1,
-    },
-  
-  ],
-  },
-};
 // レンダリング
 export default function Chart(){
 
   const [month, setMonth] = useState("2026-07");
 
-  const spendingTotal = graphData[month].buy - graphData[month].sell;
+  const [chartData, setChartData] = useState(null);
 
+  const [spendingTotal, setSpendingTotal] = useState(0);
+
+  
+
+  useEffect(() => {
+
+  fetch(`http://localhost:8080/api/graph?month=${month}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+
+      const chart = {
+        labels: data.graph.map(item => `${item.category}`),
+
+        datasets:[
+          {
+            label:"浪費額",
+
+            data:data.graph.map(item => -item.buy),
+
+             backgroundColor:
+                "rgba(255,205,86,0.2)",
+
+              borderColor:
+                "rgb(255,205,86)",
+
+              borderWidth:1
+          },
+          {
+            label:"売却額",
+            data:data.graph.map(item => item.sell),
+              backgroundColor:
+                "rgba(0,156,123,0.2)",
+
+              borderColor:
+                "rgb(0,156,123)",
+
+              borderWidth:1
+          }
+        ]
+      }
+      //jsonを保存
+      setChartData(chart)
+
+      //総浪費額保存
+      setSpendingTotal(data.total)
+    });
+
+}, [month]);
+
+ 
   return(
   <div>
     <div>
@@ -244,10 +94,11 @@ export default function Chart(){
     </div>
     
       <div className="chart-container">
-        <Bar data={graphData[month]}
+       {chartData &&( <Bar data={chartData}
         options={{
           maintainAspectRatio:false
         }} />
+      )}
       </div>
     <p>総浪費額：{spendingTotal}円</p>
   </div>
