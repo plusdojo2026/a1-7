@@ -4,6 +4,7 @@ import Select from 'react-select';
 import axios from 'axios';
 import 'react-calendar/dist/Calendar.css'; 
 import './Calendar.css'; 
+import BottomNav from "./BottomNav";
 
 const MyCalendar = () => {
   const [waste, setWaste] = useState([]);
@@ -478,6 +479,7 @@ const MyCalendar = () => {
         </div>
       )}
     </div>
+    <BottomNav />
     </>
     
   );

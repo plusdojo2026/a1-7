@@ -10,16 +10,16 @@ import { Link } from "react-router-dom";
 export default function BottomNav(){
     return(
         <BottomNavigation showLabels>
-            <BottomNavigationAction label="分析" icon={<BarChartIcon />}  
+            <BottomNavigationAction label="分析" icon={<BarChartIcon />}
+            component={Link}
+            to="/Chart"/>
+            <BottomNavigationAction label="検索" icon={<SearchIcon />} />
+            <BottomNavigationAction label="ホーム" icon={<HomeIcon />}
             component={Link}
             to="/"/>
-            <BottomNavigationAction label="検索" icon={<SearchIcon />} />
-            <BottomNavigationAction label="ホーム" icon={<HomeIcon />}   
-            component={Link}
-            to="/Calendar"/>
             <BottomNavigationAction label="仕分け" icon={<CategoryIcon />} />
             <BottomNavigationAction label="マイページ" icon={<PersonIcon />} />
-        </BottomNavigation>
+            </BottomNavigation>
     )
 }
 
