@@ -94,11 +94,10 @@ export default function Chart(){
     <div>
       <label></label>
 
-      <select value={month} onChange={(e) => setMonth(e.target.value)}>
-        <option value="2026-07">2026年7月</option>
-        <option value="2026-06">2026年6月</option>
-        <option value="2026-05">2026年5月</option>
-      </select>
+         <input type="month"
+      value={month}
+      onChange={(e) => setMonth(e.target.value)}
+    />
     </div>
     
       <div className="chart-container">
