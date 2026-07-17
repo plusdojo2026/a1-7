@@ -25,7 +25,7 @@ public class Frequency {
 	private Boolean firstWeek;
 	private Boolean secondWeek;
 	private Boolean thirdWeek;
-	private Boolean fouthWeek;
+	private Boolean fourthWeek;
 	private Integer dayOfWeek;
 	private Integer dayOfWeek2;
 	
