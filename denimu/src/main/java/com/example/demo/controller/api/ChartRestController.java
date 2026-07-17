@@ -16,6 +16,8 @@ import com.example.demo.entity.Products;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductsRepository;
 
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:5173") 
@@ -33,7 +35,8 @@ public class ChartRestController {
 	  }
 	  @GetMapping("/graph")
 	    public Map<String,Object> graph(
-	            @RequestParam String month
+	            @RequestParam String month,
+	            HttpSession session
 	    ) {
 		//  System.out.println("受け取った月：" + month);
 		  
@@ -101,10 +104,17 @@ public class ChartRestController {
 	            "graph",
 	            new ArrayList<>(result.values())
 	        );
+	        int totalWaste = totalBuy - totalSell;
+	        
+	        session.setAttribute("totalWaste",totalWaste);
 
+	        //確認用
+	        System.out.println("セッション保存値：" 
+	                + session.getAttribute("totalWaste"));
+	        
 	        response.put(
-	            "total",
-	            totalBuy - totalSell
+	            "total",totalWaste
+	            
 	        );
 
 
