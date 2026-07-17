@@ -114,3 +114,27 @@ VALUES
     1000000,           -- 目標金額 (target_price)
     NOW()              -- 最終ログイン日時 (現在日時)
 );
+
+-- ログイン確認用
+INSERT INTO Users (
+    user_id,
+    pw,
+    name,
+    fire_garbage,
+    nofire_garbage,
+    landfill_garbage,
+    recycle_garbage,
+    target_price,
+    last_login
+)
+VALUES (
+    '1234',
+    'abcd',
+    '鈴木',
+    0,
+    1,
+    0,
+    1,
+    30000,
+    '2026-07-17 11:00:00'
+);
