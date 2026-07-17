@@ -134,7 +134,7 @@
   align-items: stretch !important;
 }
 
-/* 各日付タイル（マージンを排除して1列に収めています） */
+/* 各日付タイル */
 .react-calendar__tile {
   min-height: 85px !important;
   max-width: 100% !important; /* 幅がはみ出ないように */
@@ -146,7 +146,7 @@
   border-radius: 8px;
   background: white;
   border: 1px solid #d7dce5;
-  margin: 0 !important; /* ← 悪さをしていたmarginを完全排除 */
+  margin: 0 !important; /* 悪さをしていたmarginを完全排除 */
   transition: background 0.2s, border-color 0.2s;
   box-sizing: border-box;
   position: relative;
@@ -189,7 +189,7 @@
 }
 
 /* 選択された日の金額表示を白抜きにする */
-.react-calendar__tile--active .calendar-daily-total {
+.react-calendar__tile--active .tile-waste-amount {
   color: #ffffff !important;
   background-color: rgba(255, 255, 255, 0.25) !important;
 }
@@ -215,8 +215,9 @@
 
 /* =========================
    💰 浪費額合計表示（文字切れ防止）
+   ※JSX内のクラス名「.tile-waste-amount」に変更適合
 ========================= */
-.calendar-daily-total {
+.tile-waste-amount {
   display: block;
   width: 96%;
   font-size: 10px; /* 7分割に合わせて少しだけ調整 */
@@ -237,9 +238,13 @@
 }
 
 /* =========================
-   📋 登録履歴テーブル
+   📋 モーダル内の登録リスト（テーブル）
+   ※JSXに適合するようクラス名調整
 ========================= */
-.history-table-wrapper {
+.step-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
   margin-top: 15px;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
@@ -248,24 +253,8 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
-.history-header-title {
-  padding: 12px 16px;
+.step-container th {
   background: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 13px;
-  font-weight: 700;
-  color: #4a5568;
-  text-align: left;
-}
-
-.waste-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-.waste-table th {
-  background: #ffffff;
   color: #718096;
   font-weight: 600;
   font-size: 12px;
@@ -274,7 +263,7 @@
   border-bottom: 1px solid #edf2f7;
 }
 
-.waste-table td {
+.step-container td {
   padding: 14px 16px;
   color: #2d3748;
   border-bottom: 1px solid #f7fafc;
@@ -282,30 +271,27 @@
   text-align: left;
 }
 
-.waste-table .wasterow {
+.step-container .wasterow {
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.waste-table .wasterow:hover {
+.step-container .wasterow:hover {
   background-color: #f7fafc;
 }
 
-.waste-table tr:last-child td {
+.step-container tr:last-child td {
   border-bottom: none;
 }
 
-.date-badge {
-  background: #edf2f7;
+.step-container td.date {
   color: #4a5568;
-  padding: 3px 8px;
-  border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
   font-family: monospace;
 }
 
-.waste-table td.name {
+.step-container td.name {
   font-weight: 600;
   max-width: 150px;
   white-space: nowrap;
@@ -313,13 +299,9 @@
   text-overflow: ellipsis;
 }
 
-.waste-table td.price {
+.step-container td.price {
   font-weight: 700;
   color: #e15252;
-}
-
-.text-right {
-  text-align: right !important;
 }
 
 /* =========================
@@ -487,6 +469,11 @@
 
 .btn-submit {
   background: #2f6fdd;
+  color: white;
+}
+
+.btn-delete {
+  background: #e15252;
   color: white;
 }
 
