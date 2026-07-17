@@ -20,6 +20,7 @@
   background-color: rgb(200, 200, 200);
 }
 
+
 /* タグの色 */
 .used-Button,.trash-Button,.cell-Button,.give-Button,.other-Button{
   color: rgb(255, 255, 255);
@@ -83,7 +84,13 @@
 }
 
 .notAp-Table{
-  
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.category-Table{
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .content{
@@ -100,6 +107,15 @@
 
 .checked-Box{
   margin: 10px;
+}
+
+
+.sortButton{
+  background-color: white;
+  color: blue;
+  transform: scale(2);
+  border-radius: 5px;
+  border: none;
 }
 
 

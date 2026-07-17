@@ -8,6 +8,7 @@ import BottomNav from "./BottomNav";
 
 const MyCalendar = () => {
   const [waste, setWaste] = useState([]);
+  const [frequencies, setFrequencies] = useState([]);
   const products = window.products || {};
   const [modalStep, setModalStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -33,6 +34,17 @@ const MyCalendar = () => {
     return dbDateOnly === formattedSelectedDate;
   });
 
+  // ⭕ 「日(0)〜土(6)」のどの曜日かを正しく返すように修正
+  const getDayOfWeek = (date) =>{
+    return date.getDay(); 
+  };
+
+  // 1〜7日＝第1週、8〜14日＝第2週、15〜21日＝第3週...
+  const getWeekOfMonth = (date) => {
+    const day = date.getDate();
+    return Math.ceil(day/7);
+  };
+
   const firstForm = {
     id: '',
     userId: 1,
@@ -42,7 +54,7 @@ const MyCalendar = () => {
     category: 1,
     sellingPrice: '',
     valuation: 0,
-    purchasePrice: '',
+    purchasePrice: '0',
     memo: ''         
   };
 
@@ -82,6 +94,7 @@ const MyCalendar = () => {
 
   useEffect(() => {
     refreshWasteList();
+    refreshFrequencyList();
   }, []);
 
   const refreshWasteList = () => {
@@ -94,6 +107,18 @@ const MyCalendar = () => {
     })
     .then(json => setWaste(json || []))
     .catch(err => console.error("データ取得エラー:", err));
+  };
+
+  const refreshFrequencyList = () => {
+    fetch('/api/frequency/')
+    .then(response => {
+      if(!response.ok){
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(json => setFrequencies(json || []))
+    .catch(err => console.error("スケジュール取得エラー：", err));
   };
 
   const addNewWaste = () => {
@@ -194,40 +219,87 @@ const MyCalendar = () => {
     setShowModal(!showModal);
   };
 
-  //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
   return (
-    <>
-      <div className="comment-wrapper">
-          <p>{randomText}</p>
-        </div>
+  <>
+    <div className="comment-wrapper">
+      <p>{randomText}</p>
+    </div>
     <div className="calendar-container">
-      
-
       <div className="calendar-wrapper">
         <p className="calendar-title">カレンダー</p>
         <Calendar 
           onClickDay={handleDayClick}
           tileContent={({ date, view }) => {
-            // 月表示の時のみ金額を表示
+            // 月表示の時のみ処理を行う
             if (view === 'month') {
               const tileDateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
               
-              // カレンダーの日付と一致するデータを抽出
+              // 1.「曜日」と「第何週」を取得
+              const dayOfWeek = getDayOfWeek(date);
+              const weekNum = Math.ceil(date.getDate() / 7);
+
+              if (date.getDate() === 1) { 
+                console.log("=== 1日の判定データ ===");
+                console.log("カレンダー上の日付:", tileDateStr);
+                console.log("カレンダーが判定に使っている曜日(0:日〜6:土):", dayOfWeek);
+                console.log("第何週:", weekNum);
+                console.log("DBから届いたごみの日データ一覧:", frequencies);
+              }
+
+              // 2. 今日の曜日・週が、データベースから届いたスケジュールに当てはまるかチェック
+              const todaysGarbage = frequencies.filter(f => {
+                // ⭕ Java側（dayOfWeek, dayOfWeek2）のキャメルケースに合わせて書き換えました
+                const isMatchingDay = (
+                  String(f.dayOfWeek) === String(dayOfWeek) || 
+                  String(f.dayOfWeek2) === String(dayOfWeek)
+                );
+                if (!isMatchingDay) return false;
+
+                // 週が一致するか (データベースの列名と正確に合わせます)
+                let isMatchingWeek = false;
+                if (weekNum === 1 && f.firstWeek) isMatchingWeek = true;
+                if (weekNum === 2 && f.secondWeek) isMatchingWeek = true;
+                if (weekNum === 3 && f.thirdWeek) isMatchingWeek = true;
+                if (weekNum === 4 && f.fourthWeek) isMatchingWeek = true;
+                
+                return isMatchingWeek;
+              });
+
+              // 3. カレンダーの日付と一致する金額データを抽出
               const tilesDayWastes = waste.filter(w => {
                 if (!w.buyDate) return false;
                 return w.buyDate.substring(0, 10) === tileDateStr;
               });
 
-              // 合計額を計算
-              if (tilesDayWastes.length > 0) {
-                const totalAmount = tilesDayWastes.reduce((sum, item) => {
-                  return sum + (Number(item.sellingPrice) || 0);
-                }, 0);
+              // 4. 金額の合計を先に計算しておく
+              const totalAmount = tilesDayWastes.reduce((sum, item) => {
+                return sum + (Number(item.sellingPrice) || 0);
+              }, 0);
 
+              // 5. ゴミの日マーク、または金額データがどちらか1つでもある場合のみマスの中に描画する
+              if (todaysGarbage.length > 0 || tilesDayWastes.length > 0) {
                 return (
-                  <div className="tile-waste-amount">
-                    ￥{totalAmount.toLocaleString()}
+                  <div className="tile-content-container">
+                    {/* 🌟 ゴミの日のマーク */}
+                    {todaysGarbage.length > 0 && (
+                      <div className="garbage-icons">
+                        {todaysGarbage.map((g, idx) => (
+                          <span key={idx} className="garbage-icon">
+                            {g.gabageType === 1 && "🔥可燃"} {/* 1＝可燃 */}
+                            {g.gabageType === 2 && "💎不燃"} {/* 2＝不燃 */}
+                            {g.gabageType === 3 && "♻️資源"} {/* 3＝資源 */}
+                            {g.gabageType === 4 && "🪵その他"} {/* 4＝その他 */}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* 💰 合計金額の表示 (金額があるときだけ) */}
+                    {tilesDayWastes.length > 0 && (
+                      <div className="tile-waste-amount">
+                        ￥{totalAmount.toLocaleString()}
+                      </div>
+                    )}
                   </div>
                 );
               }
@@ -236,7 +308,6 @@ const MyCalendar = () => {
           }}
         />
       </div>
-
       {showModal && (
         <div className="modal-overlay" onClick={toggleModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -480,7 +551,7 @@ const MyCalendar = () => {
       )}
     </div>
     <BottomNav />
-    </>
+  </>
     
   );
 };
