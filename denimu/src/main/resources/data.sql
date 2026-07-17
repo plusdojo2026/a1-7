@@ -1,17 +1,38 @@
-INSERT INTO Products(user_id,ap_type,name,buy_date,category,selling_price,valuation,purchase_price,created_at)VALUES(1,3,'Tシャツ','2026/6/15',1,5300,3,2200,'2026/6/15');
-INSERT INTO Products(user_id,ap_type,name,buy_date,category,selling_price,valuation,purchase_price,created_at)VALUES(1,3,'非常食','2026/6/15',2,3300,2,1200,'2026/6/15');
-INSERT INTO Products(user_id,ap_type,name,buy_date,category,selling_price,valuation,purchase_price,created_at)VALUES(1,3,'電池','2026/6/15',3,800,1,550,'2026/6/15');
-INSERT INTO Products(user_id,ap_type,name,buy_date,category,selling_price,valuation,purchase_price,created_at)VALUES(1,3,'時計','2026/6/15',4,600,4,200,'2026/6/15');
-INSERT INTO Products(user_id,ap_type,name,buy_date,category,selling_price,valuation,purchase_price,created_at)VALUES(1,3,'動画配信サービス','2026/6/15',5,2860,2,400,'2026/6/15');
-INSERT INTO Products(user_id,ap_type,name,buy_date,category,selling_price,valuation,purchase_price,created_at)VALUES(1,3,'その他','2026/6/15',6,7000,5,1200,'2026/6/15');
+-- =========================================================================
+-- 1. Category テーブル（カテゴリーマスター）
+-- =========================================================================
+INSERT IGNORE INTO Category(category_type) VALUES ('衣類');
+INSERT IGNORE INTO Category(category_type) VALUES ('食品');
+INSERT IGNORE INTO Category(category_type) VALUES ('電子機器');
+INSERT IGNORE INTO Category(category_type) VALUES ('雑貨');
+INSERT IGNORE INTO Category(category_type) VALUES ('サービス');
+INSERT IGNORE INTO Category(category_type) VALUES ('その他');
 
-INSERT INTO Category(category_type)VALUES('衣類');
-INSERT INTO Category(category_type)VALUES('食品');
-INSERT INTO Category(category_type)VALUES('電子機器');
-INSERT INTO Category(category_type)VALUES('雑貨');
-INSERT INTO Category(category_type)VALUES('サービス');
-INSERT INTO Category(category_type)VALUES('その他');
+-- =========================================================================
+-- 2. Products テーブル（家計簿データ）
+-- =========================================================================
+INSERT INTO Products(user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at) 
+VALUES (1, 3, 'Tシャツ', '2026-06-15', 1, 5300, 3, 2200, '2026-06-15');
 
+INSERT INTO Products(user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at) 
+VALUES (1, 3, '非常食', '2026-06-15', 2, 3300, 2, 1200, '2026-06-15');
+
+INSERT INTO Products(user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at) 
+VALUES (1, 3, '電池', '2026-06-15', 3, 800, 1, 550, '2026-06-15');
+
+-- 修正箇所: 末尾のシングルクォーテーション「'」を追加しました！
+INSERT INTO Products(user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at) 
+VALUES (1, 3, '時計', '2026-07-10', 4, 600, 4, 200, '2026-07-10');
+
+INSERT INTO Products(user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at) 
+VALUES (1, 3, '動画配信サービス', '2026-06-15', 5, 2860, 2, 400, '2026-06-15');
+
+INSERT INTO Products(user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at) 
+VALUES (1, 3, 'その他', '2026-06-15', 6, 7000, 5, 1200, '2026-06-15');
+
+-- =========================================================================
+-- 3. comment テーブル（アドバイスシステム）
+-- =========================================================================
 INSERT INTO comment (id, comment) VALUES
 (1, '「これくらいならいいか」の積み重ねが、大きな出費に繋がっています。一度深呼吸しましょう。'),
 (2, '本当に必要ですか？それとも、ただ「欲しい」だけですか？一晩寝てから決めても遅くありません。'),
@@ -47,3 +68,49 @@ INSERT INTO comment (id, comment) VALUES
 (308, 'ここが踏ん張りどころです！これ以上の浪費をストップして、これ以上の傷口を広げないように。'),
 (309, '一度立ち止まりましょう。今すぐ必要ではないお買い物は、すべて来月以降に回してください。'),
 (310, '失敗は成功の基です。今月の反省を活かして、来月はもっとスマートに管理していきましょう！');
+
+-- =========================================================================
+-- 4. frequency テーブル（ゴミスケジュール）
+-- =========================================================================
+INSERT IGNORE INTO frequency 
+  (id, user_id, day_of_week, day_of_week2, first_week, second_week, third_week, fouth_week, gabage_type) 
+VALUES 
+  -- 毎週【月曜日】と【木曜日】「可燃ゴミ」
+  (1, 1, 1, 4, 1, 1, 1, 1, 1),
+
+  -- 毎週【水曜日】の「資源ゴミ（プラ・ビン缶など）」
+  (2, 1, 3, NULL, 1, 1, 1, 1, 3),
+
+  -- ③ 第1・第3【金曜日】の「その他（ペットボトル・古紙など）」
+  (3, 1, 5, NULL, 1, 0, 1, 0, 4),
+
+  -- ④ 第2【土曜日】だけの「💎 不燃ゴミ（燃えないゴミ・有害ゴミ）」
+  (4, 1, 6, NULL, 0, 1, 0, 0, 2),
+
+  -- ⑤ 第4【火曜日】の「🪵 その他（粗大ゴミや草木など）」
+  (5, 1, 2, NULL, 0, 0, 0, 1, 4);
+  
+  
+  INSERT INTO Users (
+    id, 
+    user_id, 
+    pw, 
+    name, 
+    fire_garbage, 
+    nofire_garbage, 
+    landfill_garbage, 
+    recycle_garbage, 
+    target_price, 
+    last_login
+) VALUES (
+    1,                 -- id（主キーを1に固定）
+    'user01',          -- ログイン時に使うユーザーID (user_id)
+    'password123',     -- パスワード (pw)
+    'テスト太郎',       -- 表示用のユーザー名 (name)
+    4,              -- 可燃ごみ (初期値は設定なしのNULL)
+    1,              -- 不燃ごみ (初期値は設定なしのNULL)
+    2,              -- 埋め立てごみ (初期値は設定なしのNULL)
+    3,              -- 資源ごみ (初期値は設定なしのNULL)
+    1000000,           -- 目標金額 (target_price)
+    NOW()              -- 最終ログイン日時 (現在日時)
+);

@@ -1,490 +1,456 @@
-/* =========================
-   全体コンテナ（画面幅100%をフルに使用）
-========================= */
-.calendar-container {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 10px;
-  box-sizing: border-box;
+/* ==========================================================================
+   全体設計：クリーン ＆ ナチュラル
+   ========================================================================== */
+body {
+  background-color: #f4f6f8; /* 優しく穏やかなライトグレー */
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #2c3e50; /* 目に優しい深みのあるスレートグレー */
+  -webkit-font-smoothing: antialiased;
 }
 
-/* =========================
-   💡 アドバイス・コメントエリア
-========================= */
+/* 上部：コメント欄（清潔感のあるミニマルな吹き出し風） */
 .comment-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
-  border: 1px solid #e2e8f0;
-  border-left: 5px solid #2f6fdd;
-  border-radius: 12px;
-  padding: 18px 24px;
-  margin: 20px auto 10px auto;
-  width: 100%;
-  max-width: 100%;
-  box-shadow: 0 4px 12px rgba(47, 111, 221, 0.05);
-  box-sizing: border-box;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin: 20px auto;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  border-left: 4px solid #10b981; /* 優しいグリーン */
 }
 
-.comment-icon {
-  font-size: 24px;
-  background: #edf5ff;
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.comment-content {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  text-align: left;
-}
-
-.comment-label {
-  font-size: 10px;
-  font-weight: 800;
-  color: #2f6fdd;
-  letter-spacing: 1px;
-}
-
-.comment-text {
+.comment-wrapper p {
   margin: 0;
   font-size: 14px;
-  color: #4a5568;
-  line-height: 1.6;
   font-weight: 600;
+  color: #334155;
+  line-height: 1.6;
 }
 
-/* =========================
-   カレンダー
-========================= */
+/* メインコンテナ */
+.calendar-container {
+  max-width: 650px;
+  margin: 0 auto 120px auto;
+  padding: 0 16px;
+}
+
 .calendar-wrapper {
-  margin-top: 15px;
-  width: 100%;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 .calendar-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: #1e293b;
   text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #333;
 }
 
-/* react-calendar 本体 */
+/* ==========================================================================
+   react-calendar（視認性最優先 ＆ 窮屈感ゼロ）
+   ========================================================================== */
 .react-calendar {
   width: 100% !important;
-  border: none;
-  font-family: inherit;
-}
-
-/* 年月ナビゲーション */
-.react-calendar__navigation {
-  display: flex;
-  margin-bottom: 15px;
-}
-
-.react-calendar__navigation button {
-  background: none;
-  border: none;
-  font-size: 22px;
-  font-weight: bold;
-  color: #333;
-  cursor: pointer;
-  padding: 10px 0;
-}
-
-.react-calendar__navigation button:enabled:hover,
-.react-calendar__navigation button:enabled:focus {
-  background-color: #f5f7fa;
-  border-radius: 8px;
+  border: none !important;
+  background: transparent !important;
 }
 
 /* 曜日ヘッダー */
 .react-calendar__month-view__weekdays {
-  background: #eef1f6;
-  border-radius: 8px;
-  margin-bottom: 8px;
-}
-
-.react-calendar__month-view__weekdays__weekday {
-  padding: 12px 0;
-  font-size: 15px;
-  color: #666;
-  font-weight: bold;
-  text-decoration: none;
+  font-weight: 700;
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 12px;
 }
 
 .react-calendar__month-view__weekdays__weekday abbr {
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
-/* 日付グリッド（1行にしっかり7日収めるための最重要設定） */
-.react-calendar__month-view__days {
-  display: grid !important;
-  grid-template-columns: repeat(7, 1fr) !important; /* 確実に横7列に分割 */
-  gap: 4px !important; /* 隙間はmarginではなくgridのgapで制御 */
-  align-items: stretch !important;
-}
-
-/* 各日付タイル */
+/* カレンダーの「1日ごと」のマス */
 .react-calendar__tile {
-  min-height: 85px !important;
-  max-width: 100% !important; /* 幅がはみ出ないように */
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  padding: 8px 2px !important;
-  border-radius: 8px;
-  background: white;
-  border: 1px solid #d7dce5;
-  margin: 0 !important; /* 悪さをしていたmarginを完全排除 */
-  transition: background 0.2s, border-color 0.2s;
-  box-sizing: border-box;
   position: relative;
+  height: 110px; /* 高さをしっかりとって余白を作る */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* 日付数字を一番上へ */
+  align-items: flex-start; /* 日付数字を左上へ寄せる */
+  padding: 8px 8px !important;
+  border: 1px solid #f1f5f9 !important; /* 繊細で清潔感のあるグリッド線 */
+  background: #ffffff;
+  transition: background-color 0.15s ease;
 }
 
-/* 日付ナンバー部分 */
+/* 日付の数字を「大きく・見やすく」 */
 .react-calendar__tile abbr {
   font-size: 16px;
   font-weight: 700;
-  color: #333;
-  text-decoration: none;
-  margin-bottom: auto;
+  color: #1e293b;
+  margin-bottom: auto; /* 日付と下部の情報を自然に引き離す */
 }
 
-/* タイルホバー */
-.react-calendar__tile:enabled:hover {
-  background: #edf5ff;
-  border-color: #b0d4ff;
-  cursor: pointer;
+/* ホバー */
+.react-calendar__tile:hover {
+  background-color: #f8fafc !important;
 }
 
-/* 今日の日付 */
+/* 今日（自然な強調） */
 .react-calendar__tile--now {
-  background: #f0f7ff !important;
-  border: 2px solid #2f6fdd !important;
+  background-color: #f0fdf4 !important; /* 極めて薄いグリーン */
 }
-
 .react-calendar__tile--now abbr {
-  color: #2f6fdd;
+  color: #10b981 !important;
+  font-weight: 800;
 }
 
-/* 日付選択時 */
-.react-calendar__tile--active {
-  background: #2f6fdd !important;
-  border-color: #2f6fdd !important;
+/* 選択された日付 */
+.react-calendar__tile--active,
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background-color: #e2e8f0 !important;
+  color: inherit !important;
 }
 
-.react-calendar__tile--active abbr {
-  color: white !important;
-}
-
-/* 選択された日の金額表示を白抜きにする */
-.react-calendar__tile--active .tile-waste-amount {
-  color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.25) !important;
-}
-
-/* 前後の月の日付 */
-.react-calendar__month-view__days__day--neighboringMonth {
-  opacity: 0.35;
-}
-
-/* 日曜・土曜の色付け */
-.tile-sunday abbr {
-  color: #e15252 !important;
-}
-
-.tile-saturday abbr {
-  color: #2f6fdd !important;
-}
-
-.react-calendar__tile--active.tile-sunday abbr,
-.react-calendar__tile--active.tile-saturday abbr {
-  color: #ffffff !important;
-}
-
-/* =========================
-   💰 浪費額合計表示（文字切れ防止）
-   ※JSX内のクラス名「.tile-waste-amount」に変更適合
-========================= */
-.tile-waste-amount {
-  display: block;
-  width: 96%;
-  font-size: 10px; /* 7分割に合わせて少しだけ調整 */
-  color: #e15252;
-  font-weight: 700;
-  margin: 6px auto 0 auto !important;
-  padding: 4px 1px;
-  text-align: center;
-  background-color: rgba(225, 82, 82, 0.08);
-  border-radius: 6px;
-  box-sizing: border-box;
-
-  /* 文字見切れを防ぐための自動折り返し */
-  white-space: normal;
-  word-break: break-all;
-  overflow: visible;
-  text-overflow: clip;
-}
-
-/* =========================
-   📋 モーダル内の登録リスト（テーブル）
-   ※JSXに適合するようクラス名調整
-========================= */
-.step-container table {
+/* 情報レイアウトコンテナ */
+.tile-content-container {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  margin-top: 15px;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
 }
 
-.step-container th {
-  background: #f8fafc;
-  color: #718096;
-  font-weight: 600;
-  font-size: 12px;
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid #edf2f7;
+/* --------------------------------------------------------------------------
+   【改善】ごみの日マーク（パステル＆クッキリ文字）
+   -------------------------------------------------------------------------- */
+.garbage-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
 }
 
-.step-container td {
-  padding: 14px 16px;
-  color: #2d3748;
-  border-bottom: 1px solid #f7fafc;
-  vertical-align: middle;
-  text-align: left;
-}
-
-.step-container .wasterow {
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.step-container .wasterow:hover {
-  background-color: #f7fafc;
-}
-
-.step-container tr:last-child td {
-  border-bottom: none;
-}
-
-.step-container td.date {
-  color: #4a5568;
-  font-size: 12px;
-  font-weight: 600;
-  font-family: monospace;
-}
-
-.step-container td.name {
-  font-weight: 600;
-  max-width: 150px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.step-container td.price {
+.garbage-icon {
+  font-size: 12px; /* 小さすぎず、ハッキリ読めるサイズ */
   font-weight: 700;
-  color: #e15252;
+  padding: 3px 6px;
+  border-radius: 6px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  color: #1e293b;
+  background-color: #f1f5f9; /* 基本の優しいグレー */
+  border: 1px solid #cbd5e1;
 }
 
-/* =========================
-   モーダル構造
-========================= */
+/* --------------------------------------------------------------------------
+   【改善】無駄遣い金額
+   -------------------------------------------------------------------------- */
+.tile-waste-amount {
+  font-size: 12px;
+  font-weight: 700;
+  color: #e11d48; /* 目立つが強すぎないローズレッド */
+  background-color: #ffe4e6; /* 優しいピンク */
+  padding: 3px 6px;
+  border-radius: 6px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #fecdd3;
+}
+
+/* ==========================================================================
+   モーダル（上品で落ち着いた北欧風デザイン）
+   ========================================================================== */
 .modal-overlay {
   position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.45);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .modal-content {
-  width: 90%;
-  max-width: 430px;
-  max-height: 90vh;
-  overflow-y: auto;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 460px;
+  max-height: 85vh;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalUp 0.2s ease-out;
+}
+
+@keyframes modalUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #f1f5f9;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 20px;
-  border-bottom: 1px solid #eee;
 }
 
 .modal-header h3 {
   margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
 }
 
 .modal-close-btn {
-  background: none;
+  background: #f1f5f9;
   border: none;
-  font-size: 26px;
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-close-btn:hover {
+  background-color: #e2e8f0;
+  color: #1e293b;
 }
 
 .modal-body {
-  padding: 20px;
+  padding: 24px;
+  overflow-y: auto;
 }
 
-/* =========================
-   メニュー画面
-========================= */
+/* ==========================================================================
+   メニュー選択・テーブル
+   ========================================================================== */
 .menu-buttons {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-.menu-btn {
-  padding: 15px;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
+  gap: 16px;
 }
 
 .menu-btn.primary {
-  background: #2f6fdd;
-  color: white;
+  background-color: #10b981; /* 爽やかなエメラルドグリーン */
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
 }
 
-.menu-btn.secondary {
-  background: #eef3fb;
-  color: #2f6fdd;
+.menu-btn.primary:hover {
+  background-color: #059669;
 }
 
-/* =========================
-   フォーム部品
-========================= */
+/* リストテーブル */
+.step-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.step-container th,
+.step-container td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.step-container th {
+  color: #64748b;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.step-container td {
+  font-size: 14px;
+  color: #334155;
+}
+
+.wasterow:hover {
+  background-color: #f8fafc;
+  cursor: pointer;
+}
+
+.wasterow td.price {
+  font-weight: 700;
+  color: #e11d48;
+  text-align: right;
+}
+
+/* ==========================================================================
+   入力フォーム ＆ インプット
+   ========================================================================== */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .selected-date {
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.selected-date span {
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 16px;
+  margin-left: 4px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 18px;
+  gap: 6px;
 }
 
 .form-group label {
-  margin-bottom: 6px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
 }
 
-.form-group input,
+/* 入力フィールド */
+.form-group input[type="text"],
+.form-group input[type="datetime-local"],
 .form-group textarea {
-  border: 1px solid #d8dde8;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 15px;
-  outline: none;
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1e293b;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  transition: border-color 0.2s;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-  border-color: #2f6fdd;
+  outline: none;
+  border-color: #10b981; /* グリーンに変更 */
 }
 
-/* react-select コントロール */
-.react-select__control {
-  border-radius: 8px !important;
-  min-height: 42px !important;
-}
-
-.react-select__control--is-focused {
-  border-color: #2f6fdd !important;
-  box-shadow: none !important;
-}
-
-/* =========================
-   評価（星）
-========================= */
+/* 星評価 */
 .valuation-stars {
   display: flex;
   gap: 8px;
-}
-
-.valuation-star {
-  font-size: 28px;
-  color: #bbb;
+  font-size: 26px;
   cursor: pointer;
 }
 
-.valuation-star.active {
-  color: #f6b800;
+.valuation-star {
+  color: #e2e8f0;
+  transition: color 0.15s;
 }
 
-/* =========================
-   アクションボタン
-========================= */
+.valuation-star.active {
+  color: #fbbf24; /* きれいな星イエロー */
+}
+
+/* react-select コントロール */
+.react-select-container .react-select__control {
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+.react-select-container .react-select__control--is-focused {
+  border-color: #10b981 !important;
+}
+
+/* ==========================================================================
+   アクションボタン（優しくスマートに整頓）
+   ========================================================================== */
 .form-actions {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 10px;
-  margin-top: 25px;
+  margin-top: 24px;
 }
 
 .form-actions button {
   flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  min-width: 80px;
+  padding: 12px 16px;
   font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.btn-back {
-  background: #f2f2f2;
-}
-
-.btn-reset {
-  background: #ffd75d;
-}
-
+/* 登録・保存 */
 .btn-submit {
-  background: #2f6fdd;
-  color: white;
+  background-color: #1e293b;
+  color: #ffffff;
 }
 
+.btn-submit:hover {
+  background-color: #0f172a;
+}
+
+/* 戻る */
+.btn-back {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.btn-back:hover {
+  background-color: #e2e8f0;
+}
+
+/* リセット */
+.btn-reset {
+  background-color: transparent;
+  color: #64748b;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.btn-reset:hover {
+  background-color: #f8fafc;
+}
+
+/* 削除 */
 .btn-delete {
-  background: #e15252;
-  color: white;
+  background-color: #ffe4e6;
+  color: #e11d48;
 }
 
-/* =========================
-   履歴プレースホルダー
-========================= */
-.history-container {
-  text-align: center;
-}
-
-.history-placeholder {
-  color: #999;
-  padding: 40px 0;
+.btn-delete:hover {
+  background-color: #fecdd3;
 }
