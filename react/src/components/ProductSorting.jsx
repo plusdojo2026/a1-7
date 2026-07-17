@@ -395,8 +395,8 @@ const ProductSorting = () => {
                         <div id="notAp-Table">
                             {notAp.map((notAp,index) =>
                                 <Draggable key={index} id={notAp} name={notAp} type='notAp'>
-                                    <div>
-                                        {notAp}
+                                    <div className="content">
+                                        {notAp}<input className="checkBox" type="checkbox"></input>
                                     </div>
                                 </Draggable>
                             )}
@@ -412,7 +412,9 @@ const ProductSorting = () => {
                             <div id="category-Table">
                                 {used.map((use,index) =>
                                     <Draggable key={index} id={use} name={use} type='used'>
-                                        {use}
+                                        <div className="content">
+                                            {use}<input className="checkBox" type="checkbox"></input>
+                                        </div>
                                     </Draggable>
                                 
                                 
@@ -431,7 +433,9 @@ const ProductSorting = () => {
                             <div id="category-Table">
                                 {trash.map((trashEle,index) =>
                                     <Draggable key={index} id={trashEle} name={trashEle} type='trash'>
-                                        {trashEle}
+                                        <div className="content">
+                                            {trashEle}<input className="checkBox" type="checkbox"></input>
+                                        </div>
                                     </Draggable>
                                 
                                 
@@ -450,7 +454,9 @@ const ProductSorting = () => {
                             <div id="category-Table">
                                 {cell.map((cellEle,index) =>
                                     <Draggable key={index} id={cellEle} name={cellEle} type='cell'>
-                                        {cellEle}
+                                        <div className="content">
+                                            {cellEle}<input className="checkBox" type="checkbox"></input>
+                                        </div>
                                     </Draggable>
                                 
                                 
@@ -469,7 +475,9 @@ const ProductSorting = () => {
                             <div id="category-Table">
                                 {give.map((giveEle,index) =>
                                     <Draggable key={index} id={giveEle} name={giveEle} type='give'>
-                                        {giveEle}
+                                        <div className="content">
+                                            {giveEle}<input className="checkBox" type="checkbox"></input>
+                                        </div>
                                     </Draggable>
                                 
                                 
@@ -488,7 +496,9 @@ const ProductSorting = () => {
                             <div id="category-Table">
                                 {other.map((otherEle,index) =>
                                     <Draggable key={index} id={otherEle} name={otherEle} type='other'>
-                                        {otherEle}
+                                        <div className="content">
+                                            {otherEle}<input className="checkBox" type="checkbox"></input>
+                                        </div>
                                     </Draggable>
                                 
                                 
@@ -508,7 +518,9 @@ const ProductSorting = () => {
                     <div id="category-Table">
                         {checked.map((checkedEle,index) =>
                             <Draggable key={index} id={checkedEle} name={checkedEle} type='checked'>
-                                {checkedEle}
+                                <div className="content">
+                                    {checkedEle}<input className="checkBox" type="checkbox"></input>
+                                </div>
                             </Draggable>
                         
                         
