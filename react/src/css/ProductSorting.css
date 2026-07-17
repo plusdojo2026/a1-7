@@ -22,7 +22,7 @@
 
 
 /* タグの色 */
-.used-Button,.trash-Button,.cell-Button,.give-Button,.other-Button{
+.used-Button,.trash-Button,.cell-Button,.give-Button,.other-Button,.all-Button{
   color: rgb(255, 255, 255);
   background-color: rgb(137, 137, 137);
 }
