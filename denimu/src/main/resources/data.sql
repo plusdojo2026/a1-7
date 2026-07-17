@@ -73,7 +73,7 @@ INSERT INTO comment (id, comment) VALUES
 -- 4. frequency テーブル（ゴミスケジュール）
 -- =========================================================================
 INSERT IGNORE INTO frequency 
-  (id, user_id, day_of_week, day_of_week2, first_week, second_week, third_week, fouth_week, gabage_type) 
+  (id, user_id, day_of_week, day_of_week2, first_week, second_week, third_week, fourth_week, gabage_type) 
 VALUES 
   -- 毎週【月曜日】と【木曜日】「可燃ゴミ」
   (1, 1, 1, 4, 1, 1, 1, 1, 1),
