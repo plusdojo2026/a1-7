@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.entity.Frequency; // ⚠️ご自身のEntityのパッケージ名に合わせてください
-import com.example.demo.repository.FrequencyRepository; // ⚠️ご自身のRepositoryのパッケージ名に合わせてください
+import com.example.demo.entity.Frequency;
+import com.example.demo.repository.FrequencyRepository; 
 
 /**
  * ゴミ収集スケジュール（Frequency）のAPIを受け付けるコントローラークラスです。
@@ -17,10 +17,9 @@ import com.example.demo.repository.FrequencyRepository; // ⚠️ご自身のRep
  */
 @RestController
 @RequestMapping("/api/frequency/")
-@CrossOrigin(origins = "http://localhost:3000") // 💡React（フロントエンド）からのアクセスを許可する設定です
+@CrossOrigin(origins = "http://localhost:3000") 
 public class FrequencyController {
 
-    // データベース操作のためのRepositoryを自動的に繋ぎ込みます
     @Autowired
     private FrequencyRepository frequencyRepository;
 
@@ -30,7 +29,6 @@ public class FrequencyController {
      */
     @GetMapping("/")
     public List<Frequency> getAllFrequencies() {
-        // JpaRepositoryの標準機能で、テーブルの全レコードを自動的に取得します
         return frequencyRepository.findAll();
     }
 }

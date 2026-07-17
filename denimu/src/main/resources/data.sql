@@ -73,7 +73,7 @@ INSERT INTO comment (id, comment) VALUES
 -- 4. frequency テーブル（ゴミスケジュール）
 -- =========================================================================
 INSERT IGNORE INTO frequency 
-  (id, user_id, day_of_week, day_of_week2, first_week, second_week, third_week, fouth_week, gabage_type) 
+  (id, user_id, day_of_week, day_of_week2, first_week, second_week, third_week, fourth_week, gabage_type) 
 VALUES 
   -- 毎週【月曜日】と【木曜日】「可燃ゴミ」
   (1, 1, 1, 4, 1, 1, 1, 1, 1),
@@ -113,4 +113,28 @@ VALUES
     3,              -- 資源ごみ (初期値は設定なしのNULL)
     1000000,           -- 目標金額 (target_price)
     NOW()              -- 最終ログイン日時 (現在日時)
+);
+
+-- ログイン確認用
+INSERT INTO Users (
+    user_id,
+    pw,
+    name,
+    fire_garbage,
+    nofire_garbage,
+    landfill_garbage,
+    recycle_garbage,
+    target_price,
+    last_login
+)
+VALUES (
+    '1234',
+    'abcd',
+    '鈴木',
+    0,
+    1,
+    0,
+    1,
+    30000,
+    '2026-07-17 11:00:00'
 );
