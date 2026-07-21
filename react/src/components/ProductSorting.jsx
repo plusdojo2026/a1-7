@@ -40,6 +40,34 @@ const ProductSorting = () => {
     let [active, setActive] = useState("used");
 
 
+    //チェック済みリスト用
+    //すべてリスト
+    let [all, setAll] = useState([]);
+
+    //使用リスト
+    let [used2, setUsed2] = useState([]);
+
+    //捨てるリスト
+    let [trash2, setTrash2] = useState([]);
+
+    //売るリスト
+    let [cell2, setCell2] = useState([]);
+
+    //あげるリスト
+    let [give2, setGive2] = useState([]);
+
+    //その他リスト
+    let [other2, setOther2] = useState([]);
+
+    //チェック済みリスト
+    let [checked2,setChecked2] = useState([]);
+
+    //現在表示しているタブ
+    let [active2, setActive2] = useState("used");
+
+
+
+
     //スライドコンテンツ
     let [open, setOpen] = useState(false);
 
@@ -73,13 +101,23 @@ const ProductSorting = () => {
 
     // 分類処理
     const sortCategory = (list) => {
-        setNotAp(list.filter(p => p.ap_type === 0));
-        setUsed(list.filter(p => p.ap_type === 1));
-        setTrash(list.filter(p => p.ap_type === 2));
-        setCell(list.filter(p => p.ap_type === 3));
-        setGive(list.filter(p => p.ap_type === 4));
-        setOther(list.filter(p => p.ap_type === 5));
-        setChecked(list.filter(p => p.ap_type === 6));
+        setNotAp(list.filter(p => p.ap_type === 0 && p.check_box != true));
+        setUsed(list.filter(p => p.ap_type === 1 && p.check_box != true));
+        setTrash(list.filter(p => p.ap_type === 2 && p.check_box != true));
+        setCell(list.filter(p => p.ap_type === 3 && p.check_box != true));
+        setGive(list.filter(p => p.ap_type === 4 && p.check_box != true));
+        setOther(list.filter(p => p.ap_type === 5 && p.check_box != true));
+        setChecked(list.filter(p => p.ap_type === 6 && p.check_box != true));
+
+        //チェック済みリスト用
+        setAll(list.filter(p => p.check_box === true));
+        setUsed2(list.filter(p => p.ap_type === 1 && p.check_box === true));
+        setTrash2(list.filter(p => p.ap_type === 2 && p.check_box === true));
+        setCell2(list.filter(p => p.ap_type === 3 && p.check_box === true));
+        setGive2(list.filter(p => p.ap_type === 4 && p.check_box === true));
+        setOther2(list.filter(p => p.ap_type === 5 && p.check_box === true));
+        setChecked2(list.filter(p => p.ap_type === 6 && p.check_box === true));
+
         console.log("仕分け後リスト"+cell);
     };
 
@@ -132,32 +170,32 @@ const ProductSorting = () => {
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setUsed(used.filter(value => value.name != name))
+                    setUsed(used.filter(value => value.id != obj.id))
                 }
 
                 //「捨てる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.name != name))
+                    setTrash(trash.filter(value => value.id != obj.id))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.name != name))
+                    setCell(cell.filter(value => value.id != obj.id))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.name != name))
+                    setGive(give.filter(value => value.id != obj.id))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.name != name))
+                    setOther(other.filter(value => value.id != obj.id))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.name != name))
+                    setChecked(checked.filter(value => value.id != obj.id))
                 }
 
             }
@@ -178,32 +216,32 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.name != name))
+                    setNotAp(notAp.filter(value => value.id != obj.id))
                 }
 
                 //「捨てる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.name != name))
+                    setTrash(trash.filter(value => value.id != obj.id))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.name != name))
+                    setCell(cell.filter(value => value.id != obj.id))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.name != name))
+                    setGive(give.filter(value => value.id != obj.id))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.name != name))
+                    setOther(other.filter(value => value.id != obj.id))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.name != name))
+                    setChecked(checked.filter(value => value.id != obj.id))
                 }
 
             }
@@ -223,32 +261,32 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.name != name))
+                    setNotAp(notAp.filter(value => value.id != obj.id))
                 }
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setTrash(used.filter(value => value.name != name))
+                    setTrash(used.filter(value => value.id != obj.id))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.name != name))
+                    setCell(cell.filter(value => value.id != obj.id))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.name != name))
+                    setGive(give.filter(value => value.id != obj.id))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.name != name))
+                    setOther(other.filter(value => value.id != obj.id))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.name != name))
+                    setChecked(checked.filter(value => value.id != obj.id))
                 }
 
             }
@@ -267,32 +305,32 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.name != name))
+                    setNotAp(notAp.filter(value => value.id != obj.id))
                 }
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setUsed(used.filter(value => value.name != name))
+                    setUsed(used.filter(value => value.id != obj.id))
                 }
 
                 //「すてる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.name != name))
+                    setTrash(trash.filter(value => value.id != obj.id))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.name != name))
+                    setGive(give.filter(value => value.id != obj.id))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.name != name))
+                    setOther(other.filter(value => value.id != obj.id))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.name != name))
+                    setChecked(checked.filter(value => value.id != obj.id))
                 }
 
             }
@@ -312,32 +350,32 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.name != name))
+                    setNotAp(notAp.filter(value => value.id != obj.id))
                 }
 
                 //「捨てる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.name != name))
+                    setTrash(trash.filter(value => value.id != obj.id))
                 }
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setUsed(used.filter(value => value.name != name))
+                    setUsed(used.filter(value => value.id != obj.id))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.name != name))
+                    setCell(cell.filter(value => value.id != obj.id))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.name != name))
+                    setOther(other.filter(value => value.id != obj.id))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.name != name))
+                    setChecked(checked.filter(value => value.id != obj.id))
                 }
 
             }
@@ -356,32 +394,32 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.name != name))
+                    setNotAp(notAp.filter(value => value.id != obj.id))
                 }
 
                 //「捨てる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.name != name))
+                    setTrash(trash.filter(value => value.id != obj.id))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.name != name))
+                    setCell(cell.filter(value => value.id != obj.id))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.name != name))
+                    setGive(give.filter(value => value.id != obj.id))
                 }
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setUsed(used.filter(value => value.name != name))
+                    setUsed(used.filter(value => value.id != obj.id))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.name != name))
+                    setChecked(checked.filter(value => value.id != obj.id))
                 }
 
             }
@@ -399,32 +437,32 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.name != name))
+                    setNotAp(notAp.filter(value => value.id != obj.id))
                 }
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setUsed(used.filter(value => value.name != name))
+                    setUsed(used.filter(value => value.id != obj.id))
                 }
 
                 //「捨てる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.name != name))
+                    setTrash(trash.filter(value => value.id != obj.id))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.name != name))
+                    setCell(cell.filter(value => value.id != obj.id))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.name != name))
+                    setGive(give.filter(value => value.id != obj.id))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.name != name))
+                    setOther(other.filter(value => value.id != obj.id))
                 }
 
             }
@@ -582,27 +620,139 @@ const ProductSorting = () => {
 
             {/* チェック済みリスト */}
             <div className="checked-Box">
-                <Droppable id="drop-area6">
-                    <h3 className="drop-Title">チェック済みリスト</h3>
-                    <nav className="button-Tab">
-                        <button onClick={() => setActive("used")} className={active === "used" ? "used-Button" : ""}>使う</button>
-                        <button onClick={() => setActive("trash")} className={active === "trash" ? "trash-Button" : ""}>すてる</button>
-                        <button onClick={() => setActive("cell")} className={active === "cell" ? "cell-Button" : ""}>売る</button>
-                        <button onClick={() => setActive("give")} className={active === "give" ? "give-Button" : ""}>あげる</button>
-                        <button onClick={() => setActive("other")} className={active === "other" ? "other-Button" : ""}>その他</button>
-                    </nav>
-                    <div id="category-Table" className="category-Table">
-                        {checked.map((checkedEle,index) =>
-                            <Draggable key={index} id={checkedEle.name} name={checkedEle.name} type='checked' obj={checkedEle}>
-                                <div className="content">
-                                    {checkedEle.name}<input className="checkBox" type="checkbox"></input>
-                                </div>
-                            </Draggable>
-                        
-                        
-                        )}
+                <h3 className="drop-Title">チェック済みリスト</h3>
+                <nav className="button-Tab">
+                    <button onClick={() => setActive2("all")} className={active2 === "all" ? "all-Button" : ""}>すべて</button>
+                    <button onClick={() => setActive2("used")} className={active2 === "used" ? "used-Button" : ""}>使う</button>
+                    <button onClick={() => setActive2("trash")} className={active2 === "trash" ? "trash-Button" : ""}>すてる</button>
+                    <button onClick={() => setActive2("cell")} className={active2 === "cell" ? "cell-Button" : ""}>売る</button>
+                    <button onClick={() => setActive2("give")} className={active2 === "give" ? "give-Button" : ""}>あげる</button>
+                    <button onClick={() => setActive2("other")} className={active2 === "other" ? "other-Button" : ""}>その他</button>
+                </nav>
+                {/* すべてタブ */}
+                {active2 === "all" &&(
+                    <div className="all-Box">
+                        <Droppable id="drop-area6">
+                            <h3 className="drop-Title">すべて</h3>
+                            <div id="category-Table" className="category-Table">
+                                {used.map((use,index) =>
+                                    <Draggable key={index} id={use.name} name={use.name} type='used' obj={use}>
+                                        <div className="content">
+                                            {use.name}<input className="checkBox" type="checkbox"></input>
+                                        </div>
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
                     </div>
-                </Droppable>
+                )}
+
+
+                {/* 使用タブ */}
+                {active2 === "used" &&(
+                    <div className="used-Box">
+                        <Droppable id="drop-area7">
+                            <h3 className="drop-Title">使う</h3>
+                            <div id="category-Table" className="category-Table">
+                                {used.map((use,index) =>
+                                    <Draggable key={index} id={use.name} name={use.name} type='used' obj={use}>
+                                        <div className="content">
+                                            {use.name}<input className="checkBox" type="checkbox"></input>
+                                        </div>
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+                )}
+
+
+                {/* すてる */}
+                {active2 === "trash" &&(
+                    <div className="used-Box">
+                        <Droppable id="drop-area8">
+                            <h3 className="drop-Title">すてる</h3>
+                            <div id="category-Table" className="category-Table">
+                                {trash.map((trashEle,index) =>
+                                    <Draggable key={index} id={trashEle.name} name={trashEle.name} type='trash' obj={trashEle}>
+                                        <div className="content">
+                                            {trashEle.name}<input className="checkBox" type="checkbox"></input>
+                                        </div>
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+                )}
+
+
+                {/* 売る */}
+                {active2 === "cell" &&(
+                    <div className="used-Box">
+                        <Droppable id="drop-area9">
+                            <h3 className="drop-Title">売る</h3>
+                            <div id="category-Table" className="category-Table">
+                                {cell.map((cellEle,index) =>
+                                    <Draggable key={index} id={cellEle.name} name={cellEle.name} type='cell' obj={cellEle}>
+                                        <div className="content">
+                                            {cellEle.name}<input className="checkBox" type="checkbox"></input>
+                                        </div>
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+                )}
+
+
+                {/* あげる */}
+                {active2 === "give" &&(
+                    <div className="used-Box">
+                        <Droppable id="drop-area10">
+                            <h3 className="drop-Title">あげる</h3>
+                            <div id="category-Table" className="category-Table">
+                                {give.map((giveEle,index) =>
+                                    <Draggable key={index} id={giveEle.name} name={giveEle.name} type='give' obj={giveEle}>
+                                        <div className="content">
+                                            {giveEle.name}<input className="checkBox" type="checkbox"></input>
+                                        </div>
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+                )}
+
+
+                {/* その他タブ */}
+                {active2 === "other" &&(
+                    <div className="used-Box">
+                        <Droppable id="drop-area11">
+                            <h3 className="drop-Title">その他</h3>
+                            <div id="category-Table" className="category-Table">
+                                {other.map((otherEle,index) =>
+                                    <Draggable key={index} id={otherEle.name} name={otherEle.name} type='other' obj={otherEle}>
+                                        <div className="content">
+                                            {otherEle.name}<input className="checkBox" type="checkbox"></input>
+                                        </div>
+                                    </Draggable>
+                                
+                                
+                                )}
+                            </div>
+                        </Droppable>
+                    </div>
+                )}
 
 
                {/* 左に固定された矢印ボタン（常に表示） */}
