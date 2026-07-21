@@ -56,6 +56,11 @@ public Map<String, Object> login(@RequestBody Users user) {
 
 @PostMapping("/Register")
 public String add(@RequestBody Users user){
+	 // 同じuserIdがあるか確認
+    Users users = repository.findByUserId(user.getUserId());
+    if(users != null){
+        return "このログインIDは既に使用されています";
+    }
 	repository.save(user);
 	return "OK";
 }

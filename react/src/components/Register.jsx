@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/Register.css";
 
 const Register = () => {
+    let navigate = useNavigate();
 
     let [newUsers, setNewUsers] = useState({ name: '', userId: '', pw: ''});
 
@@ -35,8 +37,24 @@ const Register = () => {
         }
         axios.post('http://localhost:8080/Register', newUsers)
         .then(response => {
+
+        // 返ってきた値を確認
+        console.log(response.data);
+
+        //成功
+        if(response.data === "OK"){
             alert("新規登録しました");
             setNewUsers({ name: '', userId: '', pw: ''});
+        
+
+             setConfirmPassword("");
+         
+            // ログイン画面へ遷移
+            navigate("/");
+        }else{
+            // ID重複などのエラー表示
+            alert(response.data);
+        }
         });
     }
     return(
