@@ -6,6 +6,7 @@ import './App.css'
 import Chart from './components/Chart'
 import Calendar from './components/Calendar'
 import Login from './components/Login'
+import Register from './components/Register'
 import ProductRegister from './components/ProductRegister'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -17,6 +18,7 @@ return (
 <BrowserRouter>
 <Routes>
 <Route index element={<Login />} ></Route>
+    <Route path="/Register" element={<Register  />} ></Route>
     <Route path="/Chart" element={<Chart  />} ></Route>
     <Route path="/Calendar" element={<Calendar />} ></Route>
     <Route path="ProductRegister" element={<ProductRegister />} ></Route>
