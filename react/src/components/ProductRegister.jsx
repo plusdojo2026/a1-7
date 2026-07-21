@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from './ProductRegister.module.css';
+//import styles from './ProductRegister.module.css';
 const ProductRegister = () => {
 
     // 検索
@@ -39,7 +39,7 @@ const ProductRegister = () => {
     ]);
 
     return (
-        <div className={styles.container}>
+        <div /*className={styles.container}*/>
             <h1>ムダログ</h1>
 
             {/* 検索 */}
