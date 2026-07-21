@@ -23,10 +23,26 @@ const Login = () => {
         }
         axios.post('http://localhost:8080/Login',users)
         .then(response => {
-            if(response.data === "OK"){
+
+            console.log(response.data);
+
+            if(response.data.result === "OK"){
+
+                // idを保存
+                sessionStorage.setItem("id", response.data.id);
+
+                // userIDを保存
+                sessionStorage.setItem("userId", response.data.userId);
+
+                // 確認
+                console.log("id:", sessionStorage.getItem("id"));
+                console.log("userId:", sessionStorage.getItem("userId"));
                 alert("ログイン成功");
+
+                // ホーム画面へ遷移
+                navigate("/Calendar");
             }else{
-                alert(response.data);
+                alert(response.data.message);
             }
         });
     }

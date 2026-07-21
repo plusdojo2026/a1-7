@@ -1,5 +1,8 @@
 package com.example.demo.controller.api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,42 +19,39 @@ public class UserController {
 @Autowired
 private UsersRepository repository;
 
-//@PostMapping("/Login")
-//public String login(@RequestBody("userId") Integer id, @RequestBody("pw") String pw) {
-//		
-//	if(id == null || pw == null){
-//		return "※IDとPWを入力してください！";
-//	}else {
-//		Users users = repository.findByUserId(userId).get();
-//	
-//		if(users.getPw().equals(pw)){
-//	        return "OK";
-//	    } else {
-//	        return "※IDまたはPWが違います";
-//	    }
-//	}
-//}
 @PostMapping("/Login")
-public String login(@RequestBody Users user) {
+public Map<String, Object> login(@RequestBody Users user) {
+	
+	Map<String, Object> result = new HashMap<>();
 	
 	String userId = user.getUserId();
-	String pw = user.getPw();
+    String pw = user.getPw();
 	
-	if(userId == null || pw == null) {
-		return "※IDとPWを入力してください！";
-	}
-	
-	Users users = repository.findByUserId(userId);
-	
+    Users users = repository.findByUserId(userId);
+    
 	if(users == null) {
-		return "※IDまたはPWが違います";
+		
+		result.put("result", "NG");
+        result.put("message", "ログインIDまたはパスワードに誤りがあります");
+		return result;
 	}
 	
 	if(users.getPw().equals(pw)) {
-		return "OK";
+		 // ログイン成功
+        result.put("result", "OK");
+
+        // idを返す
+        result.put("id", users.getId());
+
+        // userIdを返す
+        result.put("userId", users.getUserId());
+
 	}else {
-		return"※IDまたはPWが違います";
+        result.put("result", "NG");
+        result.put("message", "ログインIDまたはパスワードに誤りがあります");
 	}
+	System.out.println(result);
+	return result;
 }
 
 @PostMapping("/Register/")
