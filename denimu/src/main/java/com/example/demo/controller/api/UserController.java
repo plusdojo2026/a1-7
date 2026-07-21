@@ -54,7 +54,7 @@ public Map<String, Object> login(@RequestBody Users user) {
 	return result;
 }
 
-@PostMapping("/Register/")
+@PostMapping("/Register")
 public String add(@RequestBody Users user){
 	repository.save(user);
 	return "OK";
