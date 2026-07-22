@@ -8,6 +8,7 @@ import Calendar from './components/Calendar'
 import Login from './components/Login'
 import Register from './components/Register'
 import ProductRegister from './components/ProductRegister'
+import Mypage from './components/Mypage'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProductSorting from './components/ProductSorting'
@@ -24,6 +25,7 @@ return (
     <Route path="/Calendar" element={<Calendar />} ></Route>
     <Route path="ProductRegister" element={<ProductRegister />} ></Route>
     <Route path="/ProductSorting" element={<ProductSorting />} ></Route>
+    <Route path="/Mypage" element={<Mypage />} ></Route>
 </Routes>
 </BrowserRouter>
 </section>

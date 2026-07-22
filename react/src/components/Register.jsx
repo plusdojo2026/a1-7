@@ -22,13 +22,27 @@ const Register = () => {
             alert("ユーザー名を入力してください。")
             return;
         }
+        if(newUsers.name.length <1 || newUsers.name.length > 10){
+            alert("ユーザー名は1文字以上10文字以下で入力してください。");
+            return;
+        }
         if(newUsers.userId === ""){
             alert("ログインIDを入力してください。")
             return;
         }
-
+        if(newUsers.userId.length < 8 || newUsers.userId.length > 50){
+            alert("ログインIDは8文字以上50文字以下で入力してください。");
+            return;
+        }
         if(newUsers.pw === ""){
             alert("パスワードを入力してください。")
+            return;
+        }
+        if(newUsers.pw.length < 8 || newUsers.pw.length > 50){
+            alert("パスワードは8文字以上50文字以下で入力してください。")
+        }
+        if(confirmPassword === ""){
+            alert("正しいパスワードを入力してください。")
             return;
         }
         if(newUsers.pw !== confirmPassword){

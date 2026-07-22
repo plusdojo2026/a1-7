@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,12 +58,30 @@ public Map<String, Object> login(@RequestBody Users user) {
 
 @PostMapping("/Register")
 public String add(@RequestBody Users user){
-	 // 同じuserIdがあるか確認
-    Users users = repository.findByUserId(user.getUserId());
-    if(users != null){
+	Users exist = repository.findByUserId(user.getUserId());
+
+    if(exist != null){
         return "このログインIDは既に使用されています";
     }
 	repository.save(user);
+	return "OK";
+}
+
+@GetMapping("/api/users/{id}")
+public Users get(@PathVariable Integer id){
+    return repository.findById(id).get();
+}
+@PostMapping("/api/users/mod/")
+public Object mod(@RequestBody Users user) {
+	
+	Users exist = repository.findByUserId(user.getUserId());
+	
+	 // 自分以外がそのuserIdを使っていたらエラー
+    if(exist != null && !exist.getId().equals(user.getId())) {
+        return "このログインIDは既に使用されています";
+    }
+	repository.save(user);
+	
 	return "OK";
 }
 }

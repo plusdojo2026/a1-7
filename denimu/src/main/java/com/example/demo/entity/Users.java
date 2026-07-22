@@ -2,8 +2,6 @@ package com.example.demo.entity;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,16 +29,16 @@ public class Users {
 	@Column(nullable = false)
 	private String name;
 	@JoinColumn(name="gabageType")
-	@JsonIgnore
+	
 	private Integer fireGarbage;
 	@JoinColumn(name="gabageType")
-	@JsonIgnore
+	
 	private Integer nofireGarbage;
 	@JoinColumn(name="gabageType")
-	@JsonIgnore
+	
 	private Integer landfillGarbage;
 	@JoinColumn(name="gabageType")
-	@JsonIgnore
+	
 	private Integer recycleGarbage;
 	private Integer targetPrice;
 	private Date lastLogin;

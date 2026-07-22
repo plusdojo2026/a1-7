@@ -20,7 +20,9 @@ export default function BottomNav(){
             component={Link}
             to="/Calendar"/>
             <BottomNavigationAction label="仕分け" icon={<CategoryIcon />} />
-            <BottomNavigationAction label="マイページ" icon={<PersonIcon />} />
+            <BottomNavigationAction label="マイページ" icon={<PersonIcon />}
+            component={Link}
+            to="/Mypage" />
             </BottomNavigation>
     )
 }
