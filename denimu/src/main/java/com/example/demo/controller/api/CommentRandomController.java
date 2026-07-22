@@ -2,6 +2,7 @@ package com.example.demo.controller.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,6 +42,7 @@ public class CommentRandomController {
                 "SELECT target_price FROM users WHERE id = ?", Integer.class, userId
             );
         } catch (Exception e) {
+            targetPrice = null;
         }
 
         List<Integer> targetIds = new ArrayList<>();
@@ -55,14 +57,32 @@ public class CommentRandomController {
                     targetIds.add(i);
                 }
             } else {
-                for (int i = 201; i <= 210; i++) {
-                    targetIds.add(i);
+                int overAmount = totalWaste - targetPrice;
+
+                if (overAmount <= 10000) { 
+                    for (int i = 201; i <= 210; i++) {
+                        targetIds.add(i);
+                    }
+                } else {
+                    for (int i = 301; i <= 350; i++) {
+                        targetIds.add(i);
+                    }
                 }
             }
         }
 
-        Comment randomComment = commentRepository.findRandomCommentInIds(targetIds);
-        
+        // 1. リスト(targetIds)からランダムに1つのIDを決定
+        Random random = new Random();
+        int selectedId = targetIds.get(random.nextInt(targetIds.size()));
+
+        // ★★★ ここでコンソールに選ばれた comment id を出力！ ★★★
+        System.out.println("==========================================");
+        System.out.println("★ 選ばれた comment id: " + selectedId);
+        System.out.println("==========================================");
+
+        // 2. 選ばれたIDを元にDBからコメントを取得
+        Comment randomComment = commentRepository.findById(selectedId).orElse(null);
+
         return randomComment != null ? randomComment.getComment() : "コメントが見つかりませんでした。";
     }
 }
