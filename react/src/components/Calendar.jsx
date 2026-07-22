@@ -7,6 +7,8 @@ import './Calendar.css';
 import BottomNav from "./BottomNav";
 
 const MyCalendar = () => {
+  const [id] = useState(() => sessionStorage.getItem("id"));
+  const [userId] = useState(() => sessionStorage.getItem("userId"));
   const [waste, setWaste] = useState([]);
   const [frequencies, setFrequencies] = useState([]);
   const products = window.products || {};
@@ -16,8 +18,9 @@ const MyCalendar = () => {
 
   //コメント欄
   const [randomText, setRandomText] = useState('読み込み中...');
+
   useEffect(() => {
-    fetch('http://localhost:8080/api/random-text')
+    fetch('/api/random-text')
       .then(response => response.text())
       .then(data => {
         setRandomText(data);
@@ -34,7 +37,7 @@ const MyCalendar = () => {
     return dbDateOnly === formattedSelectedDate;
   });
 
-  // ⭕ 「日(0)〜土(6)」のどの曜日かを正しく返すように修正
+  //  「日(0)〜土(6)」のどの曜日かを正しく返すように修正
   const getDayOfWeek = (date) =>{
     return date.getDay(); 
   };
@@ -47,7 +50,7 @@ const MyCalendar = () => {
 
   const firstForm = {
     id: '',
-    userId: 1,
+    userId: userId,
     name: '',
     ap_type: 5, 
     buyDate: '',
@@ -57,6 +60,8 @@ const MyCalendar = () => {
     purchasePrice: '0',
     memo: ''         
   };
+  console.log(" 保持されているid:", id);
+  console.log(" 保持されているuserId:", userId);
 
   const secondForm = {
     id: products.id,
@@ -72,6 +77,13 @@ const MyCalendar = () => {
 
   const [newWaste, setNewWaste] = useState(firstForm);
   const [modWaste, setModWaste] = useState(secondForm);
+
+  useEffect(() => {
+    if (id) {
+      setNewWaste(prev => ({ ...prev, userId: id }));
+      setModWaste(prev => ({ ...prev, userId: id }));
+    }
+  }, [id]);
 
   const inputNewWaste = (e) => {
     setNewWaste({ ...newWaste, [e.target.name]: e.target.value });
@@ -93,32 +105,36 @@ const MyCalendar = () => {
   };
 
   useEffect(() => {
-    refreshWasteList();
-    refreshFrequencyList();
-  }, []);
+    if (id) {
+      refreshWasteList();
+      refreshFrequencyList();
+    }
+  }, [id]);
 
   const refreshWasteList = () => {
-    fetch('/api/waste/')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(json => setWaste(json || []))
-    .catch(err => console.error("データ取得エラー:", err));
+    if (!id) return;
+    fetch(`/api/waste/?id=${id}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');i
+        }
+        return response.json();
+      })
+      .then(json => setWaste(json || []))
+      .catch(err => console.error("データ取得エラー:", err));
   };
 
   const refreshFrequencyList = () => {
-    fetch('/api/frequency/')
-    .then(response => {
-      if(!response.ok){
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(json => setFrequencies(json || []))
-    .catch(err => console.error("スケジュール取得エラー：", err));
+    if (!id) return;
+    fetch(`/api/frequency/?id=${id}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(json => setFrequencies(json || []))
+      .catch(err => console.error("スケジュール取得エラー：", err));
   };
 
   const addNewWaste = () => {
@@ -132,7 +148,7 @@ const MyCalendar = () => {
     
     const wasteWithDateTime = {
       ...newWaste,
-      userId: newWaste.userId || 1,
+      userId: id ,
       buyDate: `${newWaste.buyDate}T${currentTimeStr}`, 
       sellingPrice: Number(newWaste.sellingPrice),
       purchasePrice: newWaste.purchasePrice ? Number(newWaste.purchasePrice) : null, 
@@ -219,8 +235,38 @@ const MyCalendar = () => {
     setShowModal(!showModal);
   };
 
+  //const [isOpen, setIsOpen] = useState(false);
+  //useEffect(() => {
+  //   fetch('/api/User')
+  //   .then((response) => {
+  //     if(!response.ok)  {
+  //       throw new alert('APIエラー');
+  //     }
+  //     return response.json();
+  //   })
+  //   .then((data) => {
+  //     if(data.lastLogin){
+  //       setIsOpen(true);
+  //     }
+  //   })
+    
+  // }, []);
+
   return (
   <>
+    {/*モーダル*/}
+    {/* <div>
+      {isOpen && (
+        <div>
+          <div>
+            <h2>お知らせ</h2>
+            <p>画面が開かれました！</p>
+            <button onClick={() => setIsOpen(false)}>閉じる</button>
+          </div>
+        </div>
+      )}
+    </div> */}
+
     <div className="comment-wrapper">
       <p>{randomText}</p>
     </div>
@@ -230,32 +276,30 @@ const MyCalendar = () => {
         <Calendar 
           onClickDay={handleDayClick}
           tileContent={({ date, view }) => {
-            // 月表示の時のみ処理を行う
             if (view === 'month') {
               const tileDateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
               
-              // 1.「曜日」と「第何週」を取得
+              // 曜日と第何週を取得
               const dayOfWeek = getDayOfWeek(date);
               const weekNum = Math.ceil(date.getDate() / 7);
 
-              if (date.getDate() === 1) { 
-                console.log("=== 1日の判定データ ===");
-                console.log("カレンダー上の日付:", tileDateStr);
-                console.log("カレンダーが判定に使っている曜日(0:日〜6:土):", dayOfWeek);
-                console.log("第何週:", weekNum);
-                console.log("DBから届いたごみの日データ一覧:", frequencies);
-              }
+              // if (date.getDate() === 1) { 
+              //   console.log("=== 1日の判定データ ===");
+              //   console.log("カレンダー上の日付:", tileDateStr);
+              //   console.log("カレンダーが判定に使っている曜日(0:日〜6:土):", dayOfWeek);
+              //   console.log("第何週:", weekNum);
+              //   console.log("DBから届いたごみの日データ一覧:", frequencies);
+              // }
 
-              // 2. 今日の曜日・週が、データベースから届いたスケジュールに当てはまるかチェック
+              // 今日の曜日・週が、データベースから届いたスケジュールに当てはまるかチェック
               const todaysGarbage = frequencies.filter(f => {
-                // ⭕ Java側（dayOfWeek, dayOfWeek2）のキャメルケースに合わせて書き換えました
                 const isMatchingDay = (
                   String(f.dayOfWeek) === String(dayOfWeek) || 
                   String(f.dayOfWeek2) === String(dayOfWeek)
                 );
                 if (!isMatchingDay) return false;
 
-                // 週が一致するか (データベースの列名と正確に合わせます)
+                // 週が一致するか
                 let isMatchingWeek = false;
                 if (weekNum === 1 && f.firstWeek) isMatchingWeek = true;
                 if (weekNum === 2 && f.secondWeek) isMatchingWeek = true;
@@ -265,22 +309,20 @@ const MyCalendar = () => {
                 return isMatchingWeek;
               });
 
-              // 3. カレンダーの日付と一致する金額データを抽出
+              //  カレンダーの日付と一致する金額データを抽出
               const tilesDayWastes = waste.filter(w => {
                 if (!w.buyDate) return false;
                 return w.buyDate.substring(0, 10) === tileDateStr;
               });
 
-              // 4. 金額の合計を先に計算しておく
               const totalAmount = tilesDayWastes.reduce((sum, item) => {
                 return sum + (Number(item.sellingPrice) || 0);
               }, 0);
 
-              // 5. ゴミの日マーク、または金額データがどちらか1つでもある場合のみマスの中に描画する
+              // ゴミの日マーク
               if (todaysGarbage.length > 0 || tilesDayWastes.length > 0) {
                 return (
                   <div className="tile-content-container">
-                    {/* 🌟 ゴミの日のマーク */}
                     {todaysGarbage.length > 0 && (
                       <div className="garbage-icons">
                         {todaysGarbage.map((g, idx) => (
@@ -294,7 +336,7 @@ const MyCalendar = () => {
                       </div>
                     )}
 
-                    {/* 💰 合計金額の表示 (金額があるときだけ) */}
+                    {/*  合計金額の表示  */}
                     {tilesDayWastes.length > 0 && (
                       <div className="tile-waste-amount">
                         ￥{totalAmount.toLocaleString()}

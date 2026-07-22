@@ -18,7 +18,7 @@ public class CommentRandomController {
 
     @GetMapping("/random-text")
     public String getRandomText() {
-        int randomId = (int)(Math.random() * 10) + 1;
+        int randomId = (int)(Math.random() * 99) + 1;
                
         return repository.findById(randomId).get().getComment();
     }
