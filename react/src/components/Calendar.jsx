@@ -16,26 +16,39 @@ const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
-  //コメント欄
-  const [randomText, setRandomText] = useState('読み込み中...');
+//コメント欄
+const [randomText, setRandomText] = useState('読み込み中...');
 
-  useEffect(() => {
-  if (id) {
-    fetch(`/api/random-text?userId=${id}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('ネットワークエラー');
-        }
-        return response.text();
-      })
-      .then(data => {
-        setRandomText(data);
-      })
-      .catch(err => {
-        console.error("コメント取得エラー:", err);
-        setRandomText("コメントの読み込みに失敗しました");
+useEffect(() => {
+  const fetchCommentWithWaste = async () => {
+    if (!id) return;
+
+    try {
+      const now = new Date();
+      const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+      await fetch(`http://localhost:8080/api/calc-waste?id=${id}&month=${currentMonth}`, {
+        credentials: 'include'
       });
-  }
+
+      const response = await fetch(`http://localhost:8080/api/random-text?id=${id}`, {
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error('ネットワークエラー');
+      }
+
+      const data = await response.text();
+      setRandomText(data);
+
+    } catch (err) {
+      console.error("コメント取得エラー:", err);
+      setRandomText("コメントの読み込みに失敗しました");
+    }
+  };
+
+  fetchCommentWithWaste();
 }, [id]);
 
   const formattedSelectedDate = selectedDate 
