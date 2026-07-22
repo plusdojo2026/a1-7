@@ -25,6 +25,7 @@ public class Products {
 	private Integer userId;
 	@Column(nullable = false)
 	private Integer ap_type;
+	@Column(columnDefinition = "boolean default 0")
 	private Boolean checkBox;
 	@Column(nullable = false)
 	private String name;

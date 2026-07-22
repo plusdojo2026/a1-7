@@ -9,8 +9,6 @@ import axios from "axios";
 
 const ProductSorting = () => {
 
-    //let productName = ['商品A','商品B','商品C','商品D','商品E','商品F','商品G','商品H'];
-
     let [sendList, setSendList] = useState({});
 
     let [productName, setProductName] = useState([]);
@@ -32,9 +30,6 @@ const ProductSorting = () => {
 
     //その他リスト
     let [other, setOther] = useState([]);
-
-    //チェック済みリスト
-    let [checked,setChecked] = useState([]);
 
     //現在表示しているタブ
     let [active, setActive] = useState("used");
@@ -59,9 +54,6 @@ const ProductSorting = () => {
     //その他リスト
     let [other2, setOther2] = useState([]);
 
-    //チェック済みリスト
-    let [checked2,setChecked2] = useState([]);
-
     //現在表示しているタブ
     let [active2, setActive2] = useState("used");
 
@@ -72,82 +64,133 @@ const ProductSorting = () => {
     let [open, setOpen] = useState(false);
 
 
+    //チェックリスト追加、削除
     const OnCheck = (content_id,useType, obj,e) => {
-        console.log("OnBUTTON!!" + e.target.checked);
+        console.log("OnBUTTON" + e.target.checked);
+        //追加処理
         if(e.target.checked === true){
             console.log(useType);
             if(useType === 'used'){
-                const newObj = {...obj, ap_type: 1, check_box: true};
+                const newObj = {...obj, ap_type: 1, checkBox: true};
                 setUsed2((used2) => [...used2, newObj]);
+                setAll((all) => [...all, newObj]);
                 //削除
                 setUsed(used.filter(value => value.id != content_id))
                 console.log("削除");
             }
             else if(useType === 'trash'){
-                const newObj = {...obj, ap_type: 2, check_box: true};
+                const newObj = {...obj, ap_type: 2, checkBox: true};
                 setTrash2((trash2) => [...trash2, newObj]);
+                setAll((all) => [...all, newObj]);
                 //削除
                 setTrash(trash.filter(value => value.id != content_id))
                 console.log("削除");
             }
             else if(useType === 'cell'){
-                const newObj = {...obj, ap_type: 3, check_box: true};
+                const newObj = {...obj, ap_type: 3, checkBox: true};
                 setCell2((cell2) => [...cell2, newObj]);
+                setAll((all) => [...all, newObj]);
                 //削除
                 setCell(cell.filter(value => value.id != content_id))
                 console.log("削除");
             }
             else if(useType === 'give'){
-                const newObj = {...obj, ap_type: 4, check_box: true};
+                const newObj = {...obj, ap_type: 4, checkBox: true};
                 setGive2((give2) => [...give2, newObj]);
+                setAll((all) => [...all, newObj]);
                 //削除
                 setGive(give.filter(value => value.id != content_id))
                 console.log("削除");
             }
             else if(useType === 'other'){
-                const newObj = {...obj, ap_type: 5, check_box: true};
+                const newObj = {...obj, ap_type: 5, checkBox: true};
                 setOther2((other2) => [...other2, newObj]);
+                setAll((all) => [...all, newObj]);
                 //削除
                 setOther(other.filter(value => value.id != content_id))
                 console.log("削除");
             }
         }
+        //削除処理
         else{
             console.log(useType);
             if(useType === 'used'){
-                const newObj = {...obj, ap_type: 1, check_box: false};
+                const newObj = {...obj, ap_type: 1, checkBox: false};
                 setUsed((used) => [...used, newObj]);
                 //削除
                 setUsed2(used2.filter(value => value.id != content_id))
+                setAll(all.filter(value => value.id != content_id))
                 console.log("削除");
             }
             if(useType === 'trash'){
-                const newObj = {...obj, ap_type: 2, check_box: false};
+                const newObj = {...obj, ap_type: 2, checkBox: false};
                 setTrash((trash) => [...trash, newObj]);
                 //削除
                 setTrash2(trash2.filter(value => value.id != content_id))
+                setAll(all.filter(value => value.id != content_id))
                 console.log("削除");
             }
             if(useType === 'cell'){
-                const newObj = {...obj, ap_type: 3, check_box: false};
+                const newObj = {...obj, ap_type: 3, checkBox: false};
                 setCell((cell) => [...cell, newObj]);
                 //削除
                 setCell2(cell2.filter(value => value.id != content_id))
+                setAll(all.filter(value => value.id != content_id))
                 console.log("削除");
             }
             if(useType === 'give'){
-                const newObj = {...obj, ap_type: 4, check_box: false};
+                const newObj = {...obj, ap_type: 4, checkBox: false};
                 setGive((give) => [...give, newObj]);
                 //削除
                 setGive2(give2.filter(value => value.id != content_id))
+                setAll(all.filter(value => value.id != content_id))
                 console.log("削除");
             }
             if(useType === 'other'){
-                const newObj = {...obj, ap_type: 5, check_box: false};
+                const newObj = {...obj, ap_type: 5, checkBox: false};
                 setOther((other) => [...other, newObj]);
                 //削除
                 setOther2(other2.filter(value => value.id != content_id))
+                setAll(all.filter(value => value.id != content_id))
                 console.log("削除");
+            }
+            if(useType === 'all'){
+                const newObj = {...obj, checkBox: false};
+                if(newObj.ap_type === 1){
+                    setUsed((used) => [...used, newObj]);
+                    //削除
+                    setUsed2(used2.filter(value => value.id != content_id))
+                    setAll(all.filter(value => value.id != content_id))
+                    console.log("削除");
+                }
+                else if(newObj.ap_type === 2){
+                    setTrash((trash) => [...trash, newObj]);
+                    //削除
+                    setTrash2(trash2.filter(value => value.id != content_id))
+                    setAll(all.filter(value => value.id != content_id))
+                    console.log("削除");
+                }
+                else if(newObj.ap_type === 3){
+                    setCell((cell) => [...cell, newObj]);
+                    //削除
+                    setCell2(cell2.filter(value => value.id != content_id))
+                    setAll(all.filter(value => value.id != content_id))
+                    console.log("削除");
+                }
+                else if(newObj.ap_type === 4){
+                    setGive((give) => [...give, newObj]);
+                    //削除
+                    setGive2(give2.filter(value => value.id != content_id))
+                    setAll(all.filter(value => value.id != content_id))
+                    console.log("削除");
+                }
+                else if(newObj.ap_type === 5){
+                    setOther((other) => [...other, newObj]);
+                    //削除
+                    setOther2(other2.filter(value => value.id != content_id))
+                    setAll(all.filter(value => value.id != content_id))
+                    console.log("削除");
+                }
             }
         }
     }
@@ -185,22 +228,21 @@ const ProductSorting = () => {
 
     // 分類処理
     const sortCategory = (list) => {
-        setNotAp(list.filter(p => p.ap_type === 0 && p.check_box != true));
-        setUsed(list.filter(p => p.ap_type === 1 && p.check_box != true));
-        setTrash(list.filter(p => p.ap_type === 2 && p.check_box != true));
-        setCell(list.filter(p => p.ap_type === 3 && p.check_box != true));
-        setGive(list.filter(p => p.ap_type === 4 && p.check_box != true));
-        setOther(list.filter(p => p.ap_type === 5 && p.check_box != true));
-        setChecked(list.filter(p => p.ap_type === 6 && p.check_box != true));
+        setNotAp(list.filter(p => p.ap_type === 0 && p.checkBox != true));
+        setUsed(list.filter(p => p.ap_type === 1 && p.checkBox != true));
+        setTrash(list.filter(p => p.ap_type === 2 && p.checkBox != true));
+        setCell(list.filter(p => p.ap_type === 3 && p.checkBox != true));
+        setGive(list.filter(p => p.ap_type === 4 && p.checkBox != true));
+        setOther(list.filter(p => p.ap_type === 5 && p.checkBox != true));
 
         //チェック済みリスト用
-        setAll(list.filter(p => p.check_box === true));
-        setUsed2(list.filter(p => p.ap_type === 1 && p.check_box === true));
-        setTrash2(list.filter(p => p.ap_type === 2 && p.check_box === true));
-        setCell2(list.filter(p => p.ap_type === 3 && p.check_box === true));
-        setGive2(list.filter(p => p.ap_type === 4 && p.check_box === true));
-        setOther2(list.filter(p => p.ap_type === 5 && p.check_box === true));
-        setChecked2(list.filter(p => p.ap_type === 6 && p.check_box === true));
+        console.log(list.checkBox, list.checkBox);
+        setAll(list.filter(p => p.checkBox === true));
+        setUsed2(list.filter(p => p.ap_type === 1 && p.checkBox === true));
+        setTrash2(list.filter(p => p.ap_type === 2 && p.checkBox === true));
+        setCell2(list.filter(p => p.ap_type === 3 && p.checkBox === true));
+        setGive2(list.filter(p => p.ap_type === 4 && p.checkBox === true));
+        setOther2(list.filter(p => p.ap_type === 5 && p.checkBox === true));
 
         console.log("仕分け後リスト"+cell);
     };
@@ -208,7 +250,7 @@ const ProductSorting = () => {
 
     //仕分けをデータベースに送信
     let addSortList = () => {
-        const margeList = [...notAp,...used,...trash,...cell,...give,...other,...checked];
+        const margeList = [...notAp,...used,...trash,...cell,...give,...other,...all];
         console.log('margeList='+margeList);
 
         axios.post('/api/sorting/add/', margeList).then(response => {
@@ -220,7 +262,12 @@ const ProductSorting = () => {
             setCell([]);
             setGive([]);
             setOther([]);
-            setChecked([]);
+            //チェック済み
+            setUsed2([]);
+            setTrash2([]);
+            setCell2([]);
+            setGive2([]);
+            setOther2([]);
             //仕分け
             sortCategory(productName);
         });
@@ -280,11 +327,6 @@ const ProductSorting = () => {
                     setOther(other.filter(value => value.id != curId))
                 }
 
-                //「チェック済み」の要素削除用
-                if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != curId))
-                }
-
             }
 
 
@@ -326,11 +368,6 @@ const ProductSorting = () => {
                 //「その他」の要素削除用
                 if(type === 'other'){
                     setOther(other.filter(value => value.id != curId))
-                }
-
-                //「チェック済み」の要素削除用
-                if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != curId))
                 }
 
 
@@ -375,11 +412,6 @@ const ProductSorting = () => {
                     setOther(other.filter(value => value.id != curId))
                 }
 
-                //「チェック済み」の要素削除用
-                if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != curId))
-                }
-
             }
 
 
@@ -418,11 +450,6 @@ const ProductSorting = () => {
                 //「その他」の要素削除用
                 if(type === 'other'){
                     setOther(other.filter(value => value.id != curId))
-                }
-
-                //「チェック済み」の要素削除用
-                if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != curId))
                 }
 
             }
@@ -466,11 +493,6 @@ const ProductSorting = () => {
                     setOther(other.filter(value => value.id != curId))
                 }
 
-                //「チェック済み」の要素削除用
-                if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != curId))
-                }
-
             }
 
 
@@ -509,11 +531,6 @@ const ProductSorting = () => {
                 //「使う」の要素削除用
                 if(type === 'used'){
                     setUsed(used.filter(value => value.id != curId))
-                }
-
-                //「チェック済み」の要素削除用
-                if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != curId))
                 }
 
             }
@@ -597,9 +614,7 @@ const ProductSorting = () => {
                         <div id="notAp-Table" className="notAp-Table">
                             {notAp.map((notApEle,index) =>
                                 <Draggable key={notApEle.id} id={notApEle.id} name={notApEle.name} type='notAp' obj={notApEle}>
-                                    <div className="content">
-                                        {notApEle.name}<input className="checkBox" type="checkbox"></input>
-                                    </div>
+                                {notApEle.name}
                                 </Draggable>
                             )}
                         </div>
@@ -613,14 +628,11 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">使う</h3>
                             <div id="category-Table" className="category-Table">
                                 {used.map((use,index) =>
-                                    <div>
+                                    <div className="content">
                                         <Draggable key={use.id} id={use.id} name={use.name} type='used' obj={use}>
-                                            <div className="content">
-                                                <div>
-                                                    {use.name}
-                                                </div>
-                                                <input className="checkBox" type="checkbox" id="CheckBox"></input>
-                                            </div>
+
+                                        {use.name}
+                                        
                                         </Draggable>
                                         <input
                                         type="checkbox"
@@ -645,11 +657,11 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">すてる</h3>
                             <div id="category-Table" className="category-Table">
                                 {trash.map((trashEle,index) =>
-                                    <div>
+                                    <div className="content">
                                         <Draggable key={trashEle.id} id={trashEle.id} name={trashEle.name} type='trash' obj={trashEle}>
-                                            <div className="content">
-                                                {trashEle.name}<input className="checkBox" type="checkbox" onChange={() => checkClick()}></input>
-                                            </div>
+                                            
+                                        {trashEle.name}
+
                                         </Draggable>
                                         <input
                                         type="checkbox"
@@ -674,11 +686,11 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">売る</h3>
                             <div id="category-Table" className="category-Table">
                                 {cell.map((cellEle,index) =>
-                                    <div>
+                                    <div className="content">
                                         <Draggable key={cellEle.id} id={cellEle.id} name={cellEle.name} type='cell' obj={cellEle}>
-                                            <div className="content">
-                                                {cellEle.name}<input className="checkBox" type="checkbox"></input>
-                                            </div>
+                                            
+                                        {cellEle.name}
+
                                         </Draggable>
                                         <input
                                         type="checkbox"
@@ -703,11 +715,11 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">あげる</h3>
                             <div id="category-Table" className="category-Table">
                                 {give.map((giveEle,index) =>
-                                    <div>
+                                    <div className="content">
                                         <Draggable key={giveEle.id} id={giveEle.id} name={giveEle.name} type='give' obj={giveEle}>
-                                            <div className="content">
-                                                {giveEle.name}<input className="checkBox" type="checkbox"></input>
-                                            </div>
+                                            
+                                        {giveEle.name}
+
                                         </Draggable>
                                         <input
                                         type="checkbox"
@@ -732,11 +744,11 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">その他</h3>
                             <div id="category-Table" className="category-Table">
                                 {other.map((otherEle,index) =>
-                                    <div>
+                                    <div className="content">
                                         <Draggable key={otherEle.id} id={otherEle.id} name={otherEle.name} type='other' obj={otherEle}>
-                                            <div className="content">
-                                                {otherEle.name}<input className="checkBox" type="checkbox"></input>
-                                            </div>
+                                            
+                                        {otherEle.name}
+
                                         </Draggable>
                                         <input
                                         type="checkbox"
@@ -774,11 +786,18 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">すべて</h3>
                             <div id="category-Table" className="category-Table">
                                 {all.map((allEle,index) =>
-                                    <div>
+                                    <div className="content">
                                         <Draggable key={allEle.id} id={allEle.id} name={allEle.name} type='all' obj={allEle}>
-                                            <div className="content">
-                                                {allEle.name}<input className="checkBox" type="checkbox"></input>
-                                            </div>
+                                        
+                                        <table className="allTable">
+                                            <th>
+                                                <td>
+                                                {allEle.ap_type === 1 ? '使う' : allEle.ap_type === 2 ? 'すてる' : allEle.ap_type === 3 ? '売る' : allEle.ap_type === 4 ? 'あげる' : 'その他'}
+                                                </td>
+                                                <td>{allEle.name}</td>
+                                            </th>
+                                        </table>
+
                                         </Draggable>
                                         <input
                                         type="checkbox"
@@ -804,11 +823,11 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">使う</h3>
                             <div id="category-Table" className="category-Table">
                                 {used2.map((use,index) =>
-                                    <div>
+                                    <div className="content">
                                         <Draggable key={use.id} id={use.id} name={use.name} type='used' obj={use}>
-                                            <div className="content">
-                                                {use.name}<input className="checkBox" type="checkbox"></input>
-                                            </div>
+                                            
+                                        {use.name}
+
                                         </Draggable>
                                         <input
                                         type="checkbox"
@@ -834,11 +853,11 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">すてる</h3>
                             <div id="category-Table" className="category-Table">
                                 {trash2.map((trashEle,index) =>
-                                    <div>
+                                    <div className="content">
                                         <Draggable key={trashEle.id} id={trashEle.id} name={trashEle.name} type='trash' obj={trashEle}>
-                                            <div className="content">
-                                                {trashEle.name}<input className="checkBox" type="checkbox"></input>
-                                            </div>
+                                            
+                                        {trashEle.name}
+
                                         </Draggable>
                                         <input
                                         type="checkbox"
@@ -864,11 +883,11 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">売る</h3>
                             <div id="category-Table" className="category-Table">
                                 {cell2.map((cellEle,index) =>
-                                    <div>
+                                    <div className="content">
                                         <Draggable key={cellEle.id} id={cellEle.id} name={cellEle.name} type='cell' obj={cellEle}>
-                                            <div className="content">
-                                                {cellEle.name}<input className="checkBox" type="checkbox"></input>
-                                            </div>
+                                            
+                                        {cellEle.name}
+
                                         </Draggable>
                                         <input
                                         type="checkbox"
@@ -894,11 +913,11 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">あげる</h3>
                             <div id="category-Table" className="category-Table">
                                 {give2.map((giveEle,index) =>
-                                    <div>
+                                    <div className="content">
                                         <Draggable key={giveEle.id} id={giveEle.id} name={giveEle.name} type='give' obj={giveEle}>
-                                            <div className="content">
-                                                {giveEle.name}<input className="checkBox" type="checkbox"></input>
-                                            </div>
+                                            
+                                        {giveEle.name}
+
                                         </Draggable>
                                         <input
                                         type="checkbox"
@@ -924,11 +943,11 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">その他</h3>
                             <div id="category-Table" className="category-Table">
                                 {other2.map((otherEle,index) =>
-                                    <div>
+                                    <div className="content">
                                         <Draggable key={otherEle.id} id={otherEle.id} name={otherEle.name} type='other' obj={otherEle}>
-                                            <div className="content">
-                                                {otherEle.name}<input className="checkBox" type="checkbox"></input>
-                                            </div>
+                                            
+                                        {otherEle.name}
+
                                         </Draggable>
                                         <input
                                         type="checkbox"
