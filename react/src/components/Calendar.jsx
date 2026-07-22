@@ -20,12 +20,23 @@ const MyCalendar = () => {
   const [randomText, setRandomText] = useState('読み込み中...');
 
   useEffect(() => {
-    fetch('/api/random-text')
-      .then(response => response.text())
+  if (id) {
+    fetch(`/api/random-text?userId=${id}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('ネットワークエラー');
+        }
+        return response.text();
+      })
       .then(data => {
         setRandomText(data);
+      })
+      .catch(err => {
+        console.error("コメント取得エラー:", err);
+        setRandomText("コメントの読み込みに失敗しました");
       });
-  }, []);
+  }
+}, [id]);
 
   const formattedSelectedDate = selectedDate 
     ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
