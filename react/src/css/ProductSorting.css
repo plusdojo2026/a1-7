@@ -56,6 +56,13 @@
   background-color: rgb(208, 248, 254);
 }
 
+.draggableList{
+  display: flex;
+  background-color: white;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+}
+
 .drop-Title{
   margin: 0;
   padding: 10px;

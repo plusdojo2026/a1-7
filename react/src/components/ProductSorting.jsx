@@ -72,6 +72,90 @@ const ProductSorting = () => {
     let [open, setOpen] = useState(false);
 
 
+    const OnCheck = (content_id,useType, obj,e) => {
+        console.log("OnBUTTON!!" + e.target.checked);
+        if(e.target.checked === true){
+            console.log(useType);
+            if(useType === 'used'){
+                const newObj = {...obj, ap_type: 1, check_box: true};
+                setUsed2((used2) => [...used2, newObj]);
+                //削除
+                setUsed(used.filter(value => value.id != content_id))
+                console.log("削除");
+            }
+            else if(useType === 'trash'){
+                const newObj = {...obj, ap_type: 2, check_box: true};
+                setTrash2((trash2) => [...trash2, newObj]);
+                //削除
+                setTrash(trash.filter(value => value.id != content_id))
+                console.log("削除");
+            }
+            else if(useType === 'cell'){
+                const newObj = {...obj, ap_type: 3, check_box: true};
+                setCell2((cell2) => [...cell2, newObj]);
+                //削除
+                setCell(cell.filter(value => value.id != content_id))
+                console.log("削除");
+            }
+            else if(useType === 'give'){
+                const newObj = {...obj, ap_type: 4, check_box: true};
+                setGive2((give2) => [...give2, newObj]);
+                //削除
+                setGive(give.filter(value => value.id != content_id))
+                console.log("削除");
+            }
+            else if(useType === 'other'){
+                const newObj = {...obj, ap_type: 5, check_box: true};
+                setOther2((other2) => [...other2, newObj]);
+                //削除
+                setOther(other.filter(value => value.id != content_id))
+                console.log("削除");
+            }
+        }
+        else{
+            console.log(useType);
+            if(useType === 'used'){
+                const newObj = {...obj, ap_type: 1, check_box: false};
+                setUsed((used) => [...used, newObj]);
+                //削除
+                setUsed2(used2.filter(value => value.id != content_id))
+                console.log("削除");
+            }
+            if(useType === 'trash'){
+                const newObj = {...obj, ap_type: 2, check_box: false};
+                setTrash((trash) => [...trash, newObj]);
+                //削除
+                setTrash2(trash2.filter(value => value.id != content_id))
+                console.log("削除");
+            }
+            if(useType === 'cell'){
+                const newObj = {...obj, ap_type: 3, check_box: false};
+                setCell((cell) => [...cell, newObj]);
+                //削除
+                setCell2(cell2.filter(value => value.id != content_id))
+                console.log("削除");
+            }
+            if(useType === 'give'){
+                const newObj = {...obj, ap_type: 4, check_box: false};
+                setGive((give) => [...give, newObj]);
+                //削除
+                setGive2(give2.filter(value => value.id != content_id))
+                console.log("削除");
+            }
+            if(useType === 'other'){
+                const newObj = {...obj, ap_type: 5, check_box: false};
+                setOther((other) => [...other, newObj]);
+                //削除
+                setOther2(other2.filter(value => value.id != content_id))
+                console.log("削除");
+            }
+        }
+    }
+
+
+
+
+
     //Json用格納処理
     let inputNotAp = (product) => {
         setNotAp({[product]: product});
@@ -154,15 +238,18 @@ const ProductSorting = () => {
 
         const type = active.data.current.type;
 
+
         if (over) {
+            
 
             //未定義リスト
             if(over.id === 'drop-area' && type != 'notAp'){
 
                 const name = active.data.current.name;
+                const curId = active.id;
                 const obj = active.data.current.obj;
 
-                console.log(name);
+                console.log("cur="+curId);
                 const newObj = {...obj, ap_type: 0};
                 setNotAp((notAp) => [...notAp, newObj]);
 
@@ -170,45 +257,47 @@ const ProductSorting = () => {
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setUsed(used.filter(value => value.id != obj.id))
+                    setUsed(used.filter(value => value.id != curId))
                 }
 
                 //「捨てる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.id != obj.id))
+                    setTrash(trash.filter(value => value.id != curId))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.id != obj.id))
+                    setCell(cell.filter(value => value.id != curId))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.id != obj.id))
+                    setGive(give.filter(value => value.id != curId))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.id != obj.id))
+                    setOther(other.filter(value => value.id != curId))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != obj.id))
+                    setChecked(checked.filter(value => value.id != curId))
                 }
 
             }
 
 
 
-
-            //使用リスト
+            //使うリスト
             if(over.id === 'drop-area1' && type != 'used'){
 
                 const name = active.data.current.name;
-                const type = active.data.current.type;
                 const obj = active.data.current.obj;
+                const curId = active.id;
+                const check_info = active.data.current.check_inf;
+
+    
 
                 console.log(name);
                 const newObj = {...obj, ap_type: 1};
@@ -216,33 +305,34 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.id != obj.id))
+                    setNotAp(notAp.filter(value => value.id != curId))
                 }
 
                 //「捨てる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.id != obj.id))
+                    setTrash(trash.filter(value => value.id != curId))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.id != obj.id))
+                    setCell(cell.filter(value => value.id != curId))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.id != obj.id))
+                    setGive(give.filter(value => value.id != curId))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.id != obj.id))
+                    setOther(other.filter(value => value.id != curId))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != obj.id))
+                    setChecked(checked.filter(value => value.id != curId))
                 }
+
 
             }
 
@@ -254,6 +344,7 @@ const ProductSorting = () => {
                 const name = active.data.current.name;
                 const type = active.data.current.type;
                 const obj = active.data.current.obj;
+                const curId = active.id;
 
                 console.log(trash);
                 const newObj = {...obj, ap_type: 2};
@@ -261,32 +352,32 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.id != obj.id))
+                    setNotAp(notAp.filter(value => value.id != curId))
                 }
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setTrash(used.filter(value => value.id != obj.id))
+                    setTrash(used.filter(value => value.id != curId))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.id != obj.id))
+                    setCell(cell.filter(value => value.id != curId))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.id != obj.id))
+                    setGive(give.filter(value => value.id != curId))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.id != obj.id))
+                    setOther(other.filter(value => value.id != curId))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != obj.id))
+                    setChecked(checked.filter(value => value.id != curId))
                 }
 
             }
@@ -298,6 +389,7 @@ const ProductSorting = () => {
                 const name = active.data.current.name;
                 const type = active.data.current.type;
                 const obj = active.data.current.obj;
+                const curId = active.id;
 
                 console.log(cell);
                 const newObj = {...obj, ap_type: 3};
@@ -305,32 +397,32 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.id != obj.id))
+                    setNotAp(notAp.filter(value => value.id != curId))
                 }
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setUsed(used.filter(value => value.id != obj.id))
+                    setUsed(used.filter(value => value.id != curId))
                 }
 
                 //「すてる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.id != obj.id))
+                    setTrash(trash.filter(value => value.id != curId))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.id != obj.id))
+                    setGive(give.filter(value => value.id != curId))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.id != obj.id))
+                    setOther(other.filter(value => value.id != curId))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != obj.id))
+                    setChecked(checked.filter(value => value.id != curId))
                 }
 
             }
@@ -343,6 +435,7 @@ const ProductSorting = () => {
                 const name = active.data.current.name;
                 const type = active.data.current.type;
                 const obj = active.data.current.obj;
+                const curId = active.id;
 
                 console.log(give);
                 const newObj = {...obj, ap_type: 4};
@@ -350,32 +443,32 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.id != obj.id))
+                    setNotAp(notAp.filter(value => value.id != curId))
                 }
 
                 //「捨てる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.id != obj.id))
+                    setTrash(trash.filter(value => value.id != curId))
                 }
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setUsed(used.filter(value => value.id != obj.id))
+                    setUsed(used.filter(value => value.id != curId))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.id != obj.id))
+                    setCell(cell.filter(value => value.id != curId))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.id != obj.id))
+                    setOther(other.filter(value => value.id != curId))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != obj.id))
+                    setChecked(checked.filter(value => value.id != curId))
                 }
 
             }
@@ -387,6 +480,7 @@ const ProductSorting = () => {
                 const name = active.data.current.name;
                 const type = active.data.current.type;
                 const obj = active.data.current.obj;
+                const curId = active.id;
 
                 console.log(other);
                 const newObj = {...obj, ap_type: 5};
@@ -394,32 +488,32 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.id != obj.id))
+                    setNotAp(notAp.filter(value => value.id != curId))
                 }
 
                 //「捨てる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.id != obj.id))
+                    setTrash(trash.filter(value => value.id != curId))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.id != obj.id))
+                    setCell(cell.filter(value => value.id != curId))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.id != obj.id))
+                    setGive(give.filter(value => value.id != curId))
                 }
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setUsed(used.filter(value => value.id != obj.id))
+                    setUsed(used.filter(value => value.id != curId))
                 }
 
                 //「チェック済み」の要素削除用
                 if(type === 'checked'){
-                    setChecked(checked.filter(value => value.id != obj.id))
+                    setChecked(checked.filter(value => value.id != curId))
                 }
 
             }
@@ -430,6 +524,7 @@ const ProductSorting = () => {
 
                 const name = active.data.current.name;
                 const obj = active.data.current.obj;
+                const curId = active.id;
 
                 console.log(name);
                 const newObj = {...obj, ap_type: 6};
@@ -437,32 +532,32 @@ const ProductSorting = () => {
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
-                    setNotAp(notAp.filter(value => value.id != obj.id))
+                    setNotAp(notAp.filter(value => value.id != curId))
                 }
 
                 //「使う」の要素削除用
                 if(type === 'used'){
-                    setUsed(used.filter(value => value.id != obj.id))
+                    setUsed(used.filter(value => value.id != curId))
                 }
 
                 //「捨てる」の要素削除用
                 if(type === 'trash'){
-                    setTrash(trash.filter(value => value.id != obj.id))
+                    setTrash(trash.filter(value => value.id != curId))
                 }
 
                 //「売る」の要素削除用
                 if(type === 'cell'){
-                    setCell(cell.filter(value => value.id != obj.id))
+                    setCell(cell.filter(value => value.id != curId))
                 }
 
                 //「あげる」の要素削除用
                 if(type === 'give'){
-                    setGive(give.filter(value => value.id != obj.id))
+                    setGive(give.filter(value => value.id != curId))
                 }
 
                 //「その他」の要素削除用
                 if(type === 'other'){
-                    setOther(other.filter(value => value.id != obj.id))
+                    setOther(other.filter(value => value.id != curId))
                 }
 
             }
@@ -501,7 +596,7 @@ const ProductSorting = () => {
                         <h3 className="drop-Title">未適用</h3>
                         <div id="notAp-Table" className="notAp-Table">
                             {notAp.map((notApEle,index) =>
-                                <Draggable key={index} id={notApEle.name} name={notApEle.name} type='notAp' obj={notApEle}>
+                                <Draggable key={notApEle.id} id={notApEle.id} name={notApEle.name} type='notAp' obj={notApEle}>
                                     <div className="content">
                                         {notApEle.name}<input className="checkBox" type="checkbox"></input>
                                     </div>
@@ -518,11 +613,22 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">使う</h3>
                             <div id="category-Table" className="category-Table">
                                 {used.map((use,index) =>
-                                    <Draggable key={index} id={use.name} name={use.name} type='used' obj={use}>
-                                        <div className="content">
-                                            {use.name}<input className="checkBox" type="checkbox"></input>
-                                        </div>
-                                    </Draggable>
+                                    <div>
+                                        <Draggable key={use.id} id={use.id} name={use.name} type='used' obj={use}>
+                                            <div className="content">
+                                                <div>
+                                                    {use.name}
+                                                </div>
+                                                <input className="checkBox" type="checkbox" id="CheckBox"></input>
+                                            </div>
+                                        </Draggable>
+                                        <input
+                                        type="checkbox"
+                                        key={`used-${use.id}`}
+                                        id={`used-${use.id}`}
+                                        onChange={(e) => OnCheck(use.id,"used", use, e)}
+                                        />
+                                    </div>
                                 
                                 
                                 )}
@@ -539,11 +645,19 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">すてる</h3>
                             <div id="category-Table" className="category-Table">
                                 {trash.map((trashEle,index) =>
-                                    <Draggable key={index} id={trashEle.name} name={trashEle.name} type='trash' obj={trashEle}>
-                                        <div className="content">
-                                            {trashEle.name}<input className="checkBox" type="checkbox"></input>
-                                        </div>
-                                    </Draggable>
+                                    <div>
+                                        <Draggable key={trashEle.id} id={trashEle.id} name={trashEle.name} type='trash' obj={trashEle}>
+                                            <div className="content">
+                                                {trashEle.name}<input className="checkBox" type="checkbox" onChange={() => checkClick()}></input>
+                                            </div>
+                                        </Draggable>
+                                        <input
+                                        type="checkbox"
+                                        key={`trash-${trashEle.id}`}
+                                        id={`trash-${trashEle.id}`}
+                                        onChange={(e) => OnCheck(trashEle.id,"trash", trashEle, e)}
+                                        />
+                                    </div>
                                 
                                 
                                 )}
@@ -560,11 +674,19 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">売る</h3>
                             <div id="category-Table" className="category-Table">
                                 {cell.map((cellEle,index) =>
-                                    <Draggable key={index} id={cellEle.name} name={cellEle.name} type='cell' obj={cellEle}>
-                                        <div className="content">
-                                            {cellEle.name}<input className="checkBox" type="checkbox"></input>
-                                        </div>
-                                    </Draggable>
+                                    <div>
+                                        <Draggable key={cellEle.id} id={cellEle.id} name={cellEle.name} type='cell' obj={cellEle}>
+                                            <div className="content">
+                                                {cellEle.name}<input className="checkBox" type="checkbox"></input>
+                                            </div>
+                                        </Draggable>
+                                        <input
+                                        type="checkbox"
+                                        key={`cell-${cellEle.id}`}
+                                        id={`cell-${cellEle.id}`}
+                                        onChange={(e) => OnCheck(cellEle.id,"cell", cellEle, e)}
+                                        />
+                                    </div>
                                 
                                 
                                 )}
@@ -581,11 +703,19 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">あげる</h3>
                             <div id="category-Table" className="category-Table">
                                 {give.map((giveEle,index) =>
-                                    <Draggable key={index} id={giveEle.name} name={giveEle.name} type='give' obj={giveEle}>
-                                        <div className="content">
-                                            {giveEle.name}<input className="checkBox" type="checkbox"></input>
-                                        </div>
-                                    </Draggable>
+                                    <div>
+                                        <Draggable key={giveEle.id} id={giveEle.id} name={giveEle.name} type='give' obj={giveEle}>
+                                            <div className="content">
+                                                {giveEle.name}<input className="checkBox" type="checkbox"></input>
+                                            </div>
+                                        </Draggable>
+                                        <input
+                                        type="checkbox"
+                                        key={`give-${giveEle.id}`}
+                                        id={`give-${giveEle.id}`}
+                                        onChange={(e) => OnCheck(giveEle.id,"give", giveEle, e)}
+                                        />
+                                    </div>
                                 
                                 
                                 )}
@@ -602,11 +732,19 @@ const ProductSorting = () => {
                             <h3 className="drop-Title">その他</h3>
                             <div id="category-Table" className="category-Table">
                                 {other.map((otherEle,index) =>
-                                    <Draggable key={index} id={otherEle.name} name={otherEle.name} type='other' obj={otherEle}>
-                                        <div className="content">
-                                            {otherEle.name}<input className="checkBox" type="checkbox"></input>
-                                        </div>
-                                    </Draggable>
+                                    <div>
+                                        <Draggable key={otherEle.id} id={otherEle.id} name={otherEle.name} type='other' obj={otherEle}>
+                                            <div className="content">
+                                                {otherEle.name}<input className="checkBox" type="checkbox"></input>
+                                            </div>
+                                        </Draggable>
+                                        <input
+                                        type="checkbox"
+                                        key={`other-${otherEle.id}`}
+                                        id={`other-${otherEle.id}`}
+                                        onChange={(e) => OnCheck(otherEle.id,"other", otherEle, e)}
+                                        />
+                                    </div>
                                 
                                 
                                 )}
@@ -631,16 +769,25 @@ const ProductSorting = () => {
                 </nav>
                 {/* すべてタブ */}
                 {active2 === "all" &&(
-                    <div className="all-Box">
+                    <div className="used-Box">
                         <Droppable id="drop-area6">
                             <h3 className="drop-Title">すべて</h3>
                             <div id="category-Table" className="category-Table">
-                                {used.map((use,index) =>
-                                    <Draggable key={index} id={use.name} name={use.name} type='used' obj={use}>
-                                        <div className="content">
-                                            {use.name}<input className="checkBox" type="checkbox"></input>
-                                        </div>
-                                    </Draggable>
+                                {all.map((allEle,index) =>
+                                    <div>
+                                        <Draggable key={allEle.id} id={allEle.id} name={allEle.name} type='all' obj={allEle}>
+                                            <div className="content">
+                                                {allEle.name}<input className="checkBox" type="checkbox"></input>
+                                            </div>
+                                        </Draggable>
+                                        <input
+                                        type="checkbox"
+                                        key={`all-${allEle.id}`}
+                                        id={`all-${allEle.id}`}
+                                        onChange={(e) => OnCheck(allEle.id,"all", allEle, e)}
+                                        checked
+                                        />
+                                    </div>
                                 
                                 
                                 )}
@@ -656,12 +803,21 @@ const ProductSorting = () => {
                         <Droppable id="drop-area7">
                             <h3 className="drop-Title">使う</h3>
                             <div id="category-Table" className="category-Table">
-                                {used.map((use,index) =>
-                                    <Draggable key={index} id={use.name} name={use.name} type='used' obj={use}>
-                                        <div className="content">
-                                            {use.name}<input className="checkBox" type="checkbox"></input>
-                                        </div>
-                                    </Draggable>
+                                {used2.map((use,index) =>
+                                    <div>
+                                        <Draggable key={use.id} id={use.id} name={use.name} type='used' obj={use}>
+                                            <div className="content">
+                                                {use.name}<input className="checkBox" type="checkbox"></input>
+                                            </div>
+                                        </Draggable>
+                                        <input
+                                        type="checkbox"
+                                        key={`use2-${use.id}`}
+                                        id={`use2-${use.id}`}
+                                        onChange={(e) => OnCheck(use.id,"used", use, e)}
+                                        checked
+                                        />
+                                    </div>
                                 
                                 
                                 )}
@@ -677,12 +833,21 @@ const ProductSorting = () => {
                         <Droppable id="drop-area8">
                             <h3 className="drop-Title">すてる</h3>
                             <div id="category-Table" className="category-Table">
-                                {trash.map((trashEle,index) =>
-                                    <Draggable key={index} id={trashEle.name} name={trashEle.name} type='trash' obj={trashEle}>
-                                        <div className="content">
-                                            {trashEle.name}<input className="checkBox" type="checkbox"></input>
-                                        </div>
-                                    </Draggable>
+                                {trash2.map((trashEle,index) =>
+                                    <div>
+                                        <Draggable key={trashEle.id} id={trashEle.id} name={trashEle.name} type='trash' obj={trashEle}>
+                                            <div className="content">
+                                                {trashEle.name}<input className="checkBox" type="checkbox"></input>
+                                            </div>
+                                        </Draggable>
+                                        <input
+                                        type="checkbox"
+                                        key={`trash2-${trashEle.id}`}
+                                        id={`trash2-${trashEle.id}`}
+                                        onChange={(e) => OnCheck(trashEle.id,"trash", trashEle, e)}
+                                        checked
+                                        />
+                                    </div>
                                 
                                 
                                 )}
@@ -698,12 +863,21 @@ const ProductSorting = () => {
                         <Droppable id="drop-area9">
                             <h3 className="drop-Title">売る</h3>
                             <div id="category-Table" className="category-Table">
-                                {cell.map((cellEle,index) =>
-                                    <Draggable key={index} id={cellEle.name} name={cellEle.name} type='cell' obj={cellEle}>
-                                        <div className="content">
-                                            {cellEle.name}<input className="checkBox" type="checkbox"></input>
-                                        </div>
-                                    </Draggable>
+                                {cell2.map((cellEle,index) =>
+                                    <div>
+                                        <Draggable key={cellEle.id} id={cellEle.id} name={cellEle.name} type='cell' obj={cellEle}>
+                                            <div className="content">
+                                                {cellEle.name}<input className="checkBox" type="checkbox"></input>
+                                            </div>
+                                        </Draggable>
+                                        <input
+                                        type="checkbox"
+                                        key={`cell2-${cellEle.id}`}
+                                        id={`cell2-${cellEle.id}`}
+                                        onChange={(e) => OnCheck(cellEle.id,"cell", cellEle, e)}
+                                        checked
+                                        />
+                                    </div>
                                 
                                 
                                 )}
@@ -719,12 +893,21 @@ const ProductSorting = () => {
                         <Droppable id="drop-area10">
                             <h3 className="drop-Title">あげる</h3>
                             <div id="category-Table" className="category-Table">
-                                {give.map((giveEle,index) =>
-                                    <Draggable key={index} id={giveEle.name} name={giveEle.name} type='give' obj={giveEle}>
-                                        <div className="content">
-                                            {giveEle.name}<input className="checkBox" type="checkbox"></input>
-                                        </div>
-                                    </Draggable>
+                                {give2.map((giveEle,index) =>
+                                    <div>
+                                        <Draggable key={giveEle.id} id={giveEle.id} name={giveEle.name} type='give' obj={giveEle}>
+                                            <div className="content">
+                                                {giveEle.name}<input className="checkBox" type="checkbox"></input>
+                                            </div>
+                                        </Draggable>
+                                        <input
+                                        type="checkbox"
+                                        key={`give2-${giveEle.id}`}
+                                        id={`give2-${giveEle.id}`}
+                                        onChange={(e) => OnCheck(giveEle.id,"give", giveEle, e)}
+                                        checked
+                                        />
+                                    </div>
                                 
                                 
                                 )}
@@ -740,12 +923,21 @@ const ProductSorting = () => {
                         <Droppable id="drop-area11">
                             <h3 className="drop-Title">その他</h3>
                             <div id="category-Table" className="category-Table">
-                                {other.map((otherEle,index) =>
-                                    <Draggable key={index} id={otherEle.name} name={otherEle.name} type='other' obj={otherEle}>
-                                        <div className="content">
-                                            {otherEle.name}<input className="checkBox" type="checkbox"></input>
-                                        </div>
-                                    </Draggable>
+                                {other2.map((otherEle,index) =>
+                                    <div>
+                                        <Draggable key={otherEle.id} id={otherEle.id} name={otherEle.name} type='other' obj={otherEle}>
+                                            <div className="content">
+                                                {otherEle.name}<input className="checkBox" type="checkbox"></input>
+                                            </div>
+                                        </Draggable>
+                                        <input
+                                        type="checkbox"
+                                        key={`other2-${otherEle.id}`}
+                                        id={`other2-${otherEle.id}`}
+                                        onChange={(e) => OnCheck(otherEle.id,"other", otherEle, e)}
+                                        checked
+                                        />
+                                    </div>
                                 
                                 
                                 )}

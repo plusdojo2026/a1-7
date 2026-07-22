@@ -22,7 +22,7 @@ return (
     <Route path="/Chart" element={<Chart  />} ></Route>
     <Route path="/Calendar" element={<Calendar />} ></Route>
     <Route path="ProductRegister" element={<ProductRegister />} ></Route>
-    
+    <Route path="/ProductSorting" element={<ProductSorting />} ></Route>
 </Routes>
 </BrowserRouter>
 </section>
