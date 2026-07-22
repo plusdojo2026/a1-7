@@ -10,6 +10,7 @@ import Register from './components/Register'
 import ProductRegister from './components/ProductRegister'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProductSorting from './components/ProductSorting'
 
 function App() {
 return (
