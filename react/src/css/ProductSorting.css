@@ -101,7 +101,16 @@
 }
 
 .content{
-  position: relative;
+  display: flex;
+  background-color: rgb(213, 208, 208);
+  border: 1px solid rgb(157, 157, 157);
+
+}
+
+.content input{
+  margin-right: auto;
+  background-color: black;
+  transform: scale(1.5);
 }
 
 .checkBox{
@@ -124,6 +133,11 @@
   transform: scale(2);
   border-radius: 5px;
   border: none;
+}
+
+.allTable td{
+  padding-right: 100px;
+  border-left: 2px solid rgb(146, 146, 146);
 }
 
 
