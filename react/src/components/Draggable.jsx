@@ -1,7 +1,7 @@
 import { useDraggable } from "@dnd-kit/core";
 import { useState } from "react";
 
-const Draggable = ({ id, name, children, type, obj }) => {
+const Draggable = ({ id, name, children, type, obj ,ac}) => {
 
   const [check_inf,setCheck_inf] = useState(false);
 
@@ -28,7 +28,7 @@ const Draggable = ({ id, name, children, type, obj }) => {
 
 
   return (
-    <div className="draggable" ref={setNodeRef} style={style} {...listeners} {...attributes}>
+    <div className={ac ? "" : "draggable"} ref={setNodeRef} style={style} {...listeners} {...attributes}>
       {children}
     </div>
   );

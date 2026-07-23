@@ -1,4 +1,4 @@
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, DragOverlay, PointerSensor, TouchSensor ,useSensor, useSensors} from "@dnd-kit/core";
 import "../css/ProductSorting.css";
 import Draggable from "./Draggable";
 import Droppable from "./Droppable";
@@ -8,6 +8,21 @@ import axios from "axios";
 
 
 const ProductSorting = () => {
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(TouchSensor, {
+        activationConstraint: {
+            delay: 150,
+            tolerance: 5
+        }
+        })
+    );
+
+
+
+    const [activeItem, setActiveItem] = useState(null);
+
 
     let [sendList, setSendList] = useState({});
 
@@ -280,7 +295,20 @@ const ProductSorting = () => {
     }
 
 
+    const handleDragStart = (event) => {
+        setActiveItem(event.active.data.current);
+        document.body.style.overflow = "hidden";     // スクロール禁止
+        document.body.style.touchAction = "none";    // スワイプ禁止
+    };
+
+
     const handleDragEnd = (event) => {
+
+        document.body.style.overflow = "auto";       // スクロール解除
+        document.body.style.touchAction = "auto";
+        
+        setActiveItem(null);
+
         const { active, over } = event;
 
         const type = active.data.current.type;
@@ -588,9 +616,26 @@ const ProductSorting = () => {
 
 
 
+    function ItemView({ item }) {
+    return (
+        <div className="item-view">
+            {item.name}
+        </div>
+    );
+    }
+
+
+
+
     return (
 
-        <DndContext onDragEnd={handleDragEnd}>
+        <DndContext sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}>
+
+
+
+
 
             <header>
                 <h1>ムダログ</h1>
@@ -609,12 +654,24 @@ const ProductSorting = () => {
 
             <div className="list-Set">
                 <div className="noAp-Box">
+
+
+                <DragOverlay>
+                    {activeItem ? (
+                    <div className="overlay-item">
+                        {activeItem ? <ItemView item={activeItem} /> : null}
+                    </div>
+                    ) : null}
+                </DragOverlay>
+
+
+
                     <Droppable id="drop-area">
                         <h3 className="drop-Title">未適用</h3>
                         <div id="notAp-Table" className="notAp-Table">
                             {notAp.map((notApEle,index) =>
-                                <Draggable key={notApEle.id} id={notApEle.id} name={notApEle.name} type='notAp' obj={notApEle}>
-                                {notApEle.name}
+                                <Draggable key={notApEle.id} id={notApEle.id} name={notApEle.name} type='notAp' obj={notApEle} ac={activeItem ? true : false}>
+                                {activeItem ? null : notApEle.name}
                                 </Draggable>
                             )}
                         </div>
@@ -629,9 +686,9 @@ const ProductSorting = () => {
                             <div id="category-Table" className="category-Table">
                                 {used.map((use,index) =>
                                     <div className="content">
-                                        <Draggable key={use.id} id={use.id} name={use.name} type='used' obj={use}>
+                                        <Draggable key={use.id} id={use.id} name={use.name} type='used' obj={use} ac={activeItem ? (activeItem.id === use.id ? true : false) : ""}>
 
-                                        {use.name}
+                                        {activeItem ? null : use.name}
                                         
                                         </Draggable>
                                         <input
@@ -658,7 +715,7 @@ const ProductSorting = () => {
                             <div id="category-Table" className="category-Table">
                                 {trash.map((trashEle,index) =>
                                     <div className="content">
-                                        <Draggable key={trashEle.id} id={trashEle.id} name={trashEle.name} type='trash' obj={trashEle}>
+                                        <Draggable key={trashEle.id} id={trashEle.id} name={trashEle.name} type='trash' obj={trashEle} ac={activeItem ? (activeItem.id === trashEle.id ? true : false) : ""}>
                                             
                                         {trashEle.name}
 
@@ -687,7 +744,7 @@ const ProductSorting = () => {
                             <div id="category-Table" className="category-Table">
                                 {cell.map((cellEle,index) =>
                                     <div className="content">
-                                        <Draggable key={cellEle.id} id={cellEle.id} name={cellEle.name} type='cell' obj={cellEle}>
+                                        <Draggable key={cellEle.id} id={cellEle.id} name={cellEle.name} type='cell' obj={cellEle} ac={activeItem ? (activeItem.id === cellEle.id ? true : false) : ""}>
                                             
                                         {cellEle.name}
 
@@ -716,7 +773,7 @@ const ProductSorting = () => {
                             <div id="category-Table" className="category-Table">
                                 {give.map((giveEle,index) =>
                                     <div className="content">
-                                        <Draggable key={giveEle.id} id={giveEle.id} name={giveEle.name} type='give' obj={giveEle}>
+                                        <Draggable key={giveEle.id} id={giveEle.id} name={giveEle.name} type='give' obj={giveEle} ac={activeItem ? (activeItem.id === giveEle.id ? true : false) : ""}>
                                             
                                         {giveEle.name}
 
@@ -745,7 +802,7 @@ const ProductSorting = () => {
                             <div id="category-Table" className="category-Table">
                                 {other.map((otherEle,index) =>
                                     <div className="content">
-                                        <Draggable key={otherEle.id} id={otherEle.id} name={otherEle.name} type='other' obj={otherEle}>
+                                        <Draggable key={otherEle.id} id={otherEle.id} name={otherEle.name} type='other' obj={otherEle} ac={activeItem ? (activeItem.id === otherEle.id ? true : false) : ""}>
                                             
                                         {otherEle.name}
 
@@ -782,36 +839,37 @@ const ProductSorting = () => {
                 {/* すべてタブ */}
                 {active2 === "all" &&(
                     <div className="used-Box">
-                        <Droppable id="drop-area6">
+                        <div className="droppable2">
                             <h3 className="drop-Title">すべて</h3>
                             <div id="category-Table" className="category-Table">
                                 {all.map((allEle,index) =>
                                     <div className="content">
-                                        <Draggable key={allEle.id} id={allEle.id} name={allEle.name} type='all' obj={allEle}>
-                                        
-                                        <table className="allTable">
-                                            <th>
-                                                <td>
-                                                {allEle.ap_type === 1 ? '使う' : allEle.ap_type === 2 ? 'すてる' : allEle.ap_type === 3 ? '売る' : allEle.ap_type === 4 ? 'あげる' : 'その他'}
-                                                </td>
-                                                <td>{allEle.name}</td>
-                                            </th>
-                                        </table>
+                                        <div className="draggable2">
+                                            <table className="allTable">
+                                                <tr>
+                                                    <td className="td-one">
+                                                    {allEle.ap_type === 1 ? '使う' : allEle.ap_type === 2 ? 'すてる' : allEle.ap_type === 3 ? '売る' : allEle.ap_type === 4 ? 'あげる' : 'その他'}
+                                                    </td>
+                                                    <td>{allEle.name}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
 
-                                        </Draggable>
                                         <input
                                         type="checkbox"
+                                        className="checkBox2"
                                         key={`all-${allEle.id}`}
                                         id={`all-${allEle.id}`}
                                         onChange={(e) => OnCheck(allEle.id,"all", allEle, e)}
                                         checked
                                         />
+                                        
                                     </div>
                                 
                                 
                                 )}
                             </div>
-                        </Droppable>
+                        </div>
                     </div>
                 )}
 
@@ -819,16 +877,16 @@ const ProductSorting = () => {
                 {/* 使用タブ */}
                 {active2 === "used" &&(
                     <div className="used-Box">
-                        <Droppable id="drop-area7">
+                        <div className="droppable2">
                             <h3 className="drop-Title">使う</h3>
                             <div id="category-Table" className="category-Table">
                                 {used2.map((use,index) =>
                                     <div className="content">
-                                        <Draggable key={use.id} id={use.id} name={use.name} type='used' obj={use}>
+                                        <div className="draggable2">
                                             
                                         {use.name}
 
-                                        </Draggable>
+                                        </div>
                                         <input
                                         type="checkbox"
                                         key={`use2-${use.id}`}
@@ -841,7 +899,7 @@ const ProductSorting = () => {
                                 
                                 )}
                             </div>
-                        </Droppable>
+                        </div>
                     </div>
                 )}
 
@@ -849,16 +907,16 @@ const ProductSorting = () => {
                 {/* すてる */}
                 {active2 === "trash" &&(
                     <div className="used-Box">
-                        <Droppable id="drop-area8">
+                        <div className="droppable2">
                             <h3 className="drop-Title">すてる</h3>
                             <div id="category-Table" className="category-Table">
                                 {trash2.map((trashEle,index) =>
                                     <div className="content">
-                                        <Draggable key={trashEle.id} id={trashEle.id} name={trashEle.name} type='trash' obj={trashEle}>
+                                        <div className="draggable2">
                                             
                                         {trashEle.name}
 
-                                        </Draggable>
+                                        </div>
                                         <input
                                         type="checkbox"
                                         key={`trash2-${trashEle.id}`}
@@ -871,7 +929,7 @@ const ProductSorting = () => {
                                 
                                 )}
                             </div>
-                        </Droppable>
+                        </div>
                     </div>
                 )}
 
@@ -879,16 +937,16 @@ const ProductSorting = () => {
                 {/* 売る */}
                 {active2 === "cell" &&(
                     <div className="used-Box">
-                        <Droppable id="drop-area9">
+                        <div className="droppable2">
                             <h3 className="drop-Title">売る</h3>
                             <div id="category-Table" className="category-Table">
                                 {cell2.map((cellEle,index) =>
                                     <div className="content">
-                                        <Draggable key={cellEle.id} id={cellEle.id} name={cellEle.name} type='cell' obj={cellEle}>
+                                        <div className="draggable2">
                                             
                                         {cellEle.name}
 
-                                        </Draggable>
+                                        </div>
                                         <input
                                         type="checkbox"
                                         key={`cell2-${cellEle.id}`}
@@ -901,7 +959,7 @@ const ProductSorting = () => {
                                 
                                 )}
                             </div>
-                        </Droppable>
+                        </div>
                     </div>
                 )}
 
@@ -909,16 +967,16 @@ const ProductSorting = () => {
                 {/* あげる */}
                 {active2 === "give" &&(
                     <div className="used-Box">
-                        <Droppable id="drop-area10">
+                        <div className="droppable2">
                             <h3 className="drop-Title">あげる</h3>
                             <div id="category-Table" className="category-Table">
                                 {give2.map((giveEle,index) =>
                                     <div className="content">
-                                        <Draggable key={giveEle.id} id={giveEle.id} name={giveEle.name} type='give' obj={giveEle}>
+                                        <div className="draggable2">
                                             
                                         {giveEle.name}
 
-                                        </Draggable>
+                                        </div>
                                         <input
                                         type="checkbox"
                                         key={`give2-${giveEle.id}`}
@@ -931,7 +989,7 @@ const ProductSorting = () => {
                                 
                                 )}
                             </div>
-                        </Droppable>
+                        </div>
                     </div>
                 )}
 
@@ -939,16 +997,16 @@ const ProductSorting = () => {
                 {/* その他タブ */}
                 {active2 === "other" &&(
                     <div className="used-Box">
-                        <Droppable id="drop-area11">
+                        <div className="droppable2">
                             <h3 className="drop-Title">その他</h3>
                             <div id="category-Table" className="category-Table">
                                 {other2.map((otherEle,index) =>
                                     <div className="content">
-                                        <Draggable key={otherEle.id} id={otherEle.id} name={otherEle.name} type='other' obj={otherEle}>
+                                        <div className="draggable2">
                                             
                                         {otherEle.name}
 
-                                        </Draggable>
+                                        </div>
                                         <input
                                         type="checkbox"
                                         key={`other2-${otherEle.id}`}
@@ -961,7 +1019,7 @@ const ProductSorting = () => {
                                 
                                 )}
                             </div>
-                        </Droppable>
+                        </div>
                     </div>
                 )}
 
