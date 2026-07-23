@@ -7,7 +7,6 @@ import Chart from './components/Chart'
 import Calendar from './components/Calendar'
 import Login from './components/Login'
 import Register from './components/Register'
-import ProductUpdate from './components/ProductUpdate'
 import Mypage from './components/Mypage'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -23,7 +22,6 @@ function App() {
                         <Route path="/Register" element={<Register />} ></Route>
                         <Route path="/Chart" element={<Chart />} ></Route>
                         <Route path="/Calendar" element={<Calendar />} ></Route>
-                        <Route path="ProductUpdate" element={<ProductUpdate />} ></Route>
                         <Route path="/ProductSorting" element={<ProductSorting />} ></Route>
                         <Route path="/Mypage" element={<Mypage />} ></Route>
                     </Routes>

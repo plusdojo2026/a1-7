@@ -5,9 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class DenimuApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(DenimuApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        java.util.TimeZone.setDefault(java.util.TimeZone.getTimeZone("Asia/Tokyo"));
+        SpringApplication.run(DenimuApplication.class, args);
+    }
 }
