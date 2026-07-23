@@ -4,6 +4,7 @@ import Select from 'react-select';
 import axios from 'axios';
 import 'react-calendar/dist/Calendar.css'; 
 import './Calendar.css'; 
+import Header from "./Header";
 import BottomNav from "./BottomNav";
 
 const MyCalendar = () => {
@@ -16,26 +17,39 @@ const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
-  //コメント欄
-  const [randomText, setRandomText] = useState('読み込み中...');
+//コメント欄
+const [randomText, setRandomText] = useState('読み込み中...');
 
-  useEffect(() => {
-  if (id) {
-    fetch(`/api/random-text?userId=${id}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('ネットワークエラー');
-        }
-        return response.text();
-      })
-      .then(data => {
-        setRandomText(data);
-      })
-      .catch(err => {
-        console.error("コメント取得エラー:", err);
-        setRandomText("コメントの読み込みに失敗しました");
+useEffect(() => {
+  const fetchCommentWithWaste = async () => {
+    if (!id) return;
+
+    try {
+      const now = new Date();
+      const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+      await fetch(`http://localhost:8080/api/calc-waste?id=${id}&month=${currentMonth}`, {
+        credentials: 'include'
       });
-  }
+
+      const response = await fetch(`http://localhost:8080/api/random-text?id=${id}`, {
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error('ネットワークエラー');
+      }
+
+      const data = await response.text();
+      setRandomText(data);
+
+    } catch (err) {
+      console.error("コメント取得エラー:", err);
+      setRandomText("コメントの読み込みに失敗しました");
+    }
+  };
+
+  fetchCommentWithWaste();
 }, [id]);
 
   const formattedSelectedDate = selectedDate 
@@ -246,9 +260,9 @@ const MyCalendar = () => {
     setShowModal(!showModal);
   };
 
-  //const [isOpen, setIsOpen] = useState(false);
-  //useEffect(() => {
-  //   fetch('/api/User')
+  // const [isOpen, setIsOpen] = useState(false);
+  // useEffect(() => {
+  //   fetch('/api/')
   //   .then((response) => {
   //     if(!response.ok)  {
   //       throw new alert('APIエラー');
@@ -265,6 +279,7 @@ const MyCalendar = () => {
 
   return (
   <>
+  <Header />
     {/*モーダル*/}
     {/* <div>
       {isOpen && (
@@ -277,7 +292,6 @@ const MyCalendar = () => {
         </div>
       )}
     </div> */}
-
     <div className="comment-wrapper">
       <p>{randomText}</p>
     </div>

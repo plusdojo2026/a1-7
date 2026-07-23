@@ -7,27 +7,29 @@ import Chart from './components/Chart'
 import Calendar from './components/Calendar'
 import Login from './components/Login'
 import Register from './components/Register'
-import ProductRegister from './components/ProductRegister'
+import ProductUpdate from './components/ProductUpdate'
+import Mypage from './components/Mypage'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProductSorting from './components/ProductSorting'
 
 function App() {
-return (
-<>
-<section id="center">
-<BrowserRouter>
-<Routes>
-<Route index element={<Login />} ></Route>
-    <Route path="/Register" element={<Register  />} ></Route>
-    <Route path="/Chart" element={<Chart  />} ></Route>
-    <Route path="/Calendar" element={<Calendar />} ></Route>
-    <Route path="ProductRegister" element={<ProductRegister />} ></Route>
-    <Route path="/ProductSorting" element={<ProductSorting />} ></Route>
-</Routes>
-</BrowserRouter>
-</section>
-</>
-);
+    return (
+        <>
+            <section id="center">
+                <BrowserRouter>
+                    <Routes>
+                        <Route index element={<Login />} ></Route>
+                        <Route path="/Register" element={<Register />} ></Route>
+                        <Route path="/Chart" element={<Chart />} ></Route>
+                        <Route path="/Calendar" element={<Calendar />} ></Route>
+                        <Route path="ProductUpdate" element={<ProductUpdate />} ></Route>
+                        <Route path="/ProductSorting" element={<ProductSorting />} ></Route>
+                        <Route path="/Mypage" element={<Mypage />} ></Route>
+                    </Routes>
+                </BrowserRouter>
+            </section>
+        </>
+    );
 }
 export default App

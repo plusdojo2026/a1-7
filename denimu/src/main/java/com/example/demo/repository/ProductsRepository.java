@@ -21,4 +21,7 @@ public interface ProductsRepository extends JpaRepository<Products, Integer> {
     List<Products> findBySellingPriceBetween(Integer minPrice, Integer maxPrice);
 
     List<Products> findByUserId(Integer id);
+    
+    @Query(value = "SELECT * FROM products WHERE user_id = :userId AND DATE_FORMAT(buy_date, '%Y-%m') = :month", nativeQuery = true)
+	List<Products> findByUserIdAndMonth(@Param("userId") Integer userId, @Param("month") String month);
 }
