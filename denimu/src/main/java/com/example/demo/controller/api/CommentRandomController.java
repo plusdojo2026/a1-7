@@ -26,7 +26,7 @@ public class CommentRandomController {
     
     @Autowired
     private UsersRepository userRepository;
-
+    
     @GetMapping("/random-text")
     public String getRandomComment(
     		@RequestParam("id") Integer id, HttpSession session) {

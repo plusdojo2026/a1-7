@@ -4,6 +4,7 @@ import Select from 'react-select';
 import axios from 'axios';
 import 'react-calendar/dist/Calendar.css'; 
 import './Calendar.css'; 
+import Header from "./Header";
 import BottomNav from "./BottomNav";
 
 const MyCalendar = () => {
@@ -259,9 +260,9 @@ useEffect(() => {
     setShowModal(!showModal);
   };
 
-  //const [isOpen, setIsOpen] = useState(false);
-  //useEffect(() => {
-  //   fetch('/api/User')
+  // const [isOpen, setIsOpen] = useState(false);
+  // useEffect(() => {
+  //   fetch('/api/')
   //   .then((response) => {
   //     if(!response.ok)  {
   //       throw new alert('APIエラー');
@@ -278,6 +279,7 @@ useEffect(() => {
 
   return (
   <>
+  <Header />
     {/*モーダル*/}
     {/* <div>
       {isOpen && (
@@ -290,7 +292,6 @@ useEffect(() => {
         </div>
       )}
     </div> */}
-
     <div className="comment-wrapper">
       <p>{randomText}</p>
     </div>

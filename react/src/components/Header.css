@@ -1,0 +1,91 @@
+/* ==========================================================================
+   Header：クリーン ＆ ナチュラル（Calendar.cssと世界観を統一）
+   ========================================================================== */
+
+/* ヘッダー全体（上部固定・すりガラス風） */
+.site-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.9); /* ほんのり透け感 */
+  backdrop-filter: blur(8px); /* トレンドのすりガラス効果 */
+  border-bottom: 1px solid #f1f5f9; /* 繊細な境界線 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); /* カレンダーと同じ優しい影 */
+  z-index: 1000;
+}
+
+/* ヘッダーの中身のコンテナ */
+.header-container {
+  max-width: 650px; /* カレンダーの幅(650px)とぴったり合わせて美しく */
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 64px;
+  display: flex;
+  justify-content: space-between; /* ロゴを左、ボタンを右に配置 */
+  align-items: center; /* 上下中央揃え */
+  box-sizing: border-box;
+}
+
+/* ロゴ画像エリア */
+.header-logo {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.header-logo a:hover {
+  opacity: 0.8;
+}
+
+/* ロゴ画像スタイル */
+.header-logo img {
+  height: 38px; /* 圧迫感のない最適な高さ */
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* MUI BottomNavigation のリセット＆カスタマイズ */
+.header-bottom-nav {
+  background-color: transparent !important; /* 背景を透明化 */
+  height: auto !important;
+}
+
+/* ログアウトボタン（カレンダーのボタンデザインに統一） */
+.logout-action {
+  min-width: auto !important;
+  padding: 8px 14px !important;
+  border-radius: 10px !important;
+  color: #64748b !important; /* 洗練されたスレートグレー */
+  background-color: #f1f5f9 !important; /* 優しい薄グレーのボタン風 */
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  flex-direction: row !important; /* アイコンとテキストを横並びに */
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+/* アイコンとテキストのサイズ調整 */
+.logout-action .MuiBottomNavigationAction-label {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  margin-top: 0 !important;
+  opacity: 1 !important;
+}
+
+.logout-action .MuiSvgIcon-root {
+  font-size: 18px !important;
+}
+
+/* ログアウトボタンのホバー処理（優しく警告色ローズレッドへ） */
+.logout-action:hover {
+  background-color: #ffe4e6 !important; /* 無駄遣い金額と同じ優しいピンク */
+  color: #e11d48 !important; /* ローズレッド */
+}
