@@ -21,14 +21,6 @@ ChartJS.register(
 
 import { useState, useEffect } from "react";
 import "./Chart.css";
-import BottomNavigation from "@mui/material/BottomNavigation";
-import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import HomeIcon from "@mui/icons-material/Home";
-import SearchIcon from "@mui/icons-material/Search";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import CategoryIcon from "@mui/icons-material/Category";
-import PersonIcon from "@mui/icons-material/Person";
-import { Link } from "react-router-dom";
 import BottomNav from "./BottomNav";
 
 // レンダリング
@@ -44,7 +36,9 @@ export default function Chart(){
 
   useEffect(() => {
 
-  fetch(`http://localhost:8080/api/graph?month=${month}`)
+    const userId = sessionStorage.getItem("id");
+
+  fetch(`http://localhost:8080/api/graph?month=${month}&userId=${userId}`)
     .then(res => res.json())
     .then(data => {
       console.log(data);
