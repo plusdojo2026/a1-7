@@ -1,10 +1,11 @@
 import { DndContext, DragOverlay, PointerSensor, TouchSensor ,useSensor, useSensors} from "@dnd-kit/core";
 import "../css/ProductSorting.css";
+import "../../node_modules/react-toastify/dist/ReactToastify.css";
 import Draggable from "./Draggable";
 import Droppable from "./Droppable";
 import { act, createElement, useEffect, useState } from "react";
 import axios from "axios";
-
+import { ToastContainer, Zoom, toast } from "react-toastify";
 
 
 const ProductSorting = () => {
@@ -89,6 +90,8 @@ const ProductSorting = () => {
                 const newObj = {...obj, ap_type: 1, checkBox: true};
                 setUsed2((used2) => [...used2, newObj]);
                 setAll((all) => [...all, newObj]);
+                //トースト表示
+                toast(<div>「<strong>{obj.name}</strong>」を<br /><strong style={{color:"crimson"}}>"使う"</strong>チェック済みリストに追加しました"</div>,{style:{width:"auto",},});
                 //削除
                 setUsed(used.filter(value => value.id != content_id))
                 console.log("削除");
@@ -97,6 +100,8 @@ const ProductSorting = () => {
                 const newObj = {...obj, ap_type: 2, checkBox: true};
                 setTrash2((trash2) => [...trash2, newObj]);
                 setAll((all) => [...all, newObj]);
+                //トースト表示
+                toast(<div>「<strong>{obj.name}</strong>」を<br /><strong style={{color:"crimson"}}>"すてる"</strong>チェック済みリストに追加しました"</div>,{style:{width:"auto",},});
                 //削除
                 setTrash(trash.filter(value => value.id != content_id))
                 console.log("削除");
@@ -105,6 +110,8 @@ const ProductSorting = () => {
                 const newObj = {...obj, ap_type: 3, checkBox: true};
                 setCell2((cell2) => [...cell2, newObj]);
                 setAll((all) => [...all, newObj]);
+                //トースト表示
+                toast(<div>「<strong>{obj.name}</strong>」を<br /><strong style={{color:"crimson"}}>"売る"</strong>チェック済みリストに追加しました"</div>,{style:{width:"auto",},});
                 //削除
                 setCell(cell.filter(value => value.id != content_id))
                 console.log("削除");
@@ -113,6 +120,8 @@ const ProductSorting = () => {
                 const newObj = {...obj, ap_type: 4, checkBox: true};
                 setGive2((give2) => [...give2, newObj]);
                 setAll((all) => [...all, newObj]);
+                //トースト表示
+                toast(<div>「<strong>{obj.name}</strong>」を<br /><strong style={{color:"crimson"}}>"あげる"</strong>チェック済みリストに追加しました"</div>,{style:{width:"auto",},});
                 //削除
                 setGive(give.filter(value => value.id != content_id))
                 console.log("削除");
@@ -121,6 +130,8 @@ const ProductSorting = () => {
                 const newObj = {...obj, ap_type: 5, checkBox: true};
                 setOther2((other2) => [...other2, newObj]);
                 setAll((all) => [...all, newObj]);
+                //トースト表示
+                toast(<div>「<strong>{obj.name}</strong>」を<br /><strong style={{color:"crimson"}}>"その他"</strong>チェック済みリストに追加しました"</div>,{style:{width:"auto",},});
                 //削除
                 setOther(other.filter(value => value.id != content_id))
                 console.log("削除");
@@ -132,6 +143,8 @@ const ProductSorting = () => {
             if(useType === 'used'){
                 const newObj = {...obj, ap_type: 1, checkBox: false};
                 setUsed((used) => [...used, newObj]);
+                //トースト表示
+                toast(<div>「<strong>{obj.name}</strong>」を<br /><strong style={{color:"crimson"}}>"使う"</strong>適用リストに追加しました"</div>,{style:{width:"auto",},});
                 //削除
                 setUsed2(used2.filter(value => value.id != content_id))
                 setAll(all.filter(value => value.id != content_id))
@@ -140,6 +153,8 @@ const ProductSorting = () => {
             if(useType === 'trash'){
                 const newObj = {...obj, ap_type: 2, checkBox: false};
                 setTrash((trash) => [...trash, newObj]);
+                //トースト表示
+                toast(<div>「<strong>{obj.name}</strong>」を<br /><strong style={{color:"crimson"}}>"すてる"</strong>適用リストに追加しました"</div>,{style:{width:"auto",},});
                 //削除
                 setTrash2(trash2.filter(value => value.id != content_id))
                 setAll(all.filter(value => value.id != content_id))
@@ -148,6 +163,8 @@ const ProductSorting = () => {
             if(useType === 'cell'){
                 const newObj = {...obj, ap_type: 3, checkBox: false};
                 setCell((cell) => [...cell, newObj]);
+                //トースト表示
+                toast(<div>「<strong>{obj.name}</strong>」を<br /><strong style={{color:"crimson"}}>"売る"</strong>適用リストに追加しました"</div>,{style:{width:"auto",},});
                 //削除
                 setCell2(cell2.filter(value => value.id != content_id))
                 setAll(all.filter(value => value.id != content_id))
@@ -156,6 +173,8 @@ const ProductSorting = () => {
             if(useType === 'give'){
                 const newObj = {...obj, ap_type: 4, checkBox: false};
                 setGive((give) => [...give, newObj]);
+                //トースト表示
+                toast(<div>「<strong>{obj.name}</strong>」を<br /><strong style={{color:"crimson"}}>"あげる"</strong>適用リストに追加しました"</div>,{style:{width:"auto",},});
                 //削除
                 setGive2(give2.filter(value => value.id != content_id))
                 setAll(all.filter(value => value.id != content_id))
@@ -164,6 +183,8 @@ const ProductSorting = () => {
             if(useType === 'other'){
                 const newObj = {...obj, ap_type: 5, checkBox: false};
                 setOther((other) => [...other, newObj]);
+                //トースト表示
+                toast(<div>「<strong>{obj.name}</strong>」を<br /><strong style={{color:"crimson"}}>"その他"</strong>適用リストに追加しました"</div>,{style:{width:"auto",},});
                 //削除
                 setOther2(other2.filter(value => value.id != content_id))
                 setAll(all.filter(value => value.id != content_id))
@@ -285,6 +306,7 @@ const ProductSorting = () => {
             setOther2([]);
             //仕分け
             sortCategory(productName);
+            toast(<div><h3>仕分けを完了しました</h3></div>,{style:{width:"auto",},transition:Zoom},);
         });
     }
     // useEffect(() => {
@@ -645,11 +667,11 @@ const ProductSorting = () => {
 
 
             <nav className="button-Tab">
-                <button onClick={() => setActive("used")} className={active === "used" ? "used-Button" : ""}>使う</button>
-                <button onClick={() => setActive("trash")} className={active === "trash" ? "trash-Button" : ""}>すてる</button>
-                <button onClick={() => setActive("cell")} className={active === "cell" ? "cell-Button" : ""}>売る</button>
-                <button onClick={() => setActive("give")} className={active === "give" ? "give-Button" : ""}>あげる</button>
-                <button onClick={() => setActive("other")} className={active === "other" ? "other-Button" : ""}>その他</button>
+                <button onClick={() => setActive("used")} className={active === "used" ? "used-Button" : ""}>使う<div className="listNum">{used.length}</div></button>
+                <button onClick={() => setActive("trash")} className={active === "trash" ? "trash-Button" : ""}>すてる<div className="listNum">{trash.length}</div></button>
+                <button onClick={() => setActive("cell")} className={active === "cell" ? "cell-Button" : ""}>売る<div className="listNum">{cell.length}</div></button>
+                <button onClick={() => setActive("give")} className={active === "give" ? "give-Button" : ""}>あげる<div className="listNum">{give.length}</div></button>
+                <button onClick={() => setActive("other")} className={active === "other" ? "other-Button" : ""}>その他<div className="listNum">{other.length}</div></button>
             </nav>
 
             <div className="list-Set">
@@ -829,18 +851,23 @@ const ProductSorting = () => {
             <div className="checked-Box">
                 <h3 className="drop-Title">チェック済みリスト</h3>
                 <nav className="button-Tab">
-                    <button onClick={() => setActive2("all")} className={active2 === "all" ? "all-Button" : ""}>すべて</button>
-                    <button onClick={() => setActive2("used")} className={active2 === "used" ? "used-Button" : ""}>使う</button>
-                    <button onClick={() => setActive2("trash")} className={active2 === "trash" ? "trash-Button" : ""}>すてる</button>
-                    <button onClick={() => setActive2("cell")} className={active2 === "cell" ? "cell-Button" : ""}>売る</button>
-                    <button onClick={() => setActive2("give")} className={active2 === "give" ? "give-Button" : ""}>あげる</button>
-                    <button onClick={() => setActive2("other")} className={active2 === "other" ? "other-Button" : ""}>その他</button>
+                    <button onClick={() => setActive2("all")} className={active2 === "all" ? "all-Button" : ""}>すべて<div className="listNum">{all.length}</div></button>
+                    <button onClick={() => setActive2("used")} className={active2 === "used" ? "used-Button" : ""}>使う<div className="listNum">{used2.length}</div></button>
+                    <button onClick={() => setActive2("trash")} className={active2 === "trash" ? "trash-Button" : ""}>すてる<div className="listNum">{trash2.length}</div></button>
+                    <button onClick={() => setActive2("cell")} className={active2 === "cell" ? "cell-Button" : ""}>売る<div className="listNum">{cell2.length}</div></button>
+                    <button onClick={() => setActive2("give")} className={active2 === "give" ? "give-Button" : ""}>あげる<div className="listNum">{give2.length}</div></button>
+                    <button onClick={() => setActive2("other")} className={active2 === "other" ? "other-Button" : ""}>その他<div className="listNum">{other2.length}</div></button>
                 </nav>
                 {/* すべてタブ */}
                 {active2 === "all" &&(
                     <div className="used-Box">
                         <div className="droppable2">
-                            <h3 className="drop-Title">すべて</h3>
+                            <h3 className="drop-Title sortCategory">すべて
+                                <select className="sortName">
+                                    <option>金額順</option>
+                                    <option>日付順</option>
+                                    <option>評価順</option>
+                                </select></h3>
                             <div id="category-Table" className="category-Table">
                                 {all.map((allEle,index) =>
                                     <div className="content">
@@ -1051,8 +1078,8 @@ const ProductSorting = () => {
                     right: open ? 0 : -250,   // ← コンテンツだけ動かす
                     top: "50%",
                     transform: "translateY(-50%)",
-                    width: 250,
-                    height: 200,
+                    width: 220,
+                    height: 80,
                     background: "#eee",
                     borderRadius: "0 8px 8px 0",
                     boxShadow: "0 0 10px rgba(0,0,0,0.2)",
@@ -1063,6 +1090,10 @@ const ProductSorting = () => {
                 >
                     <button className="sortButton" onClick={() => addSortList()}>仕分け完了</button>
                 </div>
+                
+                
+
+                <ToastContainer />
 
 
             </div>
