@@ -11,23 +11,23 @@ INSERT IGNORE INTO Category(category_type) VALUES ('その他');
 -- =========================================================================
 -- 2. Products テーブル（家計簿データ）
 -- =========================================================================
-INSERT INTO Products(id, user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 1, 3, 'Tシャツ', '2026-06-15', 1, 5300, '3', 2200, '2026-06-15 00:00:00');
+INSERT INTO Products(id, user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
+VALUES (1, 3, 1, 0, 'Tシャツ', '2026-06-15', 1, 5300, '3', 2200, '2026-06-15 00:00:00');
 
-INSERT INTO Products(user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (2, 1, '非常食', '2026-06-15', 2, 3300, '3', 1200, '2026-06-15 00:00:00');
+INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
+VALUES (1, 1, 0, '非常食', '2026-06-15', 2, 3300, '3', 1200, '2026-06-15 00:00:00');
 
-INSERT INTO Products(user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (3, 1, '電池', '2026-06-15', 3, 800, '1', 550, '2026-06-15 00:00:00');
+INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
+VALUES (1, 1, 0, '電池', '2026-06-15', 3, 800, '1', 550, '2026-06-15 00:00:00');
 
-INSERT INTO Products(user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (4, 1, '時計', '2026-07-10', 4, 600, '4', 200, '2026-07-10 00:00:00');
+INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
+VALUES (1, 1, 0, '時計', '2026-07-10', 4, 600, '4', 200, '2026-07-10 00:00:00');
 
-INSERT INTO Products(user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (5, 1, '動画配信サービス', '2026-06-15', 5, 2860, '2', 400, '2026-06-15 00:00:00');
+INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
+VALUES (1, 1, 0, '動画配信サービス', '2026-06-15', 5, 2860, '2', 400, '2026-06-15 00:00:00');
 
-INSERT INTO Products(user_id, ap_type, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (6, 1, 'その他', '2026-06-15', 6, 7000, '5', 1200, '2026-06-15 00:00:00');
+INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
+VALUES (1, 1, 0, 'その他', '2026-06-15', 6, 7000, '5', 1200, '2026-06-15 00:00:00');
 
 -- =========================================================================
 -- 3. comment テーブル（アドバイスシステム）
@@ -200,4 +200,27 @@ VALUES
   (3, 1, 5, NULL, 1, 0, 1, 0, 4),
   (4, 1, 6, NULL, 0, 1, 0, 0, 2),
   (5, 1, 2, NULL, 0, 0, 0, 1, 4);
-
+  
+INSERT INTO users (
+    fire_garbage,
+    id,
+    landfill_garbage,
+    nofire_garbage,
+    recycle_garbage,
+    target_price,
+    last_login,
+    name,
+    pw,
+    user_id
+) VALUES (
+    NULL,
+    1,
+    NULL,
+    NULL,
+    NULL,
+    50000,
+    NULL,
+    '123456789',
+    '123456789',
+    '123456789'
+);
