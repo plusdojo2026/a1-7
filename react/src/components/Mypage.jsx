@@ -10,6 +10,13 @@ const Mypage = () => {
     let [showGabageTypeModal, setShowGabageTypeModal] = useState(false);
     let [showMoneyModal, setShowMoneyModal] = useState(false);
 
+//　マイページアイコン写真
+    let[file, setFile] = useState(null);
+    let changeFile = (e)=> {
+        setFile(e.target.files[0]);
+    }
+// ここまで
+
     let inputModUsers = (e) => {
         setModUsers({ ...modUsers, [e.target.name]: e.target.value });
     }
@@ -84,11 +91,21 @@ const Mypage = () => {
             alert("パスワードは8文字以上50文字以下で入力してください。");
             return;
         }
+        //現在のパスワードが一致しているか
+        axios.post("/api/users/checkPw",modUsers)
+        .then(response =>{
+
+            //pwが違う
+            if(response.data !== "OK"){
+                alert(response.data);
+                return;
+            }
+        
         //newPwをDBに登録
         let updateData = {
             ...modUsers,
             pw: modUsers.newPw
-        }
+        };
         axios.post('/api/users/mod/', updateData)
         .then(response => {
 
@@ -103,7 +120,8 @@ const Mypage = () => {
                 alert(response.data);
               }
         });
-    }
+    });
+}  
     let updateGabageType = () => {
         axios.post('/api/users/mod/', modUsers)
         .then(response => {
@@ -120,9 +138,49 @@ const Mypage = () => {
         });
     }
 
+    //　マイページアイコン写真ここから
+        let upload =() => {
+
+            console.log(users);
+            console.log(file);
+
+            if (!users.id || !file) {
+                alert("画像を選択してください");
+                return;
+            }
+
+            const formData = new FormData();
+    
+ 
+            formData.append("user_id", users.id);
+            formData.append("image", file);
+            
+            axios.post('/api/users/upload/', formData)
+            
+            .then(response => { alert("アップロードしました");
+            window.location.reload();
+                });
+        }
+    
+       
+                
+    
+
     return (
         <div className="login-container">
             <h1>マイページ</h1>
+            <div className="image-area">
+                <img className="user-icon" src={users.id && "/api/users/images/" + users.id} />
+    
+        <label htmlFor="imageInput" className="camera-button">
+            📷
+        </label>
+    
+        <input id="imageInput" type="file" style={{display:"none"}} onChange={changeFile} />
+            </div>
+    <br></br>
+                <button onClick={upload}>アップロード</button>
+    <br></br><br></br>
             <p className="form-group">ユーザー名: {users.name}</p>
             <button className="login-button" onClick={() => modUsersStart(users)}>編集</button>
             <button className="login-button" onClick={() => modGabageTypeStart(users)}>ゴミの日曜日設定</button>
