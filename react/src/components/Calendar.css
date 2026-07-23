@@ -454,3 +454,166 @@ body {
 .btn-delete:hover {
   background-color: #fecdd3;
 }
+
+/* 画面中央モーダル */
+.notice-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.6); /* 少し青みがかったリッチな半透明背景 */
+  backdrop-filter: blur(4px); /* 背景を少しすりガラス風にぼかす */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeInBg 0.25s ease-out;
+}
+
+.notice-card {
+  width: 90%;
+  max-width: 520px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 32px 28px;
+  box-sizing: border-box;
+  animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  
+  /* 日本語が美しく見える一般的なフォントスタックを指定 */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* メインの見出し（明日は〜の日） */
+.notice-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+  line-height: 1.5;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+/* ごみの種類（強調部分） */
+.notice-title .highlight {
+  color: #0284c7; /* 清潔感のある鮮やかなブルー（または赤系にしたい場合は #dc2626） */
+  background-color: #e0f2fe; /* 薄い背景色でアクセントを付ける */
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin: 0 2px;
+}
+
+/* サブ見出し（以下のごみを…） */
+.notice-subtitle {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0 0 24px 0;
+  text-align: center;
+}
+
+/* テーブル全体のデザイン */
+.table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 28px;
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
+}
+
+.notice-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.notice-table th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  letter-spacing: 0.05em;
+}
+
+.notice-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+}
+
+/* 各カラムの調整 */
+.notice-table .date {
+  color: #64748b;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums; /* 数字の幅を揃える */
+  white-space: nowrap;
+  width: 110px;
+}
+
+.notice-table .name {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.notice-table .price {
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #0f172a;
+  white-space: nowrap;
+  width: 100px;
+}
+
+.notice-table th:last-child {
+  text-align: right;
+}
+
+.wasterow:hover {
+  background-color: #f8fafc;
+}
+
+/* 閉じるボタン */
+.notice-action {
+  text-align: center;
+}
+
+.close-btn {
+  background-color: #0f172a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 32px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn:hover {
+  background-color: #1e293b;
+}
+
+.close-btn:active {
+  transform: scale(0.98);
+}
+
+/* アニメーション */
+@keyframes fadeInBg {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
