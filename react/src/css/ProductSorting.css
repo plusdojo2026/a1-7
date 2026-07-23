@@ -100,6 +100,26 @@
   overflow-y: auto;
 }
 
+.overlay-item {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.item-view{
+  width: 100%;
+  padding: 10px;
+  top: 0;
+  left: 0;
+  border: 1px solid rgb(125, 125, 125);
+  background-color: rgb(255, 255, 255);
+  cursor: grab;
+}
+
+
 .content{
   display: flex;
   background-color: rgb(213, 208, 208);
@@ -113,9 +133,36 @@
   transform: scale(1.5);
 }
 
+
 .checkBox{
   position: absolute;
   right: 0;
+  top: 2px;
+  transform: scale(2);
+  border: 2px solid black;
+}
+
+
+.droppable2 {
+  width: 100%;
+  min-height: 300px;
+  padding: 16px;
+  background-color: azure;
+  border-radius: 10px;
+  border: 1px solid rgb(198, 198, 198);
+}
+
+.draggable2 {
+  width: 90%;
+  padding: 10px;
+  margin-right: auto;
+  margin-left: auto;
+  border: 1px solid rgb(125, 125, 125);
+  background-color: rgb(255, 255, 255);
+}
+
+.checkBox2{
+  right: 0px;
   top: 2px;
   transform: scale(2);
   border: 2px solid black;
@@ -136,8 +183,19 @@
 }
 
 .allTable td{
-  padding-right: 100px;
+  display: table-cell;
+  padding-right: 10px;
+  padding-left: 10px;
   border-left: 2px solid rgb(146, 146, 146);
+}
+
+.allTable .td-one{
+  text-align: center;
+}
+
+.allTable {
+  display: table;
+  border-collapse: collapse;
 }
 
 
