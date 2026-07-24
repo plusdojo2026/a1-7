@@ -1,9 +1,13 @@
 package com.example.demo.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,190 +15,29 @@ import com.example.demo.entity.Products;
 import com.example.demo.repository.ProductsRepository;
 
 @RestController
+@RequestMapping("/api/products")
+@CrossOrigin(origins = "http://localhost:5173") 
 public class SearchController {
 
     @Autowired
-    private ProductsRepository repository;
+    private ProductsRepository productsRepository;
 
-     @GetMapping("/search/")
-    public List<Products> search(
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String category,
-            @RequestParam(required = false) Integer minPrice,
-            @RequestParam(required = false) Integer maxPrice) {
-        
-        // 何も入力されていない場合は全件表示
-        if ((keyword == null || keyword.isBlank())
-                && (category == null || category.isBlank())
-                && minPrice == null
-                && maxPrice == null) {
+    @GetMapping("/search")
+    public List<Products> searchProducts(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "category", required = false) Integer category,
+            @RequestParam(name = "minPrice", required = false) Integer minPrice,
+            @RequestParam(name = "maxPrice", required = false) Integer maxPrice,
+            @RequestParam(name = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @RequestParam(name = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
 
-            return repository.findAll();
-        }
-
-        // キーワード検索（例）
-        if (keyword != null && !keyword.isBlank()) {
-            return repository.findByNameContaining(keyword);
-        }
-
-        // カテゴリ検索（例）
-        if (category != null && !category.isBlank()) {
-            return repository.findByCategory(category);
-        }
-
-        // 価格検索（例）
-        if (minPrice != null && maxPrice !=null) {
-            return repository.findBySellingPriceBetween(minPrice, maxPrice);
-        }
-
-        return repository.findAll();
+        return productsRepository.searchProducts(
+                keyword, 
+                category, 
+                minPrice, 
+                maxPrice, 
+                startDate, 
+                endDate
+        );
     }
 }
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    
