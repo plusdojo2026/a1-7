@@ -26,11 +26,11 @@ public class SortingRestController {
 		return product;
 	}
 	
-	
 	@GetMapping("/sorting/")
 	private List<Products> get(){
 		return repository.findAll();
 	}
+	
 	
 	@PostMapping("/sorting/mod/")
 	private Products mod(@RequestBody Products products) {

@@ -36,13 +36,14 @@ public class ChartRestController {
 	  @GetMapping("/graph")
 	    public Map<String,Object> graph(
 	            @RequestParam String month,
+	            @RequestParam Integer userId,
 	            HttpSession session
 	    ) {
 		//  System.out.println("受け取った月：" + month);
 		  
-	        // DBから月指定で取得
+	        // DBから月とuserId指定で取得
 	        List<Products> products =
-	                productsRepository.findByMonth(month);
+	                productsRepository.findByUserIdAndMonth(userId,month);
 
 	        //System.out.println("件数：" + products.size());
 	        
