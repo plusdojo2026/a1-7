@@ -6,6 +6,7 @@ import Droppable from "./Droppable";
 import { act, createElement, useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, Zoom, toast } from "react-toastify";
+import { Star } from "@mui/icons-material";
 
 
 const ProductSorting = () => {
@@ -26,8 +27,6 @@ const ProductSorting = () => {
 
 
     let [sendList, setSendList] = useState({});
-
-    let [resSortList, setResSortList] = useState([]);
 
     let [productName, setProductName] = useState([]);
 
@@ -80,6 +79,58 @@ const ProductSorting = () => {
 
     //スライドコンテンツ
     let [open, setOpen] = useState(false);
+
+
+
+    //星の表示
+    const StarFill = ({ value, max = 5 }) => {
+        const percentage = (value / max) * 100;
+
+        return (
+            <div style={{ position: "relative", width: "24px", height: "24px" }}>
+            {/* 星の枠（グレー） */}
+            <span
+                style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                fontSize: "24px",
+                color: "#ccc",
+                }}
+            >
+                ★
+            </span>
+
+            {/* 塗りつぶし部分（黄色） */}
+            <span
+                style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                fontSize: "24px",
+                color: "gold",
+                width: `${percentage}%`,
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                }}
+            >
+                ★
+            </span>
+            </div>
+        );
+    };
+
+
+
+    const formatDate = (value) => {
+        const d = new Date(value);
+        if (isNaN(d)) return value;
+        return d.toISOString().split("T")[0];
+    };
+
+
+
+
 
 
     //チェックリスト追加、削除
@@ -319,51 +370,87 @@ const ProductSorting = () => {
     }
 
 
-    //ソート用のリストに格納
-    const rearrange = (setArray) => {
-        setResSortList(setArray);
-    }
-
-
 
     //selectリストでのソート
-    const changeSort = (e) => {
+    const changeSort = (e, sortType) => {
         if(e.target.value === "金額順"){
-            if(e.target.type === "all"){
-                rearrange(all);
-                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setAll(json));
+            if(sortType === "all"){
+                setAll([...all].sort((a, b) => a.sellingPrice - b.sellingPrice));
+                console.log("Sort-All-money");
             }
-            else if(e.target.type === "used"){
-                rearrange(used2);
-                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setUsed2(json));
+            else if(sortType === "used"){
+                setUsed2([...used2].sort((a, b) => a.sellingPrice - b.sellingPrice));
+                console.log("Sort-Used-money");
             }
-            else if(e.target.type === "trash"){
-                rearrange(trash2);
-                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setTrash2(json));
+            else if(sortType === "trash"){
+                setTrash2([...trash2].sort((a, b) => a.sellingPrice - b.sellingPrice));
+                console.log("Sort-Trash-money");
             }
-            else if(e.target.type === "cell"){
-                rearrange(cell2);
-                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setCell2(json));
+            else if(sortType === "cell"){
+                setCell2([...cell2].sort((a, b) => a.sellingPrice - b.sellingPrice));
+                console.log("Sort-Cell-money");
             }
-            else if(e.target.type === "give"){
-                rearrange(give2);
-                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setGive2(json));
+            else if(sortType === "give"){
+                setGive2([...give2].sort((a, b) => a.sellingPrice - b.sellingPrice));
+                console.log("Sort-Give-money");
             }
-            else if(e.target.type === "other"){
-                rearrange(other2);
-                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setOther2(json));
+            else if(sortType === "other"){
+                setOther2([...other2].sort((a, b) => a.sellingPrice - b.sellingPrice));
+                console.log("Sort-Other-money");
             }
 
         }
         else if(e.target.value === "日付順"){
-            axios.post('/api/sorting/add/', margeList).then(response => {
-            refreshSortList();
-            })
+            if(sortType === "all"){
+                setAll([...all].sort((a, b) => new Date(a.buyDate) - new Date(b.buyDate)));
+                console.log("Sort-All-day");
+            }
+            else if(sortType === "used"){
+                setUsed2([...used2].sort((a, b) => a.buyDate - b.buyDate));
+                console.log("Sort-Used-day");
+            }
+            else if(sortType === "trash"){
+                setTrash2([...trash2].sort((a, b) => a.buyDate - b.buyDate));
+                console.log("Sort-Trash-day");
+            }
+            else if(sortType === "cell"){
+                setCell2([...cell2].sort((a, b) => a.buyDate - b.buyDate));
+                console.log("Sort-Cell-day");
+            }
+            else if(sortType === "give"){
+                setGive2([...give2].sort((a, b) => a.buyDate - b.buyDate));
+                console.log("Sort-Give-day");
+            }
+            else if(sortType === "other"){
+                setOther2([...other2].sort((a, b) => a.buyDate - b.buyDate));
+                console.log("Sort-Other-day");
+            }
         }
         else if(e.target.value === "評価順"){
-            axios.post('/api/sorting/add/', margeList).then(response => {
-            refreshSortList();
-            })
+            if(sortType === "all"){
+                setAll([...all].sort((a, b) => a.valuation - b.valuation));
+                console.log("Sort-All-value");
+            }
+            else if(sortType === "used"){
+                setUsed2([...used2].sort((a, b) => a.valuation - b.valuation));
+                console.log("Sort-Used-value");
+            }
+            else if(sortType === "trash"){
+                setTrash2([...trash2].sort((a, b) => a.valuation - b.valuation));
+                console.log("Sort-Trash-value");
+            }
+            else if(sortType === "cell"){
+                setCell2([...cell2].sort((a, b) => a.valuation - b.valuation));
+                console.log("Sort-Cell-value");
+            }
+            else if(sortType === "give"){
+                setGive2([...give2].sort((a, b) => a.valuation - b.valuation));
+                console.log("Sort-Give-value");
+            }
+            else if(sortType === "other"){
+                setOther2([...other2].sort((a, b) => a.valuation - b.valuation));
+                console.log("Sort-Other-value");
+            }
         }
         else{
             console.log("sort error");
@@ -918,39 +1005,71 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3 className="drop-Title sortCategory">すべて
-                                <select className="sortName" onChange={(event) => changeSort(event)} type="all">
+                                <select className="sortName" onChange={(event) => changeSort(event,"all")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
                                     <option value={"評価順"}>評価順</option>
                                 </select></h3>
-                            <div id="category-Table" className="category-Table">
-                                {all.map((allEle,index) =>
-                                    <div className="content">
-                                        <div className="draggable2">
-                                            <table className="allTable">
-                                                <tr>
-                                                    <td className="td-one">
-                                                    {allEle.ap_type === 1 ? '使う' : allEle.ap_type === 2 ? 'すてる' : allEle.ap_type === 3 ? '売る' : allEle.ap_type === 4 ? 'あげる' : 'その他'}
-                                                    </td>
-                                                    <td>{allEle.name}</td>
-                                                </tr>
-                                            </table>
-                                        </div>
+                                <div id="category-Table" className="category-Table">
+                                <table className="allTable">
+                                    <thead>
+                                    <tr>
+                                        <th className="type-category">項目名</th>
+                                        <th className="type-product">商品名</th>
+                                        <th className="type-price">値段</th>
+                                        <th className="type-valuation">評価</th>
+                                        <th className="type-date">購入日</th>
+                                        <th className="type-check">選択</th>
+                                    </tr>
+                                    </thead>
 
-                                        <input
-                                        type="checkbox"
-                                        className="checkBox2"
-                                        key={`all-${allEle.id}`}
-                                        id={`all-${allEle.id}`}
-                                        onChange={(e) => OnCheck(allEle.id,"all", allEle, e)}
-                                        checked
-                                        />
-                                        
-                                    </div>
-                                
-                                
-                                )}
-                            </div>
+                                    <tbody>
+                                    {all.map((allEle, index) => (
+                                        <tr key={allEle.id}>
+                                        <td className="td-one">
+                                            {allEle.ap_type === 1
+                                            ? '使う'
+                                            : allEle.ap_type === 2
+                                            ? 'すてる'
+                                            : allEle.ap_type === 3
+                                            ? '売る'
+                                            : allEle.ap_type === 4
+                                            ? 'あげる'
+                                            : 'その他'}
+                                        </td>
+
+                                        <td>{allEle.name}</td>
+                                        <td>￥{allEle.sellingPrice}</td>
+
+                                        {/* ★ 星の中央寄せはここで確実にできる */}
+                                        <td>
+                                            <div style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            width: "100%"
+                                            }}>
+                                            <StarFill value={allEle.valuation} max={5} />
+                                            </div>
+                                        </td>
+
+                                        <td>{formatDate(allEle.buyDate)}</td>
+
+                                        {/* レコードごとのチェックボックス */}
+                                        <td>
+                                            <input
+                                            type="checkbox"
+                                            className="checkBox2"
+                                            id={`all-${allEle.id}`}
+                                            onChange={(e) => OnCheck(allEle.id, "all", allEle, e)}
+                                            checked
+                                            />
+                                        </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                                </div>
+
                         </div>
                     </div>
                 )}
@@ -960,7 +1079,13 @@ const ProductSorting = () => {
                 {active2 === "used" &&(
                     <div className="used-Box">
                         <div className="droppable2">
-                            <h3 className="drop-Title">使う</h3>
+                            <h3  className="drop-Title sortCategory">使う
+                                <select className="sortName" onChange={(event) => changeSort(event,"used")}>
+                                    <option value={"金額順"}>金額順</option>
+                                    <option value={"日付順"}>日付順</option>
+                                    <option value={"評価順"}>評価順</option>
+                                </select>
+                            </h3>
                             <div id="category-Table" className="category-Table">
                                 {used2.map((use,index) =>
                                     <div className="content">
@@ -990,7 +1115,13 @@ const ProductSorting = () => {
                 {active2 === "trash" &&(
                     <div className="used-Box">
                         <div className="droppable2">
-                            <h3 className="drop-Title">すてる</h3>
+                            <h3  className="drop-Title sortCategory">すてる
+                                <select className="sortName" onChange={(event) => changeSort(event,"trash")}>
+                                    <option value={"金額順"}>金額順</option>
+                                    <option value={"日付順"}>日付順</option>
+                                    <option value={"評価順"}>評価順</option>
+                                </select>
+                            </h3>
                             <div id="category-Table" className="category-Table">
                                 {trash2.map((trashEle,index) =>
                                     <div className="content">
@@ -1020,7 +1151,13 @@ const ProductSorting = () => {
                 {active2 === "cell" &&(
                     <div className="used-Box">
                         <div className="droppable2">
-                            <h3 className="drop-Title">売る</h3>
+                            <h3  className="drop-Title sortCategory">売る
+                                <select className="sortName" onChange={(event) => changeSort(event,"cell")}>
+                                    <option value={"金額順"}>金額順</option>
+                                    <option value={"日付順"}>日付順</option>
+                                    <option value={"評価順"}>評価順</option>
+                                </select>
+                            </h3>
                             <div id="category-Table" className="category-Table">
                                 {cell2.map((cellEle,index) =>
                                     <div className="content">
@@ -1050,7 +1187,13 @@ const ProductSorting = () => {
                 {active2 === "give" &&(
                     <div className="used-Box">
                         <div className="droppable2">
-                            <h3 className="drop-Title">あげる</h3>
+                            <h3  className="drop-Title sortCategory">あげる
+                                <select className="sortName" onChange={(event) => changeSort(event,"give")}>
+                                    <option value={"金額順"}>金額順</option>
+                                    <option value={"日付順"}>日付順</option>
+                                    <option value={"評価順"}>評価順</option>
+                                </select>
+                            </h3>
                             <div id="category-Table" className="category-Table">
                                 {give2.map((giveEle,index) =>
                                     <div className="content">
@@ -1080,7 +1223,13 @@ const ProductSorting = () => {
                 {active2 === "other" &&(
                     <div className="used-Box">
                         <div className="droppable2">
-                            <h3 className="drop-Title">その他</h3>
+                            <h3  className="drop-Title sortCategory">その他
+                                <select className="sortName" onChange={(event) => changeSort(event,"other")}>
+                                    <option value={"金額順"}>金額順</option>
+                                    <option value={"日付順"}>日付順</option>
+                                    <option value={"評価順"}>評価順</option>
+                                </select>
+                            </h3>
                             <div id="category-Table" className="category-Table">
                                 {other2.map((otherEle,index) =>
                                     <div className="content">

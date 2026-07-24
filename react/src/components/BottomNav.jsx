@@ -15,7 +15,7 @@ export default function BottomNav() {
                 to="/Chart" />
             <BottomNavigationAction label="検索" icon={<SearchIcon />}
                 component={Link}
-                to="/ProductUpdate" />
+                to="/ProductSearch" />
             <BottomNavigationAction label="ホーム" icon={<HomeIcon />}
                 component={Link}
                 to="/Calendar" />
