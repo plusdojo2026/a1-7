@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Header：クリーン ＆ ナチュラル（Calendar.cssと世界観を統一）
+   Header：クリーン ＆ ナチュラル（Calendar.cssの世界観に完全統一）
    ========================================================================== */
 
 /* ヘッダー全体（上部固定・すりガラス風） */
@@ -8,27 +8,39 @@
   top: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.9); /* ほんのり透け感 */
-  backdrop-filter: blur(8px); /* トレンドのすりガラス効果 */
-  border-bottom: 1px solid #f1f5f9; /* 繊細な境界線 */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); /* カレンダーと同じ優しい影 */
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid #f1f5f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   z-index: 1000;
 }
 
-/* ヘッダーの中身のコンテナ */
+/* ヘッダーの中身（★ Calendar.css の .calendar-container と全く同じ幅・余白に設定） */
 .header-container {
-  max-width: 650px; /* カレンダーの幅(650px)とぴったり合わせて美しく */
+  max-width: 650px;
+  width: 100%;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 16px; /* カレンダーの padding: 0 16px と統一 */
   height: 64px;
-  display: flex;
-  justify-content: space-between; /* ロゴを左、ボタンを右に配置 */
-  align-items: center; /* 上下中央揃え */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
   box-sizing: border-box;
 }
 
-/* ロゴ画像エリア */
+.header-nav {
+  justify-self: start;
+}
+
 .header-logo {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+}
+
+.header-menu {
+  justify-self: end;
   display: flex;
   align-items: center;
 }
@@ -37,42 +49,41 @@
   display: flex;
   align-items: center;
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .header-logo a:hover {
-  opacity: 0.8;
+  opacity: 0.85;
+  transform: scale(1.02);
 }
 
-/* ロゴ画像スタイル */
 .header-logo img {
-  height: 38px; /* 圧迫感のない最適な高さ */
+  height: 38px;
   width: auto;
   display: block;
   object-fit: contain;
 }
 
-/* MUI BottomNavigation のリセット＆カスタマイズ */
+/* MUI BottomNavigation カスタマイズ */
 .header-bottom-nav {
-  background-color: transparent !important; /* 背景を透明化 */
+  background-color: transparent !important;
   height: auto !important;
 }
 
-/* ログアウトボタン（カレンダーのボタンデザインに統一） */
 .logout-action {
   min-width: auto !important;
   padding: 8px 14px !important;
   border-radius: 10px !important;
-  color: #64748b !important; /* 洗練されたスレートグレー */
-  background-color: #f1f5f9 !important; /* 優しい薄グレーのボタン風 */
+  color: #64748b !important;
+  background-color: #f1f5f9 !important;
+  border: 1px solid transparent !important;
   transition: all 0.2s ease !important;
   display: flex !important;
-  flex-direction: row !important; /* アイコンとテキストを横並びに */
+  flex-direction: row !important;
   align-items: center !important;
   gap: 6px !important;
 }
 
-/* アイコンとテキストのサイズ調整 */
 .logout-action .MuiBottomNavigationAction-label {
   font-size: 13px !important;
   font-weight: 700 !important;
@@ -84,8 +95,112 @@
   font-size: 18px !important;
 }
 
-/* ログアウトボタンのホバー処理（優しく警告色ローズレッドへ） */
 .logout-action:hover {
-  background-color: #ffe4e6 !important; /* 無駄遣い金額と同じ優しいピンク */
-  color: #e11d48 !important; /* ローズレッド */
+  background-color: #ffe4e6 !important;
+  color: #e11d48 !important;
+  border-color: #fecdd3 !important;
+}
+
+/* ==========================================================================
+   ハンバーガーメニュー：右からスライドインするサイドパネル
+   ========================================================================== */
+
+/* 背景オーバーレイ */
+.side-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1100;
+  animation: fadeInBg 0.25s ease-out;
+}
+
+/* サイドパネル本体 */
+.side-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  max-width: 85vw;
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: -10px 0 25px rgba(0, 0, 0, 0.05);
+  padding: 80px 16px 24px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* データがない場合 */
+.side-panel-empty {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* サイドパネル テーブル */
+.side-panel-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 4px;
+}
+
+.side-panel-table th {
+  color: #64748b;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 8px;
+  text-align: left;
+  border-bottom: 2px solid #f1f5f9;
+  letter-spacing: 0.02em;
+}
+
+.side-panel-table td {
+  padding: 10px 8px;
+  font-size: 13px;
+  color: #334155;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.side-panel-table tbody tr.wasterow {
+  transition: background-color 0.15s ease;
+  border-radius: 8px;
+}
+
+.side-panel-table tbody tr.wasterow:hover {
+  background-color: #f8fafc;
+}
+
+.side-panel-table td.date {
+  color: #64748b;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.side-panel-table td.name {
+  font-weight: 600;
+  color: #1e293b;
+  word-break: break-word;
+}
+
+.side-panel-table td.separation {
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
 }
