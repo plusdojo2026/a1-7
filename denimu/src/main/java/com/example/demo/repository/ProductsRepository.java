@@ -19,7 +19,7 @@ public interface ProductsRepository extends JpaRepository<Products, Integer> {
     List<Products> findByCategory(String category);
 
     List<Products> findBySellingPriceBetween(Integer minPrice, Integer maxPrice);
-
+    
     List<Products> findByUserId(Integer id);
     
     @Query(value = "SELECT * FROM products WHERE user_id = :userId AND DATE_FORMAT(buy_date, '%Y-%m') = :month", nativeQuery = true)

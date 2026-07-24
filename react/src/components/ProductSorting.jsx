@@ -27,6 +27,8 @@ const ProductSorting = () => {
 
     let [sendList, setSendList] = useState({});
 
+    let [resSortList, setResSortList] = useState([]);
+
     let [productName, setProductName] = useState([]);
 
     //未適用リスト
@@ -315,6 +317,59 @@ const ProductSorting = () => {
     let refreshSortList = () => {
         fetch('/api/sorting/').then(response => response.json()).then(json => setProductName(json));
     }
+
+
+    //ソート用のリストに格納
+    const rearrange = (setArray) => {
+        setResSortList(setArray);
+    }
+
+
+
+    //selectリストでのソート
+    const changeSort = (e) => {
+        if(e.target.value === "金額順"){
+            if(e.target.type === "all"){
+                rearrange(all);
+                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setAll(json));
+            }
+            else if(e.target.type === "used"){
+                rearrange(used2);
+                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setUsed2(json));
+            }
+            else if(e.target.type === "trash"){
+                rearrange(trash2);
+                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setTrash2(json));
+            }
+            else if(e.target.type === "cell"){
+                rearrange(cell2);
+                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setCell2(json));
+            }
+            else if(e.target.type === "give"){
+                rearrange(give2);
+                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setGive2(json));
+            }
+            else if(e.target.type === "other"){
+                rearrange(other2);
+                axios.post('/api/sorting/add/', resSortList).then(response => response.json()).then(json => setOther2(json));
+            }
+
+        }
+        else if(e.target.value === "日付順"){
+            axios.post('/api/sorting/add/', margeList).then(response => {
+            refreshSortList();
+            })
+        }
+        else if(e.target.value === "評価順"){
+            axios.post('/api/sorting/add/', margeList).then(response => {
+            refreshSortList();
+            })
+        }
+        else{
+            console.log("sort error");
+        }
+    }
+
 
 
     const handleDragStart = (event) => {
@@ -863,10 +918,10 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3 className="drop-Title sortCategory">すべて
-                                <select className="sortName">
-                                    <option>金額順</option>
-                                    <option>日付順</option>
-                                    <option>評価順</option>
+                                <select className="sortName" onChange={(event) => changeSort(event)} type="all">
+                                    <option value={"金額順"}>金額順</option>
+                                    <option value={"日付順"}>日付順</option>
+                                    <option value={"評価順"}>評価順</option>
                                 </select></h3>
                             <div id="category-Table" className="category-Table">
                                 {all.map((allEle,index) =>
