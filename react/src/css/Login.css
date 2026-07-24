@@ -1,40 +1,124 @@
-.login-container {
-    width: 300px;
-    margin: 100px auto;
-    text-align: center;
+
+
+/* ログインカードコンテナ */
+.login-container1 {
+  width: 90%;
+  max-width: 380px;
+  margin: 20px auto;
+  padding: 32px 24px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
+  box-sizing: border-box;
 }
 
-
-.form-group {
-    text-align: left;
-    margin-bottom: 15px;
+/* 見出し：ログイン */
+.login-container1 h1 {
+  font-size: 24px;
+  font-weight: 900;
+  text-align: center;
+  color: #1e293b;
+  margin-top: 0;
+  margin-bottom: 24px;
 }
 
-
-.form-group input {
-    width: 100%;
-    height: 30px;
-    margin-top: 5px;
-    box-sizing: border-box;
+/* 入力欄グループ (ID / PW) */
+.form-group1 {
+  margin-bottom: 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
 }
 
-
-.login-button,
-.register-button {
-    width: 100%;
-    height: 35px;
-    background-color: white;
-    border: 1px solid #333;
-    cursor: pointer;
+.form-group1 input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px 16px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
+  color: #334155;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-
-.login-button:hover,
-.register-button:hover {
-    background-color: #f5f5f5;
+.form-group1 input:focus {
+  outline: none;
+  background-color: #ffffff;
+  border-color: #58a5f7;
+  box-shadow: 0 0 0 4px rgba(187, 232, 255, 0.15);
 }
 
+/* ログインボタン */
+.login-button1 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  width: 100%;
+  padding: 14px;
+  /*background-color: #10b981 !important;*/
+  background-color: #043C78 !important;
 
-.register-text {
-    margin-top: 20px;
+  color: white !important;
+  border: none !important;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(187, 232, 255, 0.15);
+  transition: background-color 0.2s, transform 0.1s;
+  margin-top: 12px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.login-button1:hover {
+  background-color: #58a5f7 !important;
+}
+
+.login-button1:active {
+  transform: scale(0.98);
+}
+
+/* 「新規会員登録はこちらから」の見出し */
+.login-container1 h2 {
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  color: #94a3b8;
+  margin: 24px 0 12px 0;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 20px;
+}
+
+/* 新規会員登録ボタン */
+.register-button1 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  width: 100%;
+  padding: 12px;
+  background-color: #ffffff !important;
+  color: #475569 !important;
+  border: 2px solid #e2e8f0 !important;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.register-button1:hover {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
 }

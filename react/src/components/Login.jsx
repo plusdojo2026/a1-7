@@ -47,19 +47,19 @@ const Login = () => {
         });
     }
     return (
-        <div className="login-container">
+        <div className="login-container1">
             <h1>ログイン</h1>
-        <p className="form-group">ID
+        <p className="form-group1">ID
             <input type="text" name="userId" value={users.userId} onChange={inputUsers}></input>
             </p>
-        <p className="form-group">PW
+        <p className="form-group1">PW
             <input type="password" name="pw" value={users.pw} onChange={inputUsers}></input>
         </p>
 		
-        <button className="login-button"  onClick={handleClick}>ログイン</button>
+        <button className="login-button1"  onClick={handleClick}>ログイン</button>
 
         <h2>新規会員登録はこちらから</h2>
-        <button className="register-button" onClick={() => navigate("/Register")}>新規会員登録</button>
+        <button className="register-button1" onClick={() => navigate("/Register")}>新規会員登録</button>
         </div>
     );
 }
