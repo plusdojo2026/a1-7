@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "../css/Register.css";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
     let navigate = useNavigate();
@@ -72,17 +72,20 @@ const Register = () => {
         });
     }
     return(
-        <div className="login-container">
+        <div className="login-container2">
             <h1>新規会員登録</h1>
-            <p className="form-group">ユーザー名
+            <p className="form-group2">ユーザー名
             <input type="text" name="name" value={newUsers.name} onChange={inputNewUsers} placeholder="10文字以下"></input></p>
-            <p className="form-group">ID
+            <p className="form-group2">ID
             <input type="text" name="userId" value={newUsers.userId} onChange={inputNewUsers} placeholder="8文字以上50文字以下"></input></p>
-            <p className="form-group">PW
+            <p className="form-group2">PW
             <input type="password" name="pw" value={newUsers.pw} onChange={inputNewUsers} placeholder="8文字以上50文字以下"></input></p>
-            <p className="form-group">PW（確認用）
+            <p className="form-group2">PW（確認用）
             <input type="password" name="confirmPassword" value={confirmPassword} onChange={inputConfirmPassword}placeholder="確認用"></input></p>
-            <button className="login-button" onClick={handleClick}>新規登録</button>
+            <button className="login-button2" onClick={handleClick}>新規登録</button>
+            <Link to="/" className="back-login">
+            前の画面に戻る
+            </Link>
         </div>
     );
 }
