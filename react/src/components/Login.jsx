@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import "../css/Login.css"; 
 
 const Login = () => {
@@ -58,8 +58,10 @@ const Login = () => {
 		
         <button className="login-button1"  onClick={handleClick}>ログイン</button>
 
-        <h2>新規会員登録はこちらから</h2>
-        <button className="register-button1" onClick={() => navigate("/Register")}>新規会員登録</button>
+        <Link to="/Register " className="back-login">
+        新規会員登録はこちらから    
+        </Link>
+        
         </div>
     );
 }
