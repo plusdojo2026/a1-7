@@ -17,6 +17,21 @@ const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
+  // ごみ出し通知
+  const [noticeVisible, setNoticeVisible] = useState(false);
+  const [noticeGarbageTypes, setNoticeGarbageTypes] = useState([]);
+  const [noticeProducts, setNoticeProducts] = useState([]);
+
+  const garbageTypeLabel = (type) => {
+    switch (type) {
+      case 1: return '🔥可燃ごみ';
+      case 2: return '💎不燃ごみ';
+      case 3: return '♻️埋め立てごみ';
+      case 4: return '🪵その他';
+      default: return '';
+    }
+  };
+
 //コメント欄
 const [randomText, setRandomText] = useState('読み込み中...');
 
@@ -77,6 +92,7 @@ useEffect(() => {
     id: '',
     userId: userId,
     name: '',
+    separation: 0,
     ap_type: 5, 
     buyDate: '',
     category: 1,
@@ -260,38 +276,83 @@ useEffect(() => {
     setShowModal(!showModal);
   };
 
-  // const [isOpen, setIsOpen] = useState(false);
-  // useEffect(() => {
-  //   fetch('/api/')
-  //   .then((response) => {
-  //     if(!response.ok)  {
-  //       throw new alert('APIエラー');
-  //     }
-  //     return response.json();
-  //   })
-  //   .then((data) => {
-  //     if(data.lastLogin){
-  //       setIsOpen(true);
-  //     }
-  //   })
-    
-  // }, []);
+
+  useEffect(() => {
+    if (!id) return;
+
+    fetch(`http://localhost:8080/api/notice/tomorrow?id=${id}`, {
+      credentials: 'include'
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.show) {
+          setNoticeGarbageTypes(data.garbageTypes || []);
+          setNoticeProducts(data.products || []);
+          setNoticeVisible(true);
+        }
+      })
+      .catch(err => console.error("通知取得エラー:", err));
+  }, [id]);
+
+  const closeNotice = () => {
+    setNoticeVisible(false);
+
+    if (!id) return;
+    fetch(`http://localhost:8080/api/notice/close?id=${id}`, {
+      method: 'POST',
+      credentials: 'include'
+    }).catch(err => console.error("通知既読化エラー:", err));
+  };
 
   return (
   <>
   <Header />
+
     {/*モーダル*/}
-    {/* <div>
-      {isOpen && (
-        <div>
-          <div>
-            <h2>お知らせ</h2>
-            <p>画面が開かれました！</p>
-            <button onClick={() => setIsOpen(false)}>閉じる</button>
-          </div>
-        </div>
-      )}
-    </div> */}
+{noticeVisible && (
+  <div className="notice-container">
+    <div className="notice-card">
+      <h3 className="notice-title">
+        明日は<span className="highlight">{noticeGarbageTypes.map(garbageTypeLabel).join('・')}</span>の日です。
+      </h3>
+      <p className="notice-subtitle">以下のごみを廃棄してください。</p>
+
+      <div className="table-wrapper">
+        <table className="notice-table">
+          <thead>
+            <tr>
+              <th>購入日</th>
+              <th>商品名</th>
+              <th>金額</th>
+            </tr>
+          </thead>
+          <tbody>
+            {noticeProducts.map((item, index) => (
+              <tr className="wasterow" key={index}>
+                <td className="date">{item.buyDate ? item.buyDate.substring(0, 10) : ''}</td>
+                <td className="name">{item.name}</td>
+                <td className="price">{item.sellingPrice ? `¥${item.sellingPrice.toLocaleString()}` : ''}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="notice-action">
+        <button className="close-btn" onClick={closeNotice}>
+          閉じる
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+      
+
     <div className="comment-wrapper">
       <p>{randomText}</p>
     </div>
@@ -308,15 +369,6 @@ useEffect(() => {
               const dayOfWeek = getDayOfWeek(date);
               const weekNum = Math.ceil(date.getDate() / 7);
 
-              // if (date.getDate() === 1) { 
-              //   console.log("=== 1日の判定データ ===");
-              //   console.log("カレンダー上の日付:", tileDateStr);
-              //   console.log("カレンダーが判定に使っている曜日(0:日〜6:土):", dayOfWeek);
-              //   console.log("第何週:", weekNum);
-              //   console.log("DBから届いたごみの日データ一覧:", frequencies);
-              // }
-
-              // 今日の曜日・週が、データベースから届いたスケジュールに当てはまるかチェック
               const todaysGarbage = frequencies.filter(f => {
                 const isMatchingDay = (
                   String(f.dayOfWeek) === String(dayOfWeek) || 
@@ -397,7 +449,7 @@ useEffect(() => {
                       <table>
                         <thead>
                           <tr>
-                            <th>日付</th>
+                            <th>購入日</th>
                             <th>商品名</th>
                             <th>金額</th>
                           </tr>

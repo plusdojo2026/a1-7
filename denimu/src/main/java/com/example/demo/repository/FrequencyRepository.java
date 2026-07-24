@@ -15,4 +15,8 @@ public interface FrequencyRepository extends JpaRepository<Frequency, Integer> {
 	
 	List<Frequency> findByUserId(Integer id);
 	
+	@Query("SELECT f FROM Frequency f WHERE f.userId = :userId AND (f.dayOfWeek = :dow OR f.dayOfWeek2 = :dow)")
+	List<Frequency> findByUserIdAndDay(@Param("userId") Integer userId, @Param("dow") Integer dow);
+	
 }
+ 
