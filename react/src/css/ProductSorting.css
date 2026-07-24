@@ -60,6 +60,7 @@
   border: 1px solid rgb(125, 125, 125);
   background-color: rgb(255, 255, 255);
   cursor: grab;
+  touch-action: none;
 }
 
 .droppable {
@@ -216,16 +217,17 @@
 
 .allTable td, th{
   display: table-cell;
+  font-size: clamp(10px, 1.2vw, 16px);
   padding-top: 3px;
   padding-bottom: 3px;
   padding-right: 10px;
   padding-left: 10px;
-  border-right: 2px solid rgb(146, 146, 146);
-  border-left: 2px solid rgb(146, 146, 146);
+  border-right: 2px solid rgb(181, 181, 181);
+  border-left: 2px solid rgb(181, 180, 180);
 }
 
 .allTable td{
-  border-top: 1px solid rgb(146, 146, 146);
+  border-top: 1px solid rgb(195, 194, 194);
 }
 
 .allTable .td-one{
@@ -234,28 +236,37 @@
 
 
 .allTable {
+  width: 100%;
   display: table;
   border-collapse: collapse;
-  background-color: white;
+  background-color: rgb(245, 245, 245);
+}
+
+.allTable th{
+  background-color: #d8d6d6;
 }
 
 .type-category{
-  width: 15%;
+  width: 25%;
 }
 
 .type-product{
-  width: 40%;
+  width: 32%;
 }
 
 .type-price{
-  width: 15%;
+  width: 12%;
 }
 
 .type-valuation{
-  width: 10%;
+  width: 2%;
 }
 
 .type-date{
+  width: 20%;
+}
+
+.type-check{
   width: 20%;
 }
 

@@ -11,15 +11,15 @@ import { Star } from "@mui/icons-material";
 
 const ProductSorting = () => {
 
-    const sensors = useSensors(
-        useSensor(PointerSensor),
-        useSensor(TouchSensor, {
-        activationConstraint: {
-            delay: 150,
-            tolerance: 5
-        }
-        })
-    );
+    // const sensors = useSensors(
+    //     useSensor(PointerSensor),
+    //     useSensor(TouchSensor, {
+    //     activationConstraint: {
+    //         delay: 150,
+    //         tolerance: 5
+    //     }
+    //     })
+    // );
 
 
 
@@ -122,6 +122,7 @@ const ProductSorting = () => {
 
 
 
+    //日付を[xxxx-xx-xx]の形式にする
     const formatDate = (value) => {
         const d = new Date(value);
         if (isNaN(d)) return value;
@@ -129,6 +130,18 @@ const ProductSorting = () => {
     };
 
 
+    const sensors = useSensors(
+        // PC用のマウス操作センサー
+        useSensor(PointerSensor),
+        
+        // スマホ用のタッチ操作センサー（長押しでスクロールをロックする設定）
+        useSensor(TouchSensor, {
+        activationConstraint: {
+            delay: 250,    // 250ミリ秒（0.25秒）長押ししたらドラッグ開始
+            tolerance: 8,  // 長押し中に指が8px以上ブレたらスクロールを優先（キャンセル）
+        },
+        })
+    );
 
 
 
@@ -406,23 +419,23 @@ const ProductSorting = () => {
                 console.log("Sort-All-day");
             }
             else if(sortType === "used"){
-                setUsed2([...used2].sort((a, b) => a.buyDate - b.buyDate));
+                setUsed2([...used2].sort((a, b) => new Date(a.buyDate) - new Date(b.buyDate)));
                 console.log("Sort-Used-day");
             }
             else if(sortType === "trash"){
-                setTrash2([...trash2].sort((a, b) => a.buyDate - b.buyDate));
+                setTrash2([...trash2].sort((a, b) => new Date(a.buyDate) - new Date(b.buyDate)));
                 console.log("Sort-Trash-day");
             }
             else if(sortType === "cell"){
-                setCell2([...cell2].sort((a, b) => a.buyDate - b.buyDate));
+                setCell2([...cell2].sort((a, b) => new Date(a.buyDate) - new Date(b.buyDate)));
                 console.log("Sort-Cell-day");
             }
             else if(sortType === "give"){
-                setGive2([...give2].sort((a, b) => a.buyDate - b.buyDate));
+                setGive2([...give2].sort((a, b) => new Date(a.buyDate) - new Date(b.buyDate)));
                 console.log("Sort-Give-day");
             }
             else if(sortType === "other"){
-                setOther2([...other2].sort((a, b) => a.buyDate - b.buyDate));
+                setOther2([...other2].sort((a, b) => new Date(a.buyDate) - new Date(b.buyDate)));
                 console.log("Sort-Other-day");
             }
         }
@@ -458,20 +471,35 @@ const ProductSorting = () => {
     }
 
 
+    const handleDragCancel = () => {
+        setActiveItem(null);
+
+        // ロックを解除
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+    }
+
 
     const handleDragStart = (event) => {
         setActiveItem(event.active.data.current);
-        document.body.style.overflow = "hidden";     // スクロール禁止
-        document.body.style.touchAction = "none";    // スワイプ禁止
+        // 画面全体のスクロールを強制ロック
+        document.body.style.overflow = 'hidden';
+        // iOS Safari用の二重ロック（必要に応じて）
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
     };
 
 
     const handleDragEnd = (event) => {
 
-        document.body.style.overflow = "auto";       // スクロール解除
-        document.body.style.touchAction = "auto";
-        
         setActiveItem(null);
+
+        // ロックを解除
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+        
 
         const { active, over } = event;
 
@@ -795,7 +823,9 @@ const ProductSorting = () => {
 
         <DndContext sensors={sensors}
         onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}>
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
+        >
 
 
 
@@ -1039,9 +1069,8 @@ const ProductSorting = () => {
                                         </td>
 
                                         <td>{allEle.name}</td>
-                                        <td>￥{allEle.sellingPrice}</td>
+                                        <td><strong>￥</strong>{allEle.sellingPrice}</td>
 
-                                        {/* ★ 星の中央寄せはここで確実にできる */}
                                         <td>
                                             <div style={{
                                             display: "flex",
@@ -1086,26 +1115,65 @@ const ProductSorting = () => {
                                     <option value={"評価順"}>評価順</option>
                                 </select>
                             </h3>
-                            <div id="category-Table" className="category-Table">
-                                {used2.map((use,index) =>
-                                    <div className="content">
-                                        <div className="draggable2">
-                                            
-                                        {use.name}
+                                <div id="category-Table" className="category-Table">
+                                <table className="allTable">
+                                    <thead>
+                                    <tr>
+                                        <th className="type-category">項目名</th>
+                                        <th className="type-product">商品名</th>
+                                        <th className="type-price">値段</th>
+                                        <th className="type-valuation">評価</th>
+                                        <th className="type-date">購入日</th>
+                                        <th className="type-check">選択</th>
+                                    </tr>
+                                    </thead>
 
-                                        </div>
-                                        <input
-                                        type="checkbox"
-                                        key={`use2-${use.id}`}
-                                        id={`use2-${use.id}`}
-                                        onChange={(e) => OnCheck(use.id,"used", use, e)}
-                                        checked
-                                        />
-                                    </div>
-                                
-                                
-                                )}
-                            </div>
+                                    <tbody>
+                                    {used2.map((use, index) => (
+                                        <tr key={use.id}>
+                                        <td className="td-one">
+                                            {use.ap_type === 1
+                                            ? '使う'
+                                            : use.ap_type === 2
+                                            ? 'すてる'
+                                            : use.ap_type === 3
+                                            ? '売る'
+                                            : use.ap_type === 4
+                                            ? 'あげる'
+                                            : 'その他'}
+                                        </td>
+
+                                        <td>{use.name}</td>
+                                        <td><strong>￥</strong>{use.sellingPrice}</td>
+
+                                        <td>
+                                            <div style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            width: "100%"
+                                            }}>
+                                            <StarFill value={use.valuation} max={5} />
+                                            </div>
+                                        </td>
+
+                                        <td>{formatDate(use.buyDate)}</td>
+
+                                        {/* レコードごとのチェックボックス */}
+                                        <td>
+                                            <input
+                                            type="checkbox"
+                                            className="checkBox2"
+                                            id={`all-${use.id}`}
+                                            onChange={(e) => OnCheck(use.id, "used", use, e)}
+                                            checked
+                                            />
+                                        </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                                </div>
+
                         </div>
                     </div>
                 )}
@@ -1122,26 +1190,65 @@ const ProductSorting = () => {
                                     <option value={"評価順"}>評価順</option>
                                 </select>
                             </h3>
-                            <div id="category-Table" className="category-Table">
-                                {trash2.map((trashEle,index) =>
-                                    <div className="content">
-                                        <div className="draggable2">
-                                            
-                                        {trashEle.name}
+                                <div id="category-Table" className="category-Table">
+                                <table className="allTable">
+                                    <thead>
+                                    <tr>
+                                        <th className="type-category">項目名</th>
+                                        <th className="type-product">商品名</th>
+                                        <th className="type-price">値段</th>
+                                        <th className="type-valuation">評価</th>
+                                        <th className="type-date">購入日</th>
+                                        <th className="type-check">選択</th>
+                                    </tr>
+                                    </thead>
 
-                                        </div>
-                                        <input
-                                        type="checkbox"
-                                        key={`trash2-${trashEle.id}`}
-                                        id={`trash2-${trashEle.id}`}
-                                        onChange={(e) => OnCheck(trashEle.id,"trash", trashEle, e)}
-                                        checked
-                                        />
-                                    </div>
-                                
-                                
-                                )}
-                            </div>
+                                    <tbody>
+                                    {trash2.map((trashEle, index) => (
+                                        <tr key={trashEle.id}>
+                                        <td className="td-one">
+                                            {trashEle.ap_type === 1
+                                            ? '使う'
+                                            : trashEle.ap_type === 2
+                                            ? 'すてる'
+                                            : trashEle.ap_type === 3
+                                            ? '売る'
+                                            : trashEle.ap_type === 4
+                                            ? 'あげる'
+                                            : 'その他'}
+                                        </td>
+
+                                        <td>{trashEle.name}</td>
+                                        <td><strong>￥</strong>{trashEle.sellingPrice}</td>
+
+                                        <td>
+                                            <div style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            width: "100%"
+                                            }}>
+                                            <StarFill value={trashEle.valuation} max={5} />
+                                            </div>
+                                        </td>
+
+                                        <td>{formatDate(trashEle.buyDate)}</td>
+
+                                        {/* レコードごとのチェックボックス */}
+                                        <td>
+                                            <input
+                                            type="checkbox"
+                                            className="checkBox2"
+                                            id={`all-${trashEle.id}`}
+                                            onChange={(e) => OnCheck(trashEle.id, "trash", trashEle, e)}
+                                            checked
+                                            />
+                                        </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                                </div>
+
                         </div>
                     </div>
                 )}
@@ -1158,26 +1265,65 @@ const ProductSorting = () => {
                                     <option value={"評価順"}>評価順</option>
                                 </select>
                             </h3>
-                            <div id="category-Table" className="category-Table">
-                                {cell2.map((cellEle,index) =>
-                                    <div className="content">
-                                        <div className="draggable2">
-                                            
-                                        {cellEle.name}
+                                <div id="category-Table" className="category-Table">
+                                <table className="allTable">
+                                    <thead>
+                                    <tr>
+                                        <th className="type-category">項目名</th>
+                                        <th className="type-product">商品名</th>
+                                        <th className="type-price">値段</th>
+                                        <th className="type-valuation">評価</th>
+                                        <th className="type-date">購入日</th>
+                                        <th className="type-check">選択</th>
+                                    </tr>
+                                    </thead>
 
-                                        </div>
-                                        <input
-                                        type="checkbox"
-                                        key={`cell2-${cellEle.id}`}
-                                        id={`cell2-${cellEle.id}`}
-                                        onChange={(e) => OnCheck(cellEle.id,"cell", cellEle, e)}
-                                        checked
-                                        />
-                                    </div>
-                                
-                                
-                                )}
-                            </div>
+                                    <tbody>
+                                    {cell2.map((cellEle, index) => (
+                                        <tr key={cellEle.id}>
+                                        <td className="td-one">
+                                            {cellEle.ap_type === 1
+                                            ? '使う'
+                                            : cellEle.ap_type === 2
+                                            ? 'すてる'
+                                            : cellEle.ap_type === 3
+                                            ? '売る'
+                                            : cellEle.ap_type === 4
+                                            ? 'あげる'
+                                            : 'その他'}
+                                        </td>
+
+                                        <td>{cellEle.name}</td>
+                                        <td><strong>￥</strong>{cellEle.sellingPrice}</td>
+
+                                        <td>
+                                            <div style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            width: "100%"
+                                            }}>
+                                            <StarFill value={cellEle.valuation} max={5} />
+                                            </div>
+                                        </td>
+
+                                        <td>{formatDate(cellEle.buyDate)}</td>
+
+                                        {/* レコードごとのチェックボックス */}
+                                        <td>
+                                            <input
+                                            type="checkbox"
+                                            className="checkBox2"
+                                            id={`all-${cellEle.id}`}
+                                            onChange={(e) => OnCheck(cellEle.id, "cell", cellEle, e)}
+                                            checked
+                                            />
+                                        </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                                </div>
+
                         </div>
                     </div>
                 )}
@@ -1194,26 +1340,65 @@ const ProductSorting = () => {
                                     <option value={"評価順"}>評価順</option>
                                 </select>
                             </h3>
-                            <div id="category-Table" className="category-Table">
-                                {give2.map((giveEle,index) =>
-                                    <div className="content">
-                                        <div className="draggable2">
-                                            
-                                        {giveEle.name}
+                                <div id="category-Table" className="category-Table">
+                                <table className="allTable">
+                                    <thead>
+                                    <tr>
+                                        <th className="type-category">項目名</th>
+                                        <th className="type-product">商品名</th>
+                                        <th className="type-price">値段</th>
+                                        <th className="type-valuation">評価</th>
+                                        <th className="type-date">購入日</th>
+                                        <th className="type-check">選択</th>
+                                    </tr>
+                                    </thead>
 
-                                        </div>
-                                        <input
-                                        type="checkbox"
-                                        key={`give2-${giveEle.id}`}
-                                        id={`give2-${giveEle.id}`}
-                                        onChange={(e) => OnCheck(giveEle.id,"give", giveEle, e)}
-                                        checked
-                                        />
-                                    </div>
-                                
-                                
-                                )}
-                            </div>
+                                    <tbody>
+                                    {give2.map((giveEle, index) => (
+                                        <tr key={giveEle.id}>
+                                        <td className="td-one">
+                                            {giveEle.ap_type === 1
+                                            ? '使う'
+                                            : giveEle.ap_type === 2
+                                            ? 'すてる'
+                                            : giveEle.ap_type === 3
+                                            ? '売る'
+                                            : giveEle.ap_type === 4
+                                            ? 'あげる'
+                                            : 'その他'}
+                                        </td>
+
+                                        <td>{giveEle.name}</td>
+                                        <td><strong>￥</strong>{giveEle.sellingPrice}</td>
+
+                                        <td>
+                                            <div style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            width: "100%"
+                                            }}>
+                                            <StarFill value={giveEle.valuation} max={5} />
+                                            </div>
+                                        </td>
+
+                                        <td>{formatDate(giveEle.buyDate)}</td>
+
+                                        {/* レコードごとのチェックボックス */}
+                                        <td>
+                                            <input
+                                            type="checkbox"
+                                            className="checkBox2"
+                                            id={`all-${giveEle.id}`}
+                                            onChange={(e) => OnCheck(giveEle.id, "give", giveEle, e)}
+                                            checked
+                                            />
+                                        </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                                </div>
+
                         </div>
                     </div>
                 )}
@@ -1230,26 +1415,65 @@ const ProductSorting = () => {
                                     <option value={"評価順"}>評価順</option>
                                 </select>
                             </h3>
-                            <div id="category-Table" className="category-Table">
-                                {other2.map((otherEle,index) =>
-                                    <div className="content">
-                                        <div className="draggable2">
-                                            
-                                        {otherEle.name}
+                                <div id="category-Table" className="category-Table">
+                                <table className="allTable">
+                                    <thead>
+                                    <tr>
+                                        <th className="type-category">項目名</th>
+                                        <th className="type-product">商品名</th>
+                                        <th className="type-price">値段</th>
+                                        <th className="type-valuation">評価</th>
+                                        <th className="type-date">購入日</th>
+                                        <th className="type-check">選択</th>
+                                    </tr>
+                                    </thead>
 
-                                        </div>
-                                        <input
-                                        type="checkbox"
-                                        key={`other2-${otherEle.id}`}
-                                        id={`other2-${otherEle.id}`}
-                                        onChange={(e) => OnCheck(otherEle.id,"other", otherEle, e)}
-                                        checked
-                                        />
-                                    </div>
-                                
-                                
-                                )}
-                            </div>
+                                    <tbody>
+                                    {other2.map((otherEle, index) => (
+                                        <tr key={otherEle.id}>
+                                        <td className="td-one">
+                                            {otherEle.ap_type === 1
+                                            ? '使う'
+                                            : otherEle.ap_type === 2
+                                            ? 'すてる'
+                                            : otherEle.ap_type === 3
+                                            ? '売る'
+                                            : otherEle.ap_type === 4
+                                            ? 'あげる'
+                                            : 'その他'}
+                                        </td>
+
+                                        <td>{otherEle.name}</td>
+                                        <td><strong>￥</strong>{otherEle.sellingPrice}</td>
+
+                                        <td>
+                                            <div style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            width: "100%"
+                                            }}>
+                                            <StarFill value={otherEle.valuation} max={5} />
+                                            </div>
+                                        </td>
+
+                                        <td>{formatDate(otherEle.buyDate)}</td>
+
+                                        {/* レコードごとのチェックボックス */}
+                                        <td>
+                                            <input
+                                            type="checkbox"
+                                            className="checkBox2"
+                                            id={`all-${otherEle.id}`}
+                                            onChange={(e) => OnCheck(otherEle.id, "other", otherEle, e)}
+                                            checked
+                                            />
+                                        </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                                </div>
+
                         </div>
                     </div>
                 )}
