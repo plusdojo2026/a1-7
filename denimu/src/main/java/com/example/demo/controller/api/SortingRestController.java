@@ -1,6 +1,5 @@
 package com.example.demo.controller.api;
 
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,22 +29,6 @@ public class SortingRestController {
 	@GetMapping("/sorting/")
 	private List<Products> get(){
 		return repository.findAll();
-	}
-	
-	@GetMapping("/sorting/valuation/")
-	private List<Products> getMoney(@RequestBody List<Products> product){
-		product.sort(Comparator.comparing(Products::getSellingPrice));
-		return product;
-	}
-	
-	@GetMapping("/sorting/money/")
-	private List<Products> getDay(@RequestBody List<Products> product){
-		return repository.findAllByOrderByCreatedAt();
-	}
-	
-	@GetMapping("/sorting/day/")
-	private List<Products> getValuation(@RequestBody List<Products> product){
-		return repository.findAllByOrderByValuation();
 	}
 	
 	
