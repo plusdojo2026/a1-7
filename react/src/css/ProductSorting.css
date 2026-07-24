@@ -214,20 +214,49 @@
   transition: color 0.3s linear;
 }
 
-.allTable td{
+.allTable td, th{
   display: table-cell;
+  padding-top: 3px;
+  padding-bottom: 3px;
   padding-right: 10px;
   padding-left: 10px;
+  border-right: 2px solid rgb(146, 146, 146);
   border-left: 2px solid rgb(146, 146, 146);
+}
+
+.allTable td{
+  border-top: 1px solid rgb(146, 146, 146);
 }
 
 .allTable .td-one{
   text-align: center;
 }
 
+
 .allTable {
   display: table;
   border-collapse: collapse;
+  background-color: white;
+}
+
+.type-category{
+  width: 15%;
+}
+
+.type-product{
+  width: 40%;
+}
+
+.type-price{
+  width: 15%;
+}
+
+.type-valuation{
+  width: 10%;
+}
+
+.type-date{
+  width: 20%;
 }
 
 .sortCategory{
