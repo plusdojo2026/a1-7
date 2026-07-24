@@ -1,6 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "../css/Mypage.css";
+import icon from "../img/sample.png";
+import BottomNav from "./BottomNav";
+import Header from "./Header";
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 
 const Mypage = () => {
     let [users, setUsers] = useState({});
@@ -162,34 +166,41 @@ const Mypage = () => {
                 });
         }
     
-       
+      
                 
     
 
-    return (
-        <div className="login-container">
-            <h1>マイページ</h1>
+    return (        
+        <div>
+            <Header />
+            
+        <div className="mypage-container">
+            <h1>MY PAGE</h1>
             <div className="image-area">
-                <img className="user-icon" src={users.id && "/api/users/images/" + users.id} />
-    
-        <label htmlFor="imageInput" className="camera-button">
-            📷
-        </label>
-    
-        <input id="imageInput" type="file" style={{display:"none"}} onChange={changeFile} />
-            </div>
-    <br></br>
-                <button onClick={upload}>アップロード</button>
-    <br></br><br></br>
-            <p className="form-group">ユーザー名: {users.name}</p>
-            <button className="login-button" onClick={() => modUsersStart(users)}>編集</button>
-            <button className="login-button" onClick={() => modGabageTypeStart(users)}>ゴミの日曜日設定</button>
-            <button className="login-button" onClick={() => modMoneyStart(users)}>目標金額設定</button>
+             <label htmlFor="imageInput">
+            
+                <img className="user-icon" src={users.id ? "/api/users/images/" + users.id : icon}
+                onError={(e) =>  e.
+                currentTarget.src =  icon} />
+                
+    </label>
+                <button className="save-button" onClick={upload}>✔</button>
+                
+                </div>
+                <input id="imageInput" type="file" style={{display:"none"}} onChange={changeFile} />
+
+            <p className="form-group">{users.name}さん</p>
+
+            <button className="mypage-button-3" onClick={() => modUsersStart(users)}> プロフィール編集</button>
+            <p className="form-group-p">設定</p>
+            <button className="mypage-button-3" onClick={() => modGabageTypeStart(users)}> ごみ回収スケジュール</button>
+            <button className="mypage-button-3" onClick={() => modMoneyStart(users)}> 目標金額</button>
             {/* モーダルウィンドウ(編集) */}
             {showUsersModal &&
                 <div id="overlay">
                     <div id="content">
-                        ユーザー名：
+                        <div className="modal-item">
+                        ユーザー名<br></br>
                         <input
                             type="text"
                             name="name"
@@ -197,8 +208,9 @@ const Mypage = () => {
                             onChange={inputModUsers}
                         />
                         <br />
-
-                        ID：
+                        </div>
+                        <div className="modal-item">
+                        ID<br></br>
                         <input
                             type="text"
                             name="userId"
@@ -206,8 +218,10 @@ const Mypage = () => {
                             onChange={inputModUsers}
                         />
                         <br />
+                        </div>
 
-                        変更前PW：
+                        <div className="modal-item">
+                        変更前PW<br></br>
                         <input
                             type="password"
                             name="pw"
@@ -215,7 +229,9 @@ const Mypage = () => {
                             onChange={inputModUsers}
                         />
                         <br />
-                        変更PW：
+                        </div>
+
+                        変更PW<br></br>
                         <input
                             type="password"
                             name="newPw"
@@ -224,9 +240,10 @@ const Mypage = () => {
                         />
                         <br />
 
-
+<div class="button-group">
                         <button onClick={updateUsers}>更新</button>
                         <button onClick={toggleUsersModal}>閉じる</button>
+                        </div>
                     </div>
                 </div>
             }
@@ -235,7 +252,7 @@ const Mypage = () => {
                 <div id="overlay">
                     <div id="content">
                         可燃ごみ：
-                        <select  name="fireGarbage" value={modUsers.fireGarbage} onChange={inputModUsers}>
+                        <select className="p" name="fireGarbage" value={modUsers.fireGarbage} onChange={inputModUsers}>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
                             <option value="3">水曜日</option>
@@ -246,7 +263,7 @@ const Mypage = () => {
                         </select>
                         <br />
                         資源ごみ：
-                        <select name="nofireGarbage" value={modUsers.nofireGarbage} onChange={inputModUsers}>
+                        <select className="p" name="nofireGarbage" value={modUsers.nofireGarbage} onChange={inputModUsers}>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
                             <option value="3">水曜日</option>
@@ -257,7 +274,7 @@ const Mypage = () => {
                         </select>
                         <br />
                         不燃ごみ：
-                        <select name="landfillGarbage" value={modUsers.landfillGarbage} onChange={inputModUsers}>
+                        <select className="p" name="landfillGarbage" value={modUsers.landfillGarbage} onChange={inputModUsers}>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
                             <option value="3">水曜日</option>
@@ -268,7 +285,7 @@ const Mypage = () => {
                         </select>
                         <br />
                         埋め立てごみ：
-                        <select name="recycleGarbage" value={modUsers.recycleGarbage} onChange={inputModUsers}>
+                        <select className="p" name="recycleGarbage" value={modUsers.recycleGarbage} onChange={inputModUsers}>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
                             <option value="3">水曜日</option>
@@ -279,9 +296,10 @@ const Mypage = () => {
                         </select>
                         <br />
 
-
+<div class="button-group">
                         <button onClick={updateGabageType}>更新</button>
                         <button onClick={toggleGabageTypeModal}>閉じる</button>
+                        </div>
                     </div>
                 </div>
             }
@@ -289,7 +307,7 @@ const Mypage = () => {
             {showMoneyModal &&
                 <div id="overlay">
                     <div id="content">
-                        目標金額設定：
+                        目標金額設定
                         <input
                             type="text"
                             name="targetPrice"
@@ -297,12 +315,16 @@ const Mypage = () => {
                             onChange={inputModUsers}
                         />
                         <br />
-
+<div class="button-group">
                         <button onClick={updateMoney}>更新</button>
                         <button onClick={toggleMoneyModal}>閉じる</button>
+                        </div>
                     </div>
                 </div>
             }
+
+        </div>
+        <BottomNav class="BottomNav" />
         </div>
     );
 };
