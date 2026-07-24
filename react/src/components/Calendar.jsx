@@ -7,6 +7,8 @@ import './Calendar.css';
 import Header from "./Header";
 import BottomNav from "./BottomNav";
 
+
+
 const MyCalendar = () => {
   const [id] = useState(() => sessionStorage.getItem("id"));
   const [userId] = useState(() => sessionStorage.getItem("userId"));
@@ -322,26 +324,7 @@ useEffect(() => {
       </h3>
       <p className="notice-subtitle">以下のごみを廃棄してください。</p>
 
-      <div className="table-wrapper">
-        <table className="notice-table">
-          <thead>
-            <tr>
-              <th>購入日</th>
-              <th>商品名</th>
-              <th>金額</th>
-            </tr>
-          </thead>
-          <tbody>
-            {noticeProducts.map((item, index) => (
-              <tr className="wasterow" key={index}>
-                <td className="date">{item.buyDate ? item.buyDate.substring(0, 10) : ''}</td>
-                <td className="name">{item.name}</td>
-                <td className="price">{item.sellingPrice ? `¥${item.sellingPrice.toLocaleString()}` : ''}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      ProductSearch
 
       <div className="notice-action">
         <button className="close-btn" onClick={closeNotice}>

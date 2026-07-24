@@ -2,6 +2,8 @@ import { useState } from 'react';
 //import styles from './ProductSearch.module.css';
 import Select from "react-select";
 
+import axios from "axios";
+
 const ProductSearch = () => {
 
     // 検索
@@ -78,15 +80,6 @@ const ProductSearch = () => {
             purchasePrice: "",
             memo: ""
         });
-    };
-
-    const updateWaste = () => {
-        alert("更新処理（未実装）");
-
-        console.log(modWaste);
-
-        // 後でAPIを作ったらここに追加
-        // axios.post("http://localhost:8080/api/waste/mod", modWaste)
     };
 
     const updateWaste = () => {
@@ -220,6 +213,7 @@ const ProductSearch = () => {
                                 <button
                                     onClick={() => {
                                         setModWaste({
+                                            id: item.id,
                                             buyDate: item.date,
                                             name: item.name,
                                             category: item.category,
@@ -241,7 +235,7 @@ const ProductSearch = () => {
             )}
 
             {/*検索ページ詳細・編集 */}
-            {showmodal && Step === 2 && (
+            {showModal && modalStep === 2 && (
                 <div className="form-container">
                     <div className="form-group">
                         <label>日付</label>
