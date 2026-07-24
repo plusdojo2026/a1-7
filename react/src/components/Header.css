@@ -4,11 +4,12 @@
 
 /* ヘッダー全体（上部固定・すりガラス風） */
 .site-header {
-  position: sticky;
+  position: fixed; /*sticky;*/
   top: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(189, 235, 255, 0.85);
+  /*background-color: rgba(255, 255, 255, 0.85);*/
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid #f1f5f9;

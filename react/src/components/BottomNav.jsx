@@ -6,10 +6,11 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import CategoryIcon from "@mui/icons-material/Category";
 import PersonIcon from "@mui/icons-material/Person";
 import { Link } from "react-router-dom";
+import './BottomNav.css'; 
 
 export default function BottomNav() {
     return (
-        <BottomNavigation showLabels>
+        <BottomNavigation showLabels className="nav">
             <BottomNavigationAction label="分析" icon={<BarChartIcon />}
                 component={Link}
                 to="/Chart" />

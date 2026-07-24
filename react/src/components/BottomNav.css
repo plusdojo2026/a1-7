@@ -1,0 +1,9 @@
+.nav {
+    background-color: white !important;
+    border-top: 1px solid #D8EEF8;
+    box-shadow: 0 -3px 10px rgba(150,200,230,0.15);
+}
+.nav .MuiBottomNavigationAction-label {
+    font-size: 10px;
+    color: #55556B;
+}
