@@ -22,6 +22,7 @@ ChartJS.register(
 import { useState, useEffect } from "react";
 import "./Chart.css";
 import BottomNav from "./BottomNav";
+import Header from "./Header";
 
 // レンダリング
 export default function Chart(){
@@ -85,6 +86,7 @@ export default function Chart(){
  
   return(
   <div>
+    <Header />
     <div>
       <label></label>
 
