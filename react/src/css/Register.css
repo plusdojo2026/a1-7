@@ -56,30 +56,35 @@
 
 /* ログインボタン */
 .login-button2 {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;
+  display: flex ;
+  align-items: center ;
+  justify-content: center ;
+  line-height: 1 ;
   width: 100%;
   padding: 14px;
   /*background-color: #10b981 !important;*/
-  background-color: #043C78 !important;
+  background-color: #ffffff ;
 
-  color: white !important;
-  border: none !important;
-  border-radius: 12px;
+  color: #55556B ;
+  border: 2px solid #BDEBFF ;
+  border-radius: 18px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(187, 232, 255, 0.15);
-  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 5px 14px rgba(153,218,244,0.35);
+  transition: all .2s ease;
   margin-top: 12px;
+  margin-bottom: 14px;
   appearance: none;
   -webkit-appearance: none;
 }
 
 .login-button2:hover {
-  background-color: #58a5f7 !important;
+   color:  #D81B60;/*#F9A8B8;*/
+	transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(80,140,180,0.35);
+    
+    border-color: #F8C8DC;
 }
 
 .login-button2:active {
