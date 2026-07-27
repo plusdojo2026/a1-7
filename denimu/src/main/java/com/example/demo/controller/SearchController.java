@@ -29,15 +29,18 @@ public class SearchController {
             @RequestParam(name = "minPrice", required = false) Integer minPrice,
             @RequestParam(name = "maxPrice", required = false) Integer maxPrice,
             @RequestParam(name = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-            @RequestParam(name = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
-
+            @RequestParam(name = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+	    	@RequestParam(name = "sortBy", required = false) String sortBy,
+	        @RequestParam(name = "direction", required = false) String direction){
         return productsRepository.searchProducts(
                 keyword, 
                 category, 
                 minPrice, 
                 maxPrice, 
                 startDate, 
-                endDate
-        );
+                endDate,
+                sortBy,
+                direction
+		);
     }
 }
