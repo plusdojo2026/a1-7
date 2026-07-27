@@ -341,9 +341,10 @@ useEffect(() => {
     </div>
     <div className="calendar-container">
       <div className="calendar-wrapper">
-        <p className="calendar-title">カレンダー</p>
+        
         <Calendar 
           onClickDay={handleDayClick}
+          formatDay={(locale, date) => date.getDate()}
           tileContent={({ date, view }) => {
             if (view === 'month') {
               const tileDateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -387,10 +388,10 @@ useEffect(() => {
                       <div className="garbage-icons">
                         {todaysGarbage.map((g, idx) => (
                           <span key={idx} className="garbage-icon">
-                            {g.gabageType === 1 && "🔥可燃"} {/* 1＝可燃 */}
-                            {g.gabageType === 2 && "💎不燃"} {/* 2＝不燃 */}
-                            {g.gabageType === 3 && "♻️資源"} {/* 3＝資源 */}
-                            {g.gabageType === 4 && "🪵その他"} {/* 4＝その他 */}
+                            {g.gabageType === 1 && "🔥"} {/* 1＝可燃 */}
+                            {g.gabageType === 2 && "💎"} {/* 2＝不燃 */}
+                            {g.gabageType === 3 && "♻️"} {/* 3＝資源 */}
+                            {g.gabageType === 4 && "🪵"} {/* 4＝その他 */}
                           </span>
                         ))}
                       </div>
@@ -429,7 +430,7 @@ useEffect(() => {
                   <div className="step-container">
                     <button className="menu-btn primary" onClick={() => setModalStep(1)}>+ 新規登録</button>
                     {dailyWastes.length > 0 && (
-                      <table>
+                      <table className="table">
                         <thead>
                           <tr>
                             <th>購入日</th>
@@ -534,7 +535,7 @@ useEffect(() => {
                       addNewWaste();
                       alert('保存しました！');
                       setShowModal(false);
-                    }}>✅ 登録</button>
+                    }}>登録</button>
                   </div>
                 </div>
               )}
@@ -637,7 +638,7 @@ useEffect(() => {
                       alert('保存しました！');
                       updateWaste();
                       setShowModal(false);
-                    }}>✅ 保存</button>
+                    }}> 保存</button>
                     <button className="btn-delete" onClick={() => {
                       alert('削除しました!');
                       deleteWaste();

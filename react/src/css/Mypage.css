@@ -61,26 +61,17 @@ body {
 .mypage-button-3 {
     width: 100%;
     height: 55px;
-
     background: #FFFFFF;
     color: #55556B;
     font-size: 16px;
     font-weight: 600;
-
     /*border: 2px solid #DDEFF8;*/
     border: 2px solid #BDEBFF;
     border-radius: 18px;
-
-    /*box-shadow:
-        0 4px 10px rgba(0,0,0,0.05),
-        0 4px 12px rgba(180,220,240,0.15);
-*/
-
     box-shadow:
         0 5px 14px rgba(153,218,244,0.35);
     cursor: pointer;
     margin-bottom: 14px;
-
     transition: all .2s ease;
 }
 .button-group {
@@ -92,9 +83,9 @@ body {
 
 .button-group button {
     width: 100px;
-    padding: 5px;
+    padding: 3px;
     border: none;
-    border-radius: 25px;
+    border-radius: 15px;
     background-color: #ee80a4;
     color: white;
     font-size: 15px;
@@ -106,11 +97,14 @@ body {
     color:  #D81B60;/*#F9A8B8;*/
 	transform: translateY(-2px);
     box-shadow: 0 8px 18px rgba(80,140,180,0.35);
-    
     border-color: #F8C8DC;
-
 }
-
+.button-group .submit:hover {
+  background-color: #dc5f89;
+}
+.button-group .close:hover {
+  background-color: #dc5f89;
+}
 
 #overlay{
     position:fixed;
@@ -136,12 +130,9 @@ body {
 #content input {
     width: 85%;
     height: 35px;
-
     border: 2px solid #aadff5;
     border-radius: 10px;
-
     padding: 5px 12px;
-
     font-size: 17px;
     outline: none;
 }
