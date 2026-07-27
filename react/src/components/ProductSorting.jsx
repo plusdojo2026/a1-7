@@ -7,6 +7,8 @@ import { act, createElement, useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, Zoom, toast } from "react-toastify";
 import { Star } from "@mui/icons-material";
+import Header from "./Header";
+import BottomNav from "./BottomNav";
 
 
 const ProductSorting = () => {
@@ -832,18 +834,18 @@ const ProductSorting = () => {
 
 
             <header>
-                <h1>ムダログ</h1>
+                <Header />
             </header>
 
             <hr />
 
 
             <nav className="button-Tab">
-                <button onClick={() => setActive("used")} className={active === "used" ? "used-Button" : ""}>使う<div className="listNum">{used.length}</div></button>
-                <button onClick={() => setActive("trash")} className={active === "trash" ? "trash-Button" : ""}>すてる<div className="listNum">{trash.length}</div></button>
-                <button onClick={() => setActive("cell")} className={active === "cell" ? "cell-Button" : ""}>売る<div className="listNum">{cell.length}</div></button>
-                <button onClick={() => setActive("give")} className={active === "give" ? "give-Button" : ""}>あげる<div className="listNum">{give.length}</div></button>
-                <button onClick={() => setActive("other")} className={active === "other" ? "other-Button" : ""}>その他<div className="listNum">{other.length}</div></button>
+                <button onClick={() => setActive("used")} className={active === "used" ? "used-Button" : ""}>使う<br /><div className="listNum">{used.length}</div></button>
+                <button onClick={() => setActive("trash")} className={active === "trash" ? "trash-Button" : ""}>すてる<br /><div className="listNum">{trash.length}</div></button>
+                <button onClick={() => setActive("cell")} className={active === "cell" ? "cell-Button" : ""}>売る<br /><div className="listNum">{cell.length}</div></button>
+                <button onClick={() => setActive("give")} className={active === "give" ? "give-Button" : ""}>あげる<br /><div className="listNum">{give.length}</div></button>
+                <button onClick={() => setActive("other")} className={active === "other" ? "other-Button" : ""}>その他<br /><div className="listNum">{other.length}</div></button>
             </nav>
 
             <div className="list-Set">
@@ -1522,7 +1524,10 @@ const ProductSorting = () => {
                 
 
                 <ToastContainer />
-
+                
+                <footer>
+                    <BottomNav className="BottomNav" />
+                </footer>
 
             </div>
 
