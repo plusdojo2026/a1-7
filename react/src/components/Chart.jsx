@@ -33,7 +33,13 @@ export default function Chart(){
 
   const [spendingTotal, setSpendingTotal] = useState(0);
 
-  
+  useEffect(() => {
+  document.body.classList.add("chart-screen");
+
+  return () => {
+    document.body.classList.remove("chart-screen");
+  };
+}, []);
 
   useEffect(() => {
 
@@ -85,6 +91,7 @@ export default function Chart(){
 
  
   return(
+    
   <div className="chart-page">
     <Header />
     <div className="content7">
@@ -103,8 +110,10 @@ export default function Chart(){
         }} />
       )}
       </div>
-    <p>総浪費額：{spendingTotal}円</p>
-
+      <div className="total-card">
+      <p className="total-title">総浪費額：{spendingTotal}円</p>
+      </div>
+    
       <BottomNav />
   </div>
   

@@ -171,7 +171,7 @@ const Mypage = () => {
     
 
     return (        
-        <div>
+        <div className="mypage-page">
             <Header />
             
         <div className="mypage-container">

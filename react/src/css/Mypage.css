@@ -215,3 +215,37 @@ position: absolute;
 .p {
     margin-bottom: 5px;
 }
+.mypage-page {
+    position: relative;
+    min-height: 100vh;
+    z-index: 0;
+}
+
+.mypage-page::before {
+    content: "";
+    position: absolute;
+
+    top:0;
+    left:50%;
+
+    width:100vw;
+    height:100%;
+
+    transform:translateX(-50%);
+    opacity: 0.5;
+    filter: blur(2px);
+
+    background-image:url("../assets/kikagaku2.png");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    z-index:-1;
+}
+.button-group .submit:hover {
+  background-color: #dc5f89;
+}
+
+.button-group .close:hover {
+  background-color: #dc5f89;
+}
