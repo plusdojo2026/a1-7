@@ -20,11 +20,11 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:5173") 
+@CrossOrigin(origins = "http://localhost:5173")
 public class ChartRestController {
 
 	  private final ProductsRepository productsRepository;
-	  
+
 	  private final CategoryRepository categoryRepository;
 
 	  //repository使えるように
@@ -40,23 +40,23 @@ public class ChartRestController {
 	            HttpSession session
 	    ) {
 		//  System.out.println("受け取った月：" + month);
-		  
+
 	        // DBから月とuserId指定で取得
 	        List<Products> products =
 	                productsRepository.findByUserIdAndMonth(userId,month);
 
 	        //System.out.println("件数：" + products.size());
-	        
 
-	        
+
+
 	      //カテゴリごとの集計用
 	        Map<Integer, Map<String,Object>> result = new HashMap<>();
-	        
+
 	        int totalBuy = 0;
 	        int totalSell = 0;
 
 	        for(Products p : products){
-	        	
+
 	        	totalBuy += p.getSellingPrice();
 		        totalSell += p.getPurchasePrice();
 
@@ -67,7 +67,7 @@ public class ChartRestController {
 	            if(!result.containsKey(category)){
 
 	                Map<String,Object> data = new HashMap<>();
-	                
+
 	                Category c = categoryRepository.findById(category).get();
 
 	                data.put("category", c.getCategoryType());
@@ -96,7 +96,7 @@ public class ChartRestController {
 
 	            data.put("sell", sell);
 	        }
-	        
+
 
 
 	        Map<String,Object> response = new HashMap<>();
@@ -106,16 +106,16 @@ public class ChartRestController {
 	            new ArrayList<>(result.values())
 	        );
 	        int totalWaste = totalBuy - totalSell;
-	        
+
 	        session.setAttribute("totalWaste",totalWaste);
 
 	        //確認用
-	        System.out.println("セッション保存値：" 
+	        System.out.println("セッション保存値："
 	                + session.getAttribute("totalWaste"));
-	        
+
 	        response.put(
 	            "total",totalWaste
-	            
+
 	        );
 
 
