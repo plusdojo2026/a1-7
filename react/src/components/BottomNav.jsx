@@ -10,6 +10,7 @@ import './BottomNav.css';
 
 export default function BottomNav() {
     return (
+        <div className="bottom-nav">
         <BottomNavigation showLabels className="nav">
             <BottomNavigationAction label="分析" icon={<BarChartIcon />}
                 component={Link}
@@ -25,6 +26,7 @@ export default function BottomNav() {
                 component={Link}
                 to="/Mypage" />
         </BottomNavigation>
+        </div>
     )
 }
 

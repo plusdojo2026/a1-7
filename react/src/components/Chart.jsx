@@ -85,9 +85,9 @@ export default function Chart(){
 
  
   return(
-  <div>
+  <div className="chart-page">
     <Header />
-    <div>
+    <div className="content7">
       <label></label>
 
          <input type="month"
@@ -96,7 +96,7 @@ export default function Chart(){
     />
     </div>
     
-      <div className="chart-container">
+      <div className="chart-container7">
        {chartData &&( <Bar data={chartData}
         options={{
           maintainAspectRatio:false
