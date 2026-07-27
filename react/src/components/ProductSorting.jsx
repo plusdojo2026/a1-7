@@ -6,9 +6,10 @@ import Droppable from "./Droppable";
 import { act, createElement, useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, Zoom, toast } from "react-toastify";
-import { Star } from "@mui/icons-material";
+import { Collections, Star } from "@mui/icons-material";
 import Header from "./Header";
 import BottomNav from "./BottomNav";
+import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 
 
 const ProductSorting = () => {
@@ -26,7 +27,6 @@ const ProductSorting = () => {
 
 
     const [activeItem, setActiveItem] = useState(null);
-
 
     let [sendList, setSendList] = useState({});
 
@@ -379,15 +379,73 @@ const ProductSorting = () => {
     }
     // useEffect(() => {
     //     refreshBookList();
-    // },[]);
+    // },[]);color
     let refreshSortList = () => {
         fetch('/api/sorting/').then(response => response.json()).then(json => setProductName(json));
     }
 
 
 
+    const changeDir = (table_type) => {
+        if(table_type == "all"){
+            const reverseList = [...all].reverse();
+            setAll(reverseList);
+        }
+        else if(table_type == "used"){
+            const reverseList = [...used2].reverse();
+            setUsed2(reverseList);
+        }
+        else if(table_type == "trash"){
+            const reverseList = [...trash2].reverse();
+            setTrash2(reverseList);
+        }
+        else if(table_type == "cell"){
+            const reverseList = [...cell2].reverse();
+            setCell2(reverseList);
+        }
+        else if(table_type == "give"){
+            const reverseList = [...give2].reverse();
+            setGive2(reverseList);
+        }
+        else if(table_type == "other"){
+            const reverseList = [...other2].reverse();
+            setOther2(reverseList);
+        }
+    }
+
+
+
     //selectリストでのソート
     const changeSort = (e, sortType) => {
+        if(e.target.value === "新しい順"){
+            if(sortType === "all"){
+                setAll([...all].sort((a, b) => a.id - b.id));
+                console.log("Sort-All-new");
+            }
+            else if(sortType === "used"){
+                setUsed2([...used2].sort((a, b) => a.id - b.id));
+                console.log("Sort-Used-new");
+            }
+            else if(sortType === "trash"){
+                setTrash2([...trash2].sort((a, b) => a.id - b.id));
+                console.log("Sort-Trash-new");
+            }
+            else if(sortType === "cell"){
+                setCell2([...cell2].sort((a, b) => a.id - b.id));
+                console.log("Sort-Cell-new");
+            }
+            else if(sortType === "give"){
+                setGive2([...give2].sort((a, b) => a.id - b.id));
+                console.log("Sort-Give-new");
+            }
+            else if(sortType === "other"){
+                setOther2([...other2].sort((a, b) => a.id - b.id));
+                console.log("Sort-Other-new");
+            }
+
+        }
+
+
         if(e.target.value === "金額順"){
             if(sortType === "all"){
                 setAll([...all].sort((a, b) => a.sellingPrice - b.sellingPrice));
@@ -1037,7 +1095,9 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3 className="drop-Title sortCategory">すべて
+                                <button className="sort-dir" onClick={() => changeDir("all")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"all")}>
+                                    <option value={"新しい順"}>新しい順</option>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
                                     <option value={"評価順"}>評価順</option>
@@ -1111,6 +1171,7 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">使う
+                                <button className="sort-dir" onClick={() => changeDir("used")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"used")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1186,6 +1247,7 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">すてる
+                                <button className="sort-dir" onClick={() => changeDir("trash")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"trash")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1261,6 +1323,7 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">売る
+                                <button className="sort-dir" onClick={() => changeDir("cell")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"cell")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1336,6 +1399,7 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">あげる
+                                <button className="sort-dir" onClick={() => changeDir("give")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"give")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1411,6 +1475,7 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">その他
+                                <button className="sort-dir" onClick={() => changeDir("other")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"other")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
