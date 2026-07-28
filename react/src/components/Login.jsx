@@ -47,6 +47,7 @@ const Login = () => {
         });
     }
     return (
+        <div className="login-page">
         <div className="login-container1">
             <h1>ログイン</h1>
         <p className="form-group1">ID
@@ -62,6 +63,7 @@ const Login = () => {
         新規会員登録はこちらから    
         </Link>
         
+        </div>
         </div>
     );
 }

@@ -72,6 +72,7 @@ const Register = () => {
         });
     }
     return(
+        <div className="register-page">
         <div className="login-container2">
             <h1>新規会員登録</h1>
             <p className="form-group2">ユーザー名
@@ -86,6 +87,7 @@ const Register = () => {
             <Link to="/" className="back-login">
             前の画面に戻る
             </Link>
+        </div>
         </div>
     );
 }

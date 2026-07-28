@@ -11,6 +11,8 @@
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
   border: 1px solid #f1f5f9;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
 /* 見出し：ログイン */
@@ -126,4 +128,28 @@
   background-color: #f8fafc !important;
   border-color: #cbd5e1 !important;
   color: #1e293b !important;
+}
+.login-page {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+.login-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: url("../assets/kikagaku2.png") center/cover no-repeat;
+
+  opacity: 0.5;
+  filter: blur(2px);
+
+  transform: scale(1.05); /* ぼかしで端が切れないように */
 }
