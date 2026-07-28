@@ -20,19 +20,18 @@ import com.example.demo.repository.FrequencyRepository;
  */
 @RestController
 @RequestMapping("/api/frequency/")
-@CrossOrigin(origins = "http://localhost:3000") 
+@CrossOrigin(origins = "http://localhost:5173") 
 public class FrequencyController {
 
     @Autowired
-    private FrequencyRepository frequencyRepository;
+    private FrequencyRepository repository;
 
     /**
      * React側で「fetch('/api/frequency/')」が呼ばれたときに動くメソッドです。
-     * frequencyテーブルの全データを取得してJSON形式で返します。
      */
     @GetMapping("/")
     public List<Frequency> getA(@RequestParam("id") Integer id) {
-        return frequencyRepository.findByUserId(id);
+        return repository.findByUserId(id);
     }
     
     @PostMapping("mod/")
