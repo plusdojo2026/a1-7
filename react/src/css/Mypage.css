@@ -25,7 +25,7 @@ body {
 
 .mypage-container {
     width: 250px;
-    margin: 70px auto 20px;
+    margin: 50px auto;
     text-align: center;
     
 }
@@ -118,8 +118,8 @@ body {
     justify-content: center;
 }
 #content{
-    width: 300px;
-    padding: 35px 40px;
+    width: 350px;
+    padding: 15px 10px;
     background: white;
     border-radius: 30px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.12);
@@ -127,7 +127,7 @@ body {
     color: #55556b;
     font-weight: 600;    
 }
-#content input {
+#content input:not([type="checkbox"]) {
     width: 85%;
     height: 35px;
     border: 2px solid #aadff5;
@@ -150,7 +150,7 @@ body {
 }
 
 #content select {
-    width: 100px;
+    width: 140px;
     height: 35px;
     border-radius: 10px;
     border: 2px solid #DFF6FF;
@@ -239,4 +239,17 @@ position: absolute;
 
 .button-group .close:hover {
   background-color: #dc5f89;
+}
+/* チェックボックス */
+.frequency {
+    font-size:16px;
+    text-align: center;
+}
+.frequency label {
+    margin-right: 5px;
+}
+.frequency input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    margin-bottom: 25px;
 }
