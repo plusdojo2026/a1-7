@@ -2,6 +2,7 @@ package com.example.demo.controller.api;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.entity.Frequency;
 import com.example.demo.entity.Images;
 import com.example.demo.entity.Users;
+import com.example.demo.repository.FrequencyRepository;
 import com.example.demo.repository.ImagesRepository;
 import com.example.demo.repository.UsersRepository;
 
@@ -31,6 +34,9 @@ private UsersRepository repository;
 //マイページ写真
 @Autowired
 private ImagesRepository imagesRepository;
+
+@Autowired
+FrequencyRepository frequencyRepository; 
 
 @PostMapping("/Login")
 public Map<String, Object> login(@RequestBody Users user) {
@@ -80,7 +86,9 @@ public String add(@RequestBody Users user){
 
 @GetMapping("/api/users/{id}")
 public Users get(@PathVariable Integer id){
-    return repository.findById(id).get();
+
+    return repository.findById(id)
+            .orElse(null);
 }
 @PostMapping("/api/users/mod/")
 public Object mod(@RequestBody Users user) {
@@ -121,7 +129,7 @@ public String uploadImage(
 	try {
 	Images image = imagesRepository.findFirstByUserIdOrderByIdAsc(userId);
 	if(image == null){
-      image = new Images();
+    image = new Images();
 	image.setUserId(userId);
 	}
 	image.setImageData(file.getBytes());
@@ -148,5 +156,9 @@ public ResponseEntity<byte[]> getImage(
 	responseBuilder.contentType(mediaType);
 	ResponseEntity<byte[]> response = responseBuilder.body(image.getImageData());
 	return response;
+}
+@GetMapping("/frequency/{id}")
+public List<Frequency> getFrequency(@PathVariable Integer id){
+    return frequencyRepository.findByUserId(id);
 }
 }

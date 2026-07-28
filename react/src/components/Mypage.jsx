@@ -8,7 +8,37 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 
 const Mypage = () => {
     let [users, setUsers] = useState({});
-    let [modUsers, setModUsers] = useState({ id: null, userId: '', pw: '' , newPw: '', name: '',fireGarbage: 1, nofireGarbage:1, landfillGarbage:1, recycleGarbage: 1, targetPrice: 1});
+    let [modUsers, setModUsers] = useState({ id: null, userId: '', pw: '' , newPw: '', name: '',fireGarbageDay: 1, nofireGarbageDay:1, landfillGarbageDay:1, recycleGarbageDay: 1, targetPrice: 1,
+});
+    let [frequency,setFrequency] = useState({
+        fireGarbage:{
+        firstWeek:false,
+        secondWeek:false,
+        thirdWeek:false,
+        fourthWeek:false
+    },
+
+    nofireGarbage:{
+        firstWeek:false,
+        secondWeek:false,
+        thirdWeek:false,
+        fourthWeek:false
+    },
+
+    landfillGarbage:{
+        firstWeek:false,
+        secondWeek:false,
+        thirdWeek:false,
+        fourthWeek:false
+    },
+
+    recycleGarbage:{
+        firstWeek:false,
+        secondWeek:false,
+        thirdWeek:false,
+        fourthWeek:false
+    }
+    });
     
     let [showUsersModal, setShowUsersModal] = useState(false);
     let [showGabageTypeModal, setShowGabageTypeModal] = useState(false);
@@ -19,12 +49,24 @@ const Mypage = () => {
     let changeFile = (e)=> {
         setFile(e.target.files[0]);
     }
-// ここまで
 
+// 変更 頻度
     let inputModUsers = (e) => {
-        setModUsers({ ...modUsers, [e.target.name]: e.target.value });
-    }
+    let {name, type, value, checked} = e.target;
+    setModUsers({
+        ...modUsers,
+        [name]: type === "checkbox" ? checked : value
+    });
+    };
 
+    let inputFrequency = (e)=>{
+    let {name,checked}=e.target;
+    setFrequency({
+        ...frequency,
+        [name]:checked
+    });
+    }
+    
     let modUsersStart = (users) => {
          console.log(users);
         setModUsers({
@@ -61,9 +103,26 @@ const Mypage = () => {
         let id = sessionStorage.getItem("id");
 
         fetch(`/api/users/${id}`)
-            .then(response => response.json())
-            .then(json => setUsers(json));
-    }
+        .then(response => response.json())
+        .then(json => { 
+            setUsers(json);       
+            setModUsers(json);
+        });
+
+
+    fetch(`/api/users/frequency/${id}`)
+
+.then(response => response.json())
+.then(json => {
+
+    setFrequency({
+    fireGarbage: json.find(item => item.gabageType === 1),
+    nofireGarbage: json.find(item => item.gabageType === 2),
+    landfillGarbage: json.find(item => item.gabageType === 3),
+    recycleGarbage: json.find(item => item.gabageType === 4)
+});
+});
+    };
     let updateUsers = () => {
 
         //エラーチェック
@@ -182,11 +241,10 @@ const Mypage = () => {
                 <img className="user-icon" src={users.id ? "/api/users/images/" + users.id : icon}
                 onError={(e) =>  e.
                 currentTarget.src =  icon} />
-                
-    </label>
+            </label>
                 <button className="save-button" onClick={upload}>＋</button>
                 
-                </div>
+        </div>
                 <input id="imageInput" type="file" style={{display:"none"}} onChange={changeFile} />
 
             <p className="form-group">{users.name}さん</p>
@@ -240,7 +298,7 @@ const Mypage = () => {
                         />
                         <br />
 
-<div class="button-group">
+                        <div className="button-group">
                         <button className="submit" onClick={updateUsers}>更新</button>
                         <button className="close"  onClick={toggleUsersModal}>閉じる</button>
                         </div>
@@ -252,49 +310,137 @@ const Mypage = () => {
                 <div id="overlay">
                     <div id="content">
                         🔥可燃ごみ：
-                        <select className="p" name="fireGarbage" value={modUsers.fireGarbage} onChange={inputModUsers}>
+                        <select className="p" name="fireGarbageDay" value={modUsers.fireGarbage} onChange={inputModUsers}>
+                            <option value="">選択してください</option>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
                             <option value="3">水曜日</option>
                             <option value="4">木曜日</option>
                             <option value="5">金曜日</option>
                             <option value="6">土曜日</option>
-                            <option value="7">日曜日</option>
+                            <option value="0">日曜日</option>
                         </select>
                         <br />
+
+                    <div className="frequency">
+                        <label>
+                            <input type="checkbox" name="firstWeek" checked={frequency.fireGarbage?.firstWeek} onChange={inputFrequency}/>
+                            第1週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="secondWeek" checked={frequency.fireGarbage?.secondWeek}onChange={inputFrequency}/> 
+                            第2週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="thirdWeek" checked={frequency.fireGarbage?.thirdWeek} onChange={inputFrequency}/>
+                            第3週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="fourthWeek" checked={frequency.fireGarbage?.fourthWeek} onChange={inputFrequency}/>
+                            第4週
+                        </label>
+                    </div>
                         ♻️資源ごみ：
-                        <select className="p" name="nofireGarbage" value={modUsers.nofireGarbage} onChange={inputModUsers}>
+                        <select className="p" name="nofireGarbageDay" value={modUsers.nofireGarbage} onChange={inputModUsers}>
+                            <option value="">選択してください</option>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
                             <option value="3">水曜日</option>
                             <option value="4">木曜日</option>
                             <option value="5">金曜日</option>
                             <option value="6">土曜日</option>
-                            <option value="7">日曜日</option>
+                            <option value="0">日曜日</option>
                         </select>
                         <br />
+                    <div className="frequency">
+                        <label>
+                            <input type="checkbox" name="firstWeek" checked={frequency.nofireGarbage?.firstWeek} onChange={inputFrequency}/>
+                            第1週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="secondWeek" checked={frequency.nofireGarbage?.secondWeek}onChange={inputFrequency}/> 
+                            第2週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="thirdWeek" checked={frequency.nofireGarbage?.thirdWeek} onChange={inputFrequency}/>
+                            第3週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="fourthWeek" checked={frequency.nofireGarbage?.fourthWeek} onChange={inputFrequency}/>
+                            第4週
+                        </label>
+                    </div>
                         💎不燃ごみ：
-                        <select className="p" name="landfillGarbage" value={modUsers.landfillGarbage} onChange={inputModUsers}>
+                        <select className="p" name="landfillGarbageDay" value={modUsers.landfillGarbage} onChange={inputModUsers}>
+                            <option value="0">選択してください</option>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
                             <option value="3">水曜日</option>
                             <option value="4">木曜日</option>
                             <option value="5">金曜日</option>
                             <option value="6">土曜日</option>
-                            <option value="7">日曜日</option>
+                            <option value="0">日曜日</option>
                         </select>
                         <br />
+                    <div className="frequency">
+                        <label>
+                            <input type="checkbox" name="firstWeek" checked={frequency.landfillGarbage?.firstWeek} onChange={inputFrequency}/>
+                            第1週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="lsecondWeek" checked={frequency.landfillGarbage?.secondWeek}onChange={inputFrequency}/> 
+                            第2週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="thirdWeek" checked={frequency.landfillGarbage?.thirdWeek} onChange={inputFrequency}/>
+                            第3週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="fourthWeek" checked={frequency.landfillGarbage?.fourthWeek} onChange={inputFrequency}/>
+                            第4週
+                        </label>
+                    </div>
                         🪵埋め立てごみ：
-                        <select className="p" name="recycleGarbage" value={modUsers.recycleGarbage} onChange={inputModUsers}>
+                        <select className="p" name="recycleGarbageDay" value={modUsers.recycleGarbage} onChange={inputModUsers}><option value="">選択してください</option>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
                             <option value="3">水曜日</option>
                             <option value="4">木曜日</option>
                             <option value="5">金曜日</option>
                             <option value="6">土曜日</option>
-                            <option value="7">日曜日</option>
+                            <option value="0">日曜日</option>
                         </select>
                         <br />
+                        <div className="frequency">
+                        <label>
+                            <input type="checkbox" name="firstWeek" checked={frequency.recycleGarbage?.firstWeek} onChange={inputFrequency}/>
+                            第1週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="secondWeek" checked={frequency.recycleGarbage?.secondWeek}onChange={inputFrequency}/> 
+                            第2週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="thirdWeek" checked={frequency.recycleGarbage?.thirdWeek} onChange={inputFrequency}/>
+                            第3週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="fourthWeek" checked={frequency.recycleGarbage?.fourthWeek} onChange={inputFrequency}/>
+                            第4週
+                        </label>
+                    </div>
 
 <div class="button-group">
                         <button className="submit" onClick={updateGabageType}>更新</button>
@@ -324,7 +470,7 @@ const Mypage = () => {
             }
 
         </div>
-        <BottomNav class="BottomNav" />
+        <BottomNav className="BottomNav" />
         </div>
     );
 };
