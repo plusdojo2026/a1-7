@@ -1202,7 +1202,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3 className="drop-Title sortCategory">すべて
-                                <button className="sort-dir" onClick={() => changeDir("all")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("all")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"all")}>
                                     <option value={"新しい順"}>新しい順</option>
                                     <option value={"金額順"}>金額順</option>
@@ -1278,7 +1287,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">使う
-                                <button className="sort-dir" onClick={() => changeDir("used")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("used")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"used")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1354,7 +1372,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">すてる
-                                <button className="sort-dir" onClick={() => changeDir("trash")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("trash")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"trash")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1430,7 +1457,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">売る
-                                <button className="sort-dir" onClick={() => changeDir("cell")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("cell")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"cell")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1506,7 +1542,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">あげる
-                                <button className="sort-dir" onClick={() => changeDir("give")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("give")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"give")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1582,7 +1627,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">その他
-                                <button className="sort-dir" onClick={() => changeDir("other")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("other")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"other")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>

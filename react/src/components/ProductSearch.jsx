@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../css/ProductSearch.css';
+// import '../css/ProductSearch.css';
 import Select from "react-select";
 import BottomNav from "./BottomNav";
 import Header from "./Header";

@@ -325,6 +325,16 @@
   padding: 0 5px 0 5px;
   background: none;
   fill: #42AFE3;
+  /* animation: rota 5s linear infinite; */
+}
+
+@keyframes rota{
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
 }
 
 
@@ -435,3 +445,5 @@
     transform: translateY(0);
   }
 }
+
+
