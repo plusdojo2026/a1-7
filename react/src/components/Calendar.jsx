@@ -112,11 +112,11 @@ const MyCalendar = () => {
     separation: 0,
     ap_type: 5, 
     buyDate: '',
-    category: 1,
+    category: 0,
     sellingPrice: '',
     valuation: 0,
     purchasePrice: '0',
-    memo: ''         
+    memo: ''        
   };
 
   const secondForm = {
@@ -128,7 +128,7 @@ const MyCalendar = () => {
     sellingPrice: products.sellingPrice,
     valuation: products.valuation || 0,
     purchasePrice: products.purchasePrice || '',
-    memo: products.memo || ''         
+    memo: products.memo || ''        
   };
 
   const [newWaste, setNewWaste] = useState(firstForm);
@@ -193,13 +193,31 @@ const MyCalendar = () => {
       .catch(err => console.error("スケジュール取得エラー：", err));
   };
 
+  const RegisterCheck = (targetData) => {
+    if (!targetData.name) {
+      alert("商品名を入力してください。");
+      return false;
+    }
+    if (!targetData.sellingPrice) {
+      alert("価格を入力してください。");
+      return false;
+    }
+    if (!targetData.valuation) {
+      alert("評価を入力してください。");
+      return false;
+    }
+    return true;
+  };
+
   const addNewWaste = () => {
+    if (!RegisterCheck(newWaste)) return;
+
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
     const currentTimeStr = `${hours}:${minutes}:${seconds}`;
-    
+
     const currentDateTimeIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${currentTimeStr}`;
     
     const wasteWithDateTime = {
@@ -216,6 +234,8 @@ const MyCalendar = () => {
     .then(response => {
       refreshWasteList();
       setNewWaste(firstForm);
+      alert('保存しました！');
+      setShowModal(false);
     })
     .catch(err => {
       console.error("登録エラー詳細:", err.response ? err.response.data : err.message);
@@ -224,6 +244,8 @@ const MyCalendar = () => {
   };
 
   const updateWaste = () => {
+    if (!RegisterCheck(modWaste)) return;
+
     const formattedModWaste = {
       ...modWaste,
       buyDate: modWaste.buyDate ? modWaste.buyDate.replace(' ', 'T') : null,
@@ -235,6 +257,8 @@ const MyCalendar = () => {
     axios.post('/api/waste/mod/', formattedModWaste)
     .then(response => {
       refreshWasteList();
+      alert('保存しました！');
+      setShowModal(false);
     })
     .catch(err => {
       console.error(err);
@@ -247,6 +271,8 @@ const MyCalendar = () => {
     axios.post('/api/waste/del/', { id: modWaste.id })
     .then(response => {
       refreshWasteList();
+      alert('削除しました!');
+      setShowModal(false);
     })
     .catch(err => {
       console.error(err);
@@ -344,7 +370,7 @@ const MyCalendar = () => {
           </div>
         </div>
       )}
-          
+        
       <div className="comment-wrapper">
         <p>{randomText}</p>
       </div>
@@ -372,7 +398,6 @@ const MyCalendar = () => {
                 if (todaysGarbage.length > 0 || tilesDayWastes.length > 0) {
                   return (
                     <div className="tile-content-container">
-                      {/* カレンダー上はアイコンのみ表示 */}
                       {todaysGarbage.length > 0 && (
                         <div className="garbage-icons">
                           {todaysGarbage.map((g, idx) => (
@@ -537,8 +562,6 @@ const MyCalendar = () => {
                       <button className="btn-reset" onClick={handleReset}>リセット</button>
                       <button className="btn-submit" onClick={() => {
                         addNewWaste();
-                        alert('保存しました！');
-                        setShowModal(false);
                       }}>登録</button>
                     </div>
                   </div>
@@ -639,14 +662,10 @@ const MyCalendar = () => {
                       <button className="btn-back" onClick={() => setModalStep(0)}>◀ 戻る</button>
                       <button className="btn-reset" onClick={handleReset}>リセット</button>
                       <button className="btn-submit" onClick={() => {
-                        alert('保存しました！');
                         updateWaste();
-                        setShowModal(false);
                       }}>保存</button>
                       <button className="btn-delete" onClick={() => {
-                        alert('削除しました!');
                         deleteWaste();
-                        setShowModal(false);
                       }}>削除</button>
                     </div>
                   </div>
