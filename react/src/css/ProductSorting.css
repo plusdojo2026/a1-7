@@ -3,7 +3,6 @@
 }
 
 
-
 .button-Tab {
   margin-top: 70px;
   display: flex;
@@ -58,14 +57,14 @@
 }
 
 .button-Tab .all-Button, .button-Tab .used-Button,.button-Tab .trash-Button,.button-Tab .cell-Button,.button-Tab .give-Button,.button-Tab .other-Button {
-  background: linear-gradient(135deg, #8fcaea 0%, #60aaca 100%);
+  background: linear-gradient(135deg, #61c6fd 0%, #e3f3fa 100%);
   color: #004E7C;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
 .button-Tab2 .all-Button, .button-Tab2 .used-Button,.button-Tab2 .trash-Button,.button-Tab2 .cell-Button,.button-Tab2 .give-Button,.button-Tab2 .other-Button {
-  background: linear-gradient(135deg, #8fcaea 0%, #60aaca 100%);
+  background: linear-gradient(135deg, #54c3ff 0%, #dfe4e6 100%);
   color: #004E7C;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.5);
@@ -146,6 +145,30 @@
   border-radius: 10px;
   /* border: 1px solid rgb(198, 198, 198); */
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.droppable:hover {
+  transform: scale(1.03);
+  border: 2px solid transparent;
+  animation: col 2s linear infinite;
+}
+
+@keyframes col {
+  0% {
+    border-color: #0655ff89;
+  }
+  25% {
+    border-color: #3abdff84;
+  }
+  50% {
+    border-color: #2ff5ff85;
+  }
+  75% {
+    border-color: #0095ff8b;
+  }
+  100% {
+    border-color: #0252ff8a;
+  }
 }
 
 .droppable.over {

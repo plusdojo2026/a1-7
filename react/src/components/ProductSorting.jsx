@@ -979,6 +979,7 @@ const ProductSorting = () => {
         onDragCancel={handleDragCancel}
         >
 
+
             {modalOn && <div className="modal-trash">
                 <div className="modal-trashDay">
                     <h3>捨てる種類を選択</h3>
@@ -1047,7 +1048,6 @@ const ProductSorting = () => {
                                 {used.map((use,index) =>
                                     <div className="content">
                                         <Draggable key={use.id} id={use.id} name={use.name} type='used' obj={use} ac={activeItem ? (activeItem.id === use.id ? true : false) : ""}>
-
                                         {activeItem ? null : use.name}
                                         
                                         </Draggable>
@@ -1062,6 +1062,7 @@ const ProductSorting = () => {
                                 
                                 )}
                             </div>
+                        
                         </Droppable>
                     </div>
                 )}
@@ -1299,6 +1300,7 @@ const ProductSorting = () => {
                                     }
                                     }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"used")}>
+                                    <option value={"新しい順"}>新しい順</option>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
                                     <option value={"評価順"}>評価順</option>
@@ -1384,6 +1386,7 @@ const ProductSorting = () => {
                                     }
                                     }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"trash")}>
+                                    <option value={"新しい順"}>新しい順</option>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
                                     <option value={"評価順"}>評価順</option>
@@ -1469,6 +1472,7 @@ const ProductSorting = () => {
                                     }
                                     }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"cell")}>
+                                    <option value={"新しい順"}>新しい順</option>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
                                     <option value={"評価順"}>評価順</option>
@@ -1554,6 +1558,7 @@ const ProductSorting = () => {
                                     }
                                     }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"give")}>
+                                    <option value={"新しい順"}>新しい順</option>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
                                     <option value={"評価順"}>評価順</option>
@@ -1639,6 +1644,7 @@ const ProductSorting = () => {
                                     }
                                     }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"other")}>
+                                    <option value={"新しい順"}>新しい順</option>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
                                     <option value={"評価順"}>評価順</option>
@@ -1712,8 +1718,9 @@ const ProductSorting = () => {
 
                {/* 左に固定された矢印ボタン（常に表示） */}
                 <button
-                    onClick={() => setOpen(!open)}
-                    style={{
+                onMouseEnter={() => setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+                style={{
                     position: "fixed",
                     right: 0,
                     top: "50%",
@@ -1725,16 +1732,18 @@ const ProductSorting = () => {
                     border: "none",
                     borderRadius: "8px 0 0 8px",
                     cursor: "pointer"
-                    }}
+                }}
                 >
-                    {open ? "◀" : "▶"}
+                {open ? "◀" : "▶"}
                 </button>
 
-                {/* スライドするコンテンツ（矢印とは別に動く） */}
+                {/* スライドコンテンツ：乗ったら開いたまま、離れたら閉じる */}
                 <div
-                    style={{
+                onMouseEnter={() => setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+                style={{
                     position: "fixed",
-                    right: open ? 0 : -250,   // ← コンテンツだけ動かす
+                    right: open ? 0 : -250,
                     top: "50%",
                     transform: "translateY(-50%)",
                     width: 220,
@@ -1745,9 +1754,11 @@ const ProductSorting = () => {
                     transition: "right 0.3s ease",
                     padding: "16px",
                     zIndex: 150
-                    }}
+                }}
                 >
-                    <button className="sortButton" onClick={() => addSortList()}>仕分け完了</button>
+                <button className="sortButton" onClick={() => addSortList()}>
+                    仕分け完了
+                </button>
                 </div>
                 
                 
