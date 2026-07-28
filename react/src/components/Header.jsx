@@ -5,7 +5,8 @@ import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import { Link } from "react-router-dom";
 import { Divide as Hamburger } from "hamburger-react";
 import axios from "axios"; 
-import logoImg from "../img/logo.png";
+// import logoImg from "../img/logo.png";
+import logoImg from "../img/muda.png";
 import "./Header.css";
 
 export default function Header() {
@@ -60,7 +61,7 @@ export default function Header() {
           <div className="header-nav">
             <BottomNavigation showLabels className="header-bottom-nav">
               <BottomNavigationAction
-                label="ログアウト"
+                // label="ログアウト"
                 icon={<MeetingRoomIcon />}
                 component={Link}
                 to="/"
