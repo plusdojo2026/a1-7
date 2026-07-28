@@ -10,13 +10,13 @@ import com.example.demo.entity.Frequency;
 
 public interface FrequencyRepository extends JpaRepository<Frequency, Integer> {
 
-	@Query(value = " SELECT * FROM products WHERE DATE_FORMAT(buy_date, '%Y-%m') = :month",nativeQuery = true)
-	List<Frequency> findByMonth(@Param("month") String month);
-	
+//	@Query(value = " SELECT * FROM products WHERE DATE_FORMAT(buy_date, '%Y-%m') = :month",nativeQuery = true)
+//	List<Frequency> findByMonth(@Param("month") String month);多分イラン
+
 	List<Frequency> findByUserId(Integer id);
 	
+
 	@Query("SELECT f FROM Frequency f WHERE f.userId = :userId AND (f.dayOfWeek = :dow OR f.dayOfWeek2 = :dow)")
 	List<Frequency> findByUserIdAndDay(@Param("userId") Integer userId, @Param("dow") Integer dow);
-	
+
 }
- 
