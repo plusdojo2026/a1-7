@@ -171,7 +171,7 @@ const Mypage = () => {
     
 
     return (        
-        <div>
+        <div className="mypage-page">
             <Header />
             
         <div className="mypage-container">
@@ -184,7 +184,7 @@ const Mypage = () => {
                 currentTarget.src =  icon} />
                 
     </label>
-                <button className="save-button" onClick={upload}>✔</button>
+                <button className="save-button" onClick={upload}>＋</button>
                 
                 </div>
                 <input id="imageInput" type="file" style={{display:"none"}} onChange={changeFile} />
@@ -241,8 +241,8 @@ const Mypage = () => {
                         <br />
 
 <div class="button-group">
-                        <button onClick={updateUsers}>更新</button>
-                        <button onClick={toggleUsersModal}>閉じる</button>
+                        <button className="submit" onClick={updateUsers}>更新</button>
+                        <button className="close"  onClick={toggleUsersModal}>閉じる</button>
                         </div>
                     </div>
                 </div>
@@ -251,7 +251,7 @@ const Mypage = () => {
             {showGabageTypeModal &&
                 <div id="overlay">
                     <div id="content">
-                        可燃ごみ：
+                        🔥可燃ごみ：
                         <select className="p" name="fireGarbage" value={modUsers.fireGarbage} onChange={inputModUsers}>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
@@ -262,7 +262,7 @@ const Mypage = () => {
                             <option value="7">日曜日</option>
                         </select>
                         <br />
-                        資源ごみ：
+                        ♻️資源ごみ：
                         <select className="p" name="nofireGarbage" value={modUsers.nofireGarbage} onChange={inputModUsers}>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
@@ -273,7 +273,7 @@ const Mypage = () => {
                             <option value="7">日曜日</option>
                         </select>
                         <br />
-                        不燃ごみ：
+                        💎不燃ごみ：
                         <select className="p" name="landfillGarbage" value={modUsers.landfillGarbage} onChange={inputModUsers}>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
@@ -284,7 +284,7 @@ const Mypage = () => {
                             <option value="7">日曜日</option>
                         </select>
                         <br />
-                        埋め立てごみ：
+                        🪵埋め立てごみ：
                         <select className="p" name="recycleGarbage" value={modUsers.recycleGarbage} onChange={inputModUsers}>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
@@ -297,8 +297,8 @@ const Mypage = () => {
                         <br />
 
 <div class="button-group">
-                        <button onClick={updateGabageType}>更新</button>
-                        <button onClick={toggleGabageTypeModal}>閉じる</button>
+                        <button className="submit" onClick={updateGabageType}>更新</button>
+                        <button className="close"  onClick={toggleGabageTypeModal}>閉じる</button>
                         </div>
                     </div>
                 </div>
@@ -312,12 +312,12 @@ const Mypage = () => {
                             type="text"
                             name="targetPrice"
                             value={modUsers.targetPrice|| ""}
-                            onChange={inputModUsers}
-                        />
+                            onChange={inputModUsers} 
+                        /> 円
                         <br />
 <div class="button-group">
-                        <button onClick={updateMoney}>更新</button>
-                        <button onClick={toggleMoneyModal}>閉じる</button>
+                        <button className="submit"  onClick={updateMoney}>更新</button>
+                        <button className="close" onClick={toggleMoneyModal}>閉じる</button>
                         </div>
                     </div>
                 </div>
