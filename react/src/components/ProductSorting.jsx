@@ -10,6 +10,7 @@ import { Collections, Star } from "@mui/icons-material";
 import Header from "./Header";
 import BottomNav from "./BottomNav";
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
+import { Modal } from "@mui/material";
 
 
 const ProductSorting = () => {
@@ -24,7 +25,18 @@ const ProductSorting = () => {
     //     })
     // );
 
+    const [id] = useState(() => sessionStorage.getItem("id"));
 
+    const [modalOn, setModalOn] = useState(false);
+
+    let [user, setUser] = useState([]);
+
+    let [firstSort, setFirstSort] = useState(false);
+
+    //直前まで持っていたオブジェクトの格納用
+    const [activeObj, setActiveObj] = useState([])
+
+    const [trashType, setTrashType] = useState("");
 
     const [activeItem, setActiveItem] = useState(null);
 
@@ -315,7 +327,16 @@ const ProductSorting = () => {
 
     // 商品取得
     useEffect(() => {
-        fetch('http://localhost:8080/api/sorting/')
+
+        // axios.post('http://localhost:8080/api/sorting/', userId).then(response => response.json())
+        //     .then(json => {
+        //         setProductName(json);
+        //         console.log('productnameis=', json);
+        //     }
+        // );
+
+        if (!id) return;
+        fetch(`http://localhost:8080/api/sorting/?id=${id}`)
             .then(response => response.json())
             .then(json => {
                 setProductName(json);
@@ -349,6 +370,8 @@ const ProductSorting = () => {
         setOther2(list.filter(p => p.ap_type === 5 && p.checkBox === true));
 
         console.log("仕分け後リスト"+cell);
+
+        setFirstSort(true);
     };
 
 
@@ -381,7 +404,15 @@ const ProductSorting = () => {
     //     refreshBookList();
     // },[]);color
     let refreshSortList = () => {
-        fetch('/api/sorting/').then(response => response.json()).then(json => setProductName(json));
+
+        // axios.post('http://localhost:8080/api/sorting/', userId).then(response => response.json())
+        //     .then(json => {
+        //         setProductName(json);
+        //     }
+        // );
+
+        if (!id) return;
+        fetch(`http://localhost:8080/api/sorting/?id=${id}`).then(response => response.json()).then(json => setProductName(json));
     }
 
 
@@ -577,7 +608,7 @@ const ProductSorting = () => {
                 const obj = active.data.current.obj;
 
                 console.log("cur="+curId);
-                const newObj = {...obj, ap_type: 0};
+                const newObj = {...obj, ap_type: 0, separation: 0};
                 setNotAp((notAp) => [...notAp, newObj]);
 
                 console.log('setNot='+notAp);
@@ -666,6 +697,11 @@ const ProductSorting = () => {
                 console.log(trash);
                 const newObj = {...obj, ap_type: 2};
                 setTrash((trash) => [...trash, newObj]);
+                
+
+                setModalOn(true);
+                setActiveObj(newObj);
+
 
                 //「未定義」の要素削除用
                 if(type === 'notAp'){
@@ -876,6 +912,62 @@ const ProductSorting = () => {
     );
     }
 
+    let confirmModal = () => {
+        console.log("trashType="+trashType);
+        if(trashType === "可燃ゴミ"){
+            const newObj = {...activeObj, separation : 1};
+            setTrash(
+                trash.map(value =>
+                    value.id === newObj.id ? newObj : value
+                )
+            );
+            console.log("addSeparationIs:"+newObj.name);
+        }
+        else if(trashType === "不燃ゴミ"){
+            const newObj = {...activeObj, separation : 2};
+            setTrash(
+                trash.map(value =>
+                    value.id === newObj.id ? newObj : value
+                )
+            );
+            console.log("addSeparationIs:"+newObj.name);
+        }
+        else if(trashType === "埋め立てゴミ"){
+            const newObj = {...activeObj, separation : 3};
+            setTrash(
+                trash.map(value =>
+                    value.id === newObj.id ? newObj : value
+                )
+            );
+            console.log("addSeparationIs:"+newObj.name);
+        }
+        else if(trashType === "その他のゴミ"){
+            const newObj = {...activeObj, separation : 4};
+            setTrash(
+                trash.map(value =>
+                    value.id === newObj.id ? newObj : value
+                )
+            );
+            console.log("addSeparationIs:"+newObj.name);
+        }
+
+        setModalOn(false);
+    }
+
+
+
+    // ユーザー取得
+    // useEffect(() => {
+    //     if (!productName || productName.length === 0) return;
+
+    //     fetch("http://localhost:8080/api/sortuser/")
+    //         .then(response => response.json())
+    //         .then(json => {
+    //             setUser(json);
+    //             console.log("user=",json);
+    //         });
+    // }, [productName]);
+
 
 
 
@@ -887,7 +979,22 @@ const ProductSorting = () => {
         onDragCancel={handleDragCancel}
         >
 
+            {modalOn && <div className="modal-trash">
+                <div className="modal-trashDay">
+                    <h3>捨てる種類を選択</h3>
 
+                    <div className="choice-type">
+                    <li><label><input type="radio" name="radio-trash" value={"可燃ゴミ"} onChange={(event) => setTrashType(event.target.value)}/>可燃ゴミ</label></li>
+                    <li><label><input type="radio" name="radio-trash" value={"不燃ゴミ"} onChange={(event) => setTrashType(event.target.value)}/>不燃ゴミ</label></li>
+                    <li><label><input type="radio" name="radio-trash" value={"埋め立てゴミ"} onChange={(event) => setTrashType(event.target.value)}/>埋め立てゴミ</label></li>
+                    <li><label><input type="radio" name="radio-trash" value={"その他のゴミ"} onChange={(event) => setTrashType(event.target.value)}/>その他のゴミ</label></li>
+                    </div>
+
+                    <div className="button-area">
+                    <button className="submit-btn" onClick={() => confirmModal()}>確定</button>
+                    </div>
+                </div>
+            </div>}
 
 
 
@@ -1095,7 +1202,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3 className="drop-Title sortCategory">すべて
-                                <button className="sort-dir" onClick={() => changeDir("all")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("all")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"all")}>
                                     <option value={"新しい順"}>新しい順</option>
                                     <option value={"金額順"}>金額順</option>
@@ -1171,7 +1287,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">使う
-                                <button className="sort-dir" onClick={() => changeDir("used")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("used")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"used")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1247,7 +1372,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">すてる
-                                <button className="sort-dir" onClick={() => changeDir("trash")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("trash")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"trash")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1323,7 +1457,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">売る
-                                <button className="sort-dir" onClick={() => changeDir("cell")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("cell")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"cell")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1399,7 +1542,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">あげる
-                                <button className="sort-dir" onClick={() => changeDir("give")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("give")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"give")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1475,7 +1627,16 @@ const ProductSorting = () => {
                     <div className="used-Box">
                         <div className="droppable2">
                             <h3  className="drop-Title sortCategory">その他
-                                <button className="sort-dir" onClick={() => changeDir("other")}><ChangeCircleOutlinedIcon sx={{fontSize:30, fill:"#477798"}}/></button>
+                                <button className="sort-dir" onClick={() => changeDir("other")}><ChangeCircleOutlinedIcon sx={{
+                                    fontSize:30,
+                                    fill:"#477798",
+                                    transition: "transform 0.5s ease",
+                                    "&:hover":{
+                                        fontSize:33,
+                                        fill:"#41d834",
+                                        transform: "rotate(180deg)",
+                                    }
+                                    }}/></button>
                                 <select className="sortName" onChange={(event) => changeSort(event,"other")}>
                                     <option value={"金額順"}>金額順</option>
                                     <option value={"日付順"}>日付順</option>
@@ -1546,6 +1707,8 @@ const ProductSorting = () => {
                 )}
 
 
+
+
                {/* 左に固定された矢印ボタン（常に表示） */}
                 <button
                     onClick={() => setOpen(!open)}
@@ -1580,7 +1743,7 @@ const ProductSorting = () => {
                     boxShadow: "0 0 10px rgba(0,0,0,0.2)",
                     transition: "right 0.3s ease",
                     padding: "16px",
-                    zIndex: 999
+                    zIndex: 150
                     }}
                 >
                     <button className="sortButton" onClick={() => addSortList()}>仕分け完了</button>
