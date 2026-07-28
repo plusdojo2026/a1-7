@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,4 +34,10 @@ public class FrequencyController {
     public List<Frequency> getA(@RequestParam("id") Integer id) {
         return frequencyRepository.findByUserId(id);
     }
+    
+    @PostMapping("mod/")
+	private Frequency mod(@RequestBody Frequency frequency) {
+		repository.save(frequency);
+		return frequency;
+	}
 }
