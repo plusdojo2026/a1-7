@@ -984,7 +984,7 @@ const ProductSorting = () => {
                     <h3>捨てる種類を選択</h3>
 
                     <div className="choice-type">
-                    <li><label><input type="radio" name="radio-trash" value={"可燃ゴミ"} onChange={(event) => setTrashType(event.target.value)}/>可燃ゴミ</label></li>
+                    <li><label><input type="radio" name="radio-trash" value={"可燃ゴミ"} onChange={(event) => setTrashType(event.target.value)} defaultChecked/>可燃ゴミ</label></li>
                     <li><label><input type="radio" name="radio-trash" value={"不燃ゴミ"} onChange={(event) => setTrashType(event.target.value)}/>不燃ゴミ</label></li>
                     <li><label><input type="radio" name="radio-trash" value={"埋め立てゴミ"} onChange={(event) => setTrashType(event.target.value)}/>埋め立てゴミ</label></li>
                     <li><label><input type="radio" name="radio-trash" value={"その他のゴミ"} onChange={(event) => setTrashType(event.target.value)}/>その他のゴミ</label></li>
@@ -995,7 +995,6 @@ const ProductSorting = () => {
                     </div>
                 </div>
             </div>}
-
 
 
             <header>
@@ -1189,13 +1188,13 @@ const ProductSorting = () => {
             {/* チェック済みリスト */}
             <div className="checked-Box">
                 <h3 className="drop-Title">チェック済みリスト</h3>
-                <nav className="button-Tab">
-                    <button onClick={() => setActive2("all")} className={active2 === "all" ? "all-Button" : ""}>すべて<div className="listNum">{all.length}</div></button>
-                    <button onClick={() => setActive2("used")} className={active2 === "used" ? "used-Button" : ""}>使う<div className="listNum">{used2.length}</div></button>
-                    <button onClick={() => setActive2("trash")} className={active2 === "trash" ? "trash-Button" : ""}>すてる<div className="listNum">{trash2.length}</div></button>
-                    <button onClick={() => setActive2("cell")} className={active2 === "cell" ? "cell-Button" : ""}>売る<div className="listNum">{cell2.length}</div></button>
-                    <button onClick={() => setActive2("give")} className={active2 === "give" ? "give-Button" : ""}>あげる<div className="listNum">{give2.length}</div></button>
-                    <button onClick={() => setActive2("other")} className={active2 === "other" ? "other-Button" : ""}>その他<div className="listNum">{other2.length}</div></button>
+                <nav className="button-Tab2">
+                    <button onClick={() => setActive2("all")} className={active2 === "all" ? "all-Button" : ""}>すべて<br /><div className="listNum">{all.length}</div></button>
+                    <button onClick={() => setActive2("used")} className={active2 === "used" ? "used-Button" : ""}>使う<br /><div className="listNum">{used2.length}</div></button>
+                    <button onClick={() => setActive2("trash")} className={active2 === "trash" ? "trash-Button" : ""}>すてる<br /><div className="listNum">{trash2.length}</div></button>
+                    <button onClick={() => setActive2("cell")} className={active2 === "cell" ? "cell-Button" : ""}>売る<br /><div className="listNum">{cell2.length}</div></button>
+                    <button onClick={() => setActive2("give")} className={active2 === "give" ? "give-Button" : ""}>あげる<br /><div className="listNum">{give2.length}</div></button>
+                    <button onClick={() => setActive2("other")} className={active2 === "other" ? "other-Button" : ""}>その他<br /><div className="listNum">{other2.length}</div></button>
                 </nav>
                 {/* すべてタブ */}
                 {active2 === "all" &&(
@@ -1231,6 +1230,7 @@ const ProductSorting = () => {
                                     </tr>
                                     </thead>
 
+                                    {
                                     <tbody>
                                     {all.map((allEle, index) => (
                                         <tr key={allEle.id}>
@@ -1274,6 +1274,7 @@ const ProductSorting = () => {
                                         </tr>
                                     ))}
                                     </tbody>
+                                    }
                                 </table>
                                 </div>
 
