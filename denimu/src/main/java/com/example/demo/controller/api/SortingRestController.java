@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Products;
+import com.example.demo.entity.Users;
 import com.example.demo.repository.ProductsRepository;
+import com.example.demo.repository.UsersRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -19,6 +22,8 @@ import com.example.demo.repository.ProductsRepository;
 public class SortingRestController {
 	@Autowired
 	ProductsRepository repository;
+	@Autowired
+	UsersRepository usersrepository;
 	
 	@PostMapping("/sorting/add/")
 	private List<Products> add(@RequestBody List<Products> product) {
@@ -26,9 +31,14 @@ public class SortingRestController {
 		return product;
 	}
 	
+	@GetMapping("/sortuser/")
+	private List<Users> sortuser(@RequestParam("id") Integer id){
+		return usersrepository.findAllById(List.of(id));
+	}
+	
 	@GetMapping("/sorting/")
-	private List<Products> get(){
-		return repository.findAll();
+	private List<Products> get(@RequestParam("id") Integer id){
+		return repository.findByUserId(id);
 	}
 	
 	

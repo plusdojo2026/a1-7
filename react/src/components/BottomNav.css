@@ -5,7 +5,9 @@
 }
 .nav .MuiBottomNavigationAction-label {
     font-size: 10px;
-    color: #55556B;
+   
+    
+    /* color: #55556B; */
 }
 .bottom-nav {
   position: fixed;
@@ -23,4 +25,43 @@
   align-items: center;
 
   z-index: 1000;
+}
+.nav .MuiBottomNavigationAction-root.Mui-selected {
+    color: #00A0E9 !important;
+}
+
+.nav .MuiBottomNavigationAction-root.Mui-selected .MuiSvgIcon-root {
+    transform: translateY(-5px);
+}
+
+.nav .MuiBottomNavigationAction-root:hover .MuiSvgIcon-root {
+    transform: translateY(-5px) scale(1.1);
+}
+.nav .MuiBottomNavigationAction-root.Mui-selected svg {
+    color: #00A0E9 !important;
+}
+.nav .MuiBottomNavigationAction-root {
+    color: #55556B;
+}
+
+/* 選択中アイコン */
+.nav .MuiBottomNavigationAction-root.Mui-selected .MuiSvgIcon-root {
+    color: #00A0E9 !important;
+}
+
+/* 選択中文字 */
+.nav .MuiBottomNavigationAction-root.Mui-selected .MuiBottomNavigationAction-label {
+    color:  #00A0E9 !important;
+}
+/* 選択中はラベル非表示 */
+.nav .MuiBottomNavigationAction-root.Mui-selected
+.MuiBottomNavigationAction-label{
+    display:none;
+}
+
+/* アイコンを少し大きく */
+.nav .MuiBottomNavigationAction-root.Mui-selected
+.MuiSvgIcon-root{
+    transform:translateY(-5px) scale(1.45);
+    color:#00A0E9;
 }

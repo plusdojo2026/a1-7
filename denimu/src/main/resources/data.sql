@@ -15,22 +15,22 @@ INSERT INTO Products(id, user_id, ap_type, separation, name, buy_date, category,
 VALUES (1, 3, 1, 0, 'Tシャツ', '2026-06-15', 1, 5300, '3', 2200, '2026-06-15 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 1, 0, '非常食', '2026-06-15', 2, 3300, '3', 1200, '2026-06-15 00:00:00');
+VALUES (1, 0, 0, '非常食', '2026-06-15', 2, 3300, '3', 1200, '2026-06-15 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 1, 0, '電池', '2026-06-15', 3, 800, '1', 550, '2026-06-15 00:00:00');
+VALUES (1, 0, 0, '電池', '2026-06-15', 3, 800, '1', 550, '2026-06-15 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 1, 1, '時計', '2026-07-10', 4, 600, '4', 200, '2026-07-10 00:00:00');
+VALUES (1, 0, 1, '時計', '2026-07-10', 4, 600, '4', 200, '2026-07-10 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 1, 0, '動画配信サービス', '2026-06-15', 5, 2860, '2', 400, '2026-06-15 00:00:00');
+VALUES (1, 0, 0, '動画配信サービス', '2026-06-15', 5, 2860, '2', 400, '2026-06-15 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 1, 0, 'その他', '2026-06-15', 6, 7000, '5', 1200, '2026-06-15 00:00:00');
+VALUES (1, 0, 0, 'その他', '2026-06-15', 6, 7000, '5', 1200, '2026-06-15 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 1, 0, '新聞紙', '2026-07-24', 4, 1600, '4', 200, '2026-07-24 00:00:00');
+VALUES (1, 0, 0, '新聞紙', '2026-07-24', 4, 1600, '4', 200, '2026-07-24 00:00:00');
 
 -- =========================================================================
 -- 3. comment テーブル（アドバイスシステム）

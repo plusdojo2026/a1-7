@@ -186,6 +186,7 @@ const Mypage = () => {
     });
 }  
     let updateGabageType = () => {
+        console.log(modUsers);
         axios.post('/api/users/mod/', modUsers)
         .then(response => {
             refreshUsers();
@@ -442,7 +443,7 @@ const Mypage = () => {
                         </label>
                     </div>
 
-<div class="button-group">
+<div className="button-group">
                         <button className="submit" onClick={updateGabageType}>更新</button>
                         <button className="close"  onClick={toggleGabageTypeModal}>閉じる</button>
                         </div>

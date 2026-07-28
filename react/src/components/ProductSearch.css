@@ -1,0 +1,413 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap');
+
+/* ==========================================
+   全体設計・ベースカラー
+   ================================          */
+:root {
+  --primary-color: #99D5F2;       /* やさしい水色 */
+  --primary-dark: #38bdf8;        /* 濃い水色（アクセント） */
+  --primary-light: #f0f9ff;       /* 極めて薄い水色（背景用） */
+  --accent-pink: #ee80a4;         /* 優しいピンク */
+  --accent-pink-hover: #e76f96;
+  --bg-color: #f4f6f8;            /* 全体の背景色 */
+  --card-bg: #ffffff;             /* カードの背景 */
+  --text-main: #334155;           /* メイン文字色 */
+  --text-sub: #64748b;            /* サブ文字色 */
+  --border-color: #aadff5;        /* 枠線の水色 */
+  --radius: 16px;                 /* 角丸の基準 */
+}
+
+* {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 24px;
+  border-bottom: 3px solid var(--primary-light);
+  padding-bottom: 8px;
+  border-left: 4px solid var(--primary-color);
+  padding-left: 10px;
+}
+
+/* ==========================================
+   検索フォーム部分
+   ================================          */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.search-row {
+  display: flex;
+  gap: 12px;
+}
+
+.search-row.full-width {
+  width: 100%;
+}
+
+.search-row.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.input, .select {
+  width: 100%;
+  height: 42px;
+  padding: 5px 14px;
+  font-size: 0.95rem;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background-color: #fff;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input:focus, .select:focus {
+  border-color: #7CC8E8;
+}
+
+/* 日付範囲 */
+.date-range-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.date-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-sub);
+}
+
+.date-wave {
+  padding-top: 20px;
+  color: var(--text-sub);
+}
+
+/* 検索ボタン */
+.searchButton {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: #7CC8E8;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(238, 128, 164, 0.3);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.searchButton:hover {
+  background-color: var(--accent-pink-hover);
+}
+
+.searchButton:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================
+   テーブル部分
+   ================================          */
+.tableContainer {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.th {
+  background-color: var(--primary-light);
+  color: #475569;
+  padding: 14px 16px;
+  font-weight: 700;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+}
+
+.wasterow {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.wasterow:hover {
+  background-color: #f8fafc;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: var(--text-sub);
+  padding: 30px;
+}
+
+/* ==========================================
+   モーダル部分（ご提示いただいたデザインに統一）
+   ================================          */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 460px;
+  max-height: 85vh;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalUp 0.2s ease-out;
+}
+
+@keyframes modalUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.modal-close-btn {
+  background: #f1f5f9;
+  border: none;
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-close-btn:hover {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.form-group input[type="text"],
+.form-group input[type="datetime-local"],
+.form-group textarea {
+  width: 100%;
+  height: 35px;
+  padding: 5px 14px;
+  border: 2px solid #aadff5;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #1e293b;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.form-group textarea {
+  height: auto;
+  min-height: 70px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #7CC8E8;
+}
+
+/* 星評価 */
+.valuation-stars {
+  display: flex;
+  gap: 8px;
+  font-size: 26px;
+  cursor: pointer;
+  justify-content: center;
+  text-align: center;
+  margin: 6px 0;
+}
+
+.valuation-star {
+  color: transparent; 
+  -webkit-text-stroke: 0.5px #FFD966;
+  transition: color 0.15s;
+  font-size: 30px;
+}
+
+.valuation-star.active {
+  color: #fbbf24;
+}
+
+/* react-select コントロール */
+.react-select-container .react-select__control {
+  border: 2px solid #aadff5 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  min-height: 35px !important;
+  height: 35px;
+}
+
+.react-select-container .react-select__control--is-focused {
+  border-color: #8FCFEE !important;
+}
+
+.react-select-container .react-select__value-container {
+  height: 33px;
+  padding: 0 10px !important;
+}
+
+/* アクションボタン */
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.form-actions button {
+  flex: 1;
+  min-width: 65px;
+  padding: 8px 5px;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-submit {
+  background-color: #ee80a4;
+  color: white;
+  border-radius: 25px !important;
+}
+
+.btn-submit:hover {
+  background-color: #e76f96;
+}
+
+.btn-back {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.btn-back:hover {
+  background-color: #e2e8f0;
+}
+
+.btn-reset {
+  background-color: transparent;
+  color: #64748b;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.btn-reset:hover {
+  background-color: #f8fafc;
+}
+
+.btn-delete {
+  background-color: #ffe4e6;
+  color: #e11d48;
+}
+
+.btn-delete:hover {
+  background-color: #fecdd3;
+}

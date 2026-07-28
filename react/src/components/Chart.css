@@ -38,6 +38,7 @@
   min-height: 100vh;
   padding-bottom: 80px;
   z-index: 0;
+  padding: 0 30px 80px;  /* 左右30px追加 */
 }
 .chart-page::before {
   content: "";
