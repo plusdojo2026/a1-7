@@ -46,17 +46,17 @@ const Mypage = () => {
     };
 
 
-    let inputFrequencyDay = (e, typeNum) => {
-        let value = e.target.value;
+    let inputFrequencyDay = (e, typeNum, fieldName = 'dayOfWeek') => {
+    let value = e.target.value;
 
-        setFrequency(prev =>
-            prev.map(item =>
-                item.gabageType === typeNum
-                    ? { ...item, dayOfWeek: value }
-                    : item
-            )
-        );
-    }
+    setFrequency(prev =>
+        prev.map(item =>
+            item.gabageType === typeNum
+                ? { ...item, [fieldName]: value }
+                : item
+        )
+    );
+}
 
     let inputFrequency = (e, typeNum) => {
         let { name, checked } = e.target;
@@ -339,7 +339,17 @@ const Mypage = () => {
                 <div id="overlay">
                     <div id="content">
                         🔥可燃ごみ：
-                        <select className="p" name="fireGarbage" value={frequency.find(item => item.gabageType === 1)?.dayOfWeek} onChange={(event) => inputFrequencyDay(event,1)}>
+                        <select className="p" name="fireGarbage" value={frequency.find(item => item.gabageType === 1)?.dayOfWeek || ""} onChange={(event) => inputFrequencyDay(event, 1, 'dayOfWeek')}>
+                            <option value="">選択してください</option>
+                            <option value="1">月曜日</option>
+                            <option value="2">火曜日</option>
+                            <option value="3">水曜日</option>
+                            <option value="4">木曜日</option>
+                            <option value="5">金曜日</option>
+                            <option value="6">土曜日</option>
+                            <option value="0">日曜日</option>
+                        </select>
+                        <select className="p" name="fireGarbage2" value={frequency.find(item => item.gabageType === 1)?.dayOfWeek2 || ""} onChange={(event) => inputFrequencyDay(event, 1, 'dayOfWeek2')}>
                             <option value="">選択してください</option>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
