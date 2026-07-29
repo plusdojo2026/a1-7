@@ -18,28 +18,30 @@ const Register = () => {
     }
 
     let createFrequency = (id) => {
-        const frequencyForm = {
-            id: null,
-            userId: id,
-            gabageType: null,
-            firstWeek: null,
-            secondWeek: null,
-            thirdWeek: null,
-            fourthWeek: null,
-            dayOfWeek: null,
-            dayOfWeek2: null
-        };
+        // 1から4までのガベージタイプで4件作成する
+        for (let i = 1; i <= 4; i++) {
+            const frequencyForm = {
+                id: null,
+                userId: id,
+                gabageType: String(i),
+                firstWeek: null,
+                secondWeek: null,
+                thirdWeek: null,
+                fourthWeek: null,
+                dayOfWeek: null,
+                dayOfWeek2: null
+            };
 
-        // デバッグ用ログ：どんなデータが送られるか確認
-        console.log("【送信データ】frequencyForm:", frequencyForm);
+            console.log(`【送信データ ${i}件目】frequencyForm:`, frequencyForm);
 
-        axios.post('http://localhost:8080/api/frequency/add/', frequencyForm)
-        .then(response => {
-          console.log('Frequencyレコードをつくったお', response.data);
-        })
-        .catch(error => {
-          console.error("Frequency作成失敗", error);
-        });
+            axios.post('http://localhost:8080/api/frequency/add/', frequencyForm)
+            .then(response => {
+                console.log(`Frequencyレコード(${i}件目)をつくったお`, response.data);
+            })
+            .catch(error => {
+                console.error(`Frequency作成失敗(${i}件目)`, error);
+            });
+        }
     };
 
     let handleClick = () => {
