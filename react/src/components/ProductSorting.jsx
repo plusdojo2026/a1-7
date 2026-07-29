@@ -1756,7 +1756,12 @@ const ProductSorting = () => {
                     zIndex: 150
                 }}
                 >
-                <button className="sortButton" onClick={() => addSortList()}>
+                <button className="sortButton" onClick={() => {
+                    addSortList();
+                    setTimeout(() => {
+                     window.location.reload();
+                }, 500); // 0.5秒後にリロード
+            }}>
                     仕分け完了
                 </button>
                 </div>
