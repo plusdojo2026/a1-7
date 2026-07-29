@@ -41,8 +41,8 @@ public class FrequencyController {
 	}
     
     @PostMapping("mod/")
-	private Frequency mod(@RequestBody Frequency frequency) {
-		repository.save(frequency);
-		return frequency;
+	private boolean mod(@RequestBody List<Frequency> frequency) {
+		repository.saveAll(frequency);
+		return true;
 	}
 }
