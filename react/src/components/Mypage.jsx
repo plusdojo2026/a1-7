@@ -138,6 +138,10 @@ const Mypage = () => {
             setBoolMod(1);
         })
 
+        window.alert("更新が完了しました");
+
+        setShowGabageTypeModal(false);
+
         // fetch(`http://localhost:8080/api/frequency/?id=${id}`).then(response => response.json()).then(json => setFrequency(json));
 
     };
