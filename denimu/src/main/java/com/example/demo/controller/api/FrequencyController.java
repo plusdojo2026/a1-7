@@ -34,6 +34,12 @@ public class FrequencyController {
         return repository.findByUserId(id);
     }
     
+    @PostMapping("add/")
+	private Frequency add(@RequestBody Frequency frequency) {
+		repository.save(frequency);
+		return frequency;
+	}
+    
     @PostMapping("mod/")
 	private Frequency mod(@RequestBody Frequency frequency) {
 		repository.save(frequency);
