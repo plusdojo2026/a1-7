@@ -18,7 +18,6 @@ const Register = () => {
     }
 
     let createFrequency = (id) => {
-        // 1から4までのガベージタイプで4件作成する
         for (let i = 1; i <= 4; i++) {
             const frequencyForm = {
                 id: null,
