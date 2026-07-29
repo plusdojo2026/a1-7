@@ -8,37 +8,22 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 
 const Mypage = () => {
     let [users, setUsers] = useState({});
-    let [modUsers, setModUsers] = useState({ id: null, userId: '', pw: '' , newPw: '', name: '',fireGarbageDay: 1, nofireGarbageDay:1, landfillGarbageDay:1, recycleGarbageDay: 1, targetPrice: 1,
+    let [modUsers, setModUsers] = useState({ id: null, userId: '', pw: '' , newPw: '', name: '',fireGarbage: 1, nofireGarbage:1, landfillGarbage:1, recycleGarbage: 1, targetPrice: 1,
 });
-    let [frequency,setFrequency] = useState({
-        fireGarbage:{
-        firstWeek:false,
-        secondWeek:false,
-        thirdWeek:false,
-        fourthWeek:false
-    },
 
-    nofireGarbage:{
-        firstWeek:false,
-        secondWeek:false,
-        thirdWeek:false,
-        fourthWeek:false
-    },
+    let [boolMod, setBoolMod] = useState(0);
 
-    landfillGarbage:{
-        firstWeek:false,
-        secondWeek:false,
-        thirdWeek:false,
-        fourthWeek:false
-    },
-
-    recycleGarbage:{
-        firstWeek:false,
-        secondWeek:false,
-        thirdWeek:false,
-        fourthWeek:false
-    }
-    });
+    let [frequency, setFrequency] = useState([
+        {
+            gabageType: 1,
+            firstWeek: false,
+            secondWeek: false,
+            thirdWeek: false,
+            fourthWeek: false,
+            dayOfWeek: 0,
+            dayOfWeek2: 0
+        }
+    ]);
     
     let [showUsersModal, setShowUsersModal] = useState(false);
     let [showGabageTypeModal, setShowGabageTypeModal] = useState(false);
@@ -52,23 +37,44 @@ const Mypage = () => {
 
 // 変更 頻度
     let inputModUsers = (e) => {
-    let {name, type, value, checked} = e.target;
-    setModUsers({
-        ...modUsers,
-        [name]: type === "checkbox" ? checked : value
-    });
+        let {name, type, value, checked} = e.target;
+        setModUsers({
+            ...modUsers,
+            [name]: type === "checkbox" ? checked : value
+        });
+        console.log(`${name}=`,modUsers.name);
     };
 
-    let inputFrequency = (e)=>{
-    let {name,checked}=e.target;
-    setFrequency({
-        ...frequency,
-        [name]:checked
-    });
+
+    let inputFrequencyDay = (e, typeNum) => {
+        let value = e.target.value;
+
+        setFrequency(prev =>
+            prev.map(item =>
+                item.gabageType === typeNum
+                    ? { ...item, dayOfWeek: value }
+                    : item
+            )
+        );
     }
+
+    let inputFrequency = (e, typeNum) => {
+        let { name, checked } = e.target;
+
+        setFrequency(prev =>
+            prev.map(item =>
+                item.gabageType === typeNum
+                    ? { ...item, [name]: checked }
+                    : item
+            )
+        );
+
+        console.log("週=", name);
+    };
+
     
     let modUsersStart = (users) => {
-         console.log(users);
+        console.log(users);
         setModUsers({
             ...users,
             newPw: ''
@@ -98,6 +104,7 @@ const Mypage = () => {
     useEffect(() => {
         refreshUsers();
     }, []);
+
     let refreshUsers = () => {
 
         let id = sessionStorage.getItem("id");
@@ -109,20 +116,37 @@ const Mypage = () => {
             setModUsers(json);
         });
 
+    }
 
-    fetch(`/api/users/frequency/${id}`)
+    useEffect(() => {
+        let id = sessionStorage.getItem("id");
 
-.then(response => response.json())
-.then(json => {
+        fetch(`http://localhost:8080/api/frequency/?id=${id}`).then(response => response.json()).then(json => setFrequency(json));
 
-    setFrequency({
-    fireGarbage: json.find(item => item.gabageType === 1),
-    nofireGarbage: json.find(item => item.gabageType === 2),
-    landfillGarbage: json.find(item => item.gabageType === 3),
-    recycleGarbage: json.find(item => item.gabageType === 4)
-});
-});
+        setBoolMod(0);
+
+    }, [boolMod]);
+
+    //Frequency更新処理
+    let modFrequency = () =>{
+
+        //let id = sessionStorage.getItem("id");
+
+        axios.post("/api/frequency/mod/",frequency)
+        .then(response => {
+            console.log("returnFrequency=",response.data);
+            setBoolMod(1);
+        })
+
+        // fetch(`http://localhost:8080/api/frequency/?id=${id}`).then(response => response.json()).then(json => setFrequency(json));
+
     };
+
+
+
+
+
+
     let updateUsers = () => {
 
         //エラーチェック
@@ -185,15 +209,15 @@ const Mypage = () => {
         });
     });
 }  
-    let updateGabageType = () => {
-        console.log(modUsers);
-        axios.post('/api/users/mod/', modUsers)
-        .then(response => {
-            refreshUsers();
-            setModUsers({ fireGarbage: 1, nofireGarbage:1, landfillGarbage:1, recycleGarbage: 1 });
-            toggleGabageTypeModal();
-        });
-    }
+    // let updateGabageType = () => {
+    //     console.log("typeis=",modUsers);
+    //     axios.post('/api/users/mod/', modUsers)
+    //     .then(response => {
+    //         refreshUsers();
+    //         setModUsers({ fireGarbage: 1, nofireGarbage:2, landfillGarbage:3, recycleGarbage: 4 });
+    //         toggleGabageTypeModal();
+    //     });
+    // }
     let updateMoney = () => {
         axios.post('/api/users/mod/', modUsers)
         .then(response => {
@@ -311,7 +335,7 @@ const Mypage = () => {
                 <div id="overlay">
                     <div id="content">
                         🔥可燃ごみ：
-                        <select className="p" name="fireGarbageDay" value={modUsers.fireGarbage} onChange={inputModUsers}>
+                        <select className="p" name="fireGarbage" value={frequency.find(item => item.gabageType === 1)?.dayOfWeek} onChange={(event) => inputFrequencyDay(event,1)}>
                             <option value="">選択してください</option>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
@@ -325,27 +349,27 @@ const Mypage = () => {
 
                     <div className="frequency">
                         <label>
-                            <input type="checkbox" name="firstWeek" checked={frequency.fireGarbage?.firstWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="firstWeek" defaultChecked={frequency.find(item => item.gabageType === 1)?.firstWeek} onChange={(event) => inputFrequency(event,1)}/>
                             第1週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="secondWeek" checked={frequency.fireGarbage?.secondWeek}onChange={inputFrequency}/> 
+                            <input type="checkbox" name="secondWeek" defaultChecked={frequency.find(item => item.gabageType === 1)?.secondWeek}onChange={(event) => inputFrequency(event,1)}/> 
                             第2週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="thirdWeek" checked={frequency.fireGarbage?.thirdWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="thirdWeek" defaultChecked={frequency.find(item => item.gabageType === 1)?.thirdWeek} onChange={(event) => inputFrequency(event,1)}/>
                             第3週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="fourthWeek" checked={frequency.fireGarbage?.fourthWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="fourthWeek" defaultChecked={frequency.find(item => item.gabageType === 1)?.fourthWeek} onChange={(event) => inputFrequency(event,1)}/>
                             第4週
                         </label>
                     </div>
                         ♻️資源ごみ：
-                        <select className="p" name="nofireGarbageDay" value={modUsers.nofireGarbage} onChange={inputModUsers}>
+                        <select className="p" name="nofireGarbage" value={frequency.find(item => item.gabageType === 4)?.dayOfWeek} onChange={(event) => inputFrequencyDay(event,4)}>
                             <option value="">選択してください</option>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
@@ -358,27 +382,27 @@ const Mypage = () => {
                         <br />
                     <div className="frequency">
                         <label>
-                            <input type="checkbox" name="firstWeek" checked={frequency.nofireGarbage?.firstWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="firstWeek" defaultChecked={frequency.find(item => item.gabageType === 4)?.firstWeek} onChange={(event) => inputFrequency(event,4)}/>
                             第1週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="secondWeek" checked={frequency.nofireGarbage?.secondWeek}onChange={inputFrequency}/> 
+                            <input type="checkbox" name="secondWeek" defaultChecked={frequency.find(item => item.gabageType === 4)?.secondWeek}onChange={(event) => inputFrequency(event,4)}/> 
                             第2週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="thirdWeek" checked={frequency.nofireGarbage?.thirdWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="thirdWeek" defaultChecked={frequency.find(item => item.gabageType === 4)?.thirdWeek} onChange={(event) => inputFrequency(event,4)}/>
                             第3週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="fourthWeek" checked={frequency.nofireGarbage?.fourthWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="fourthWeek" defaultChecked={frequency.find(item => item.gabageType === 4)?.fourthWeek} onChange={(event) => inputFrequency(event,4)}/>
                             第4週
                         </label>
                     </div>
                         💎不燃ごみ：
-                        <select className="p" name="landfillGarbageDay" value={modUsers.landfillGarbage} onChange={inputModUsers}>
+                        <select className="p" name="landfillGarbage" value={frequency.find(item => item.gabageType === 2)?.dayOfWeek} onChange={(event) => inputFrequencyDay(event,2)}>
                             <option value="0">選択してください</option>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
@@ -391,27 +415,27 @@ const Mypage = () => {
                         <br />
                     <div className="frequency">
                         <label>
-                            <input type="checkbox" name="firstWeek" checked={frequency.landfillGarbage?.firstWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="firstWeek" defaultChecked={frequency.find(item => item.gabageType === 2)?.firstWeek} onChange={(event) => inputFrequency(event,2)}/>
                             第1週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="lsecondWeek" checked={frequency.landfillGarbage?.secondWeek}onChange={inputFrequency}/> 
+                            <input type="checkbox" name="secondWeek" defaultChecked={frequency.find(item => item.gabageType === 2)?.secondWeek}onChange={(event) => inputFrequency(event,2)}/> 
                             第2週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="thirdWeek" checked={frequency.landfillGarbage?.thirdWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="thirdWeek" defaultChecked={frequency.find(item => item.gabageType === 2)?.thirdWeek} onChange={(event) => inputFrequency(event,2)}/>
                             第3週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="fourthWeek" checked={frequency.landfillGarbage?.fourthWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="fourthWeek" defaultChecked={frequency.find(item => item.gabageType === 2)?.fourthWeek} onChange={(event) => inputFrequency(event,2)}/>
                             第4週
                         </label>
                     </div>
                         🪵埋め立てごみ：
-                        <select className="p" name="recycleGarbageDay" value={modUsers.recycleGarbage} onChange={inputModUsers}><option value="">選択してください</option>
+                        <select className="p" name="recycleGarbage" value={frequency.find(item => item.gabageType === 3)?.dayOfWeek} onChange={(event) => inputFrequencyDay(event,3)}><option value="">選択してください</option>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
                             <option value="3">水曜日</option>
@@ -423,28 +447,28 @@ const Mypage = () => {
                         <br />
                         <div className="frequency">
                         <label>
-                            <input type="checkbox" name="firstWeek" checked={frequency.recycleGarbage?.firstWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="firstWeek" defaultChecked={frequency.find(item => item.gabageType === 3)?.firstWeek} onChange={(event) => inputFrequency(event,3)}/>
                             第1週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="secondWeek" checked={frequency.recycleGarbage?.secondWeek}onChange={inputFrequency}/> 
+                            <input type="checkbox" name="secondWeek" defaultChecked={frequency.find(item => item.gabageType === 3)?.secondWeek}onChange={(event) => inputFrequency(event,3)}/> 
                             第2週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="thirdWeek" checked={frequency.recycleGarbage?.thirdWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="thirdWeek" defaultChecked={frequency.find(item => item.gabageType === 3)?.thirdWeek} onChange={(event) => inputFrequency(event,3)}/>
                             第3週
                         </label>
 
                         <label>
-                            <input type="checkbox" name="fourthWeek" checked={frequency.recycleGarbage?.fourthWeek} onChange={inputFrequency}/>
+                            <input type="checkbox" name="fourthWeek" defaultChecked={frequency.find(item => item.gabageType === 3)?.fourthWeek} onChange={(event) => inputFrequency(event,3)}/>
                             第4週
                         </label>
                     </div>
 
 <div className="button-group">
-                        <button className="submit" onClick={updateGabageType}>更新</button>
+                        <button className="submit" onClick={modFrequency}>更新</button>
                         <button className="close"  onClick={toggleGabageTypeModal}>閉じる</button>
                         </div>
                     </div>
