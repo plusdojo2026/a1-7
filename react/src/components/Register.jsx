@@ -17,12 +17,37 @@ const Register = () => {
         setConfirmPassword(e.target.value);
     }
 
+    let createFrequency = (id) => {
+        const frequencyForm = {
+            id: null,
+            userId: id,
+            gabageType: null,
+            firstWeek: null,
+            secondWeek: null,
+            thirdWeek: null,
+            fourthWeek: null,
+            dayOfWeek: null,
+            dayOfWeek2: null
+        };
+
+        // デバッグ用ログ：どんなデータが送られるか確認
+        console.log("【送信データ】frequencyForm:", frequencyForm);
+
+        axios.post('http://localhost:8080/api/frequency/add/', frequencyForm)
+        .then(response => {
+          console.log('Frequencyレコードをつくったお', response.data);
+        })
+        .catch(error => {
+          console.error("Frequency作成失敗", error);
+        });
+    };
+
     let handleClick = () => {
         if(newUsers.name === ""){
             alert("ユーザー名を入力してください。")
             return;
         }
-        if(newUsers.name.length <1 || newUsers.name.length > 10){
+        if(newUsers.name.length < 1 || newUsers.name.length > 10){
             alert("ユーザー名は1文字以上10文字以下で入力してください。");
             return;
         }
@@ -39,7 +64,8 @@ const Register = () => {
             return;
         }
         if(newUsers.pw.length < 8 || newUsers.pw.length > 50){
-            alert("パスワードは8文字以上50文字以下で入力してください。")
+            alert("パスワードは8文字以上50文字以下で入力してください。");
+            return;
         }
         if(confirmPassword === ""){
             alert("正しいパスワードを入力してください。")
@@ -49,28 +75,27 @@ const Register = () => {
             alert("パスワードが一致しません。")
             return;
         }
+
         axios.post('http://localhost:8080/Register', newUsers)
         .then(response => {
+            console.log("登録レスポンス(response.data):", response.data);
 
-        // 返ってきた値を確認
-        console.log(response.data);
-
-        //成功
-        if(response.data === "OK"){
-            alert("新規登録しました");
-            setNewUsers({ name: '', userId: '', pw: ''});
-        
-
-             setConfirmPassword("");
-         
-            // ログイン画面へ遷移
-            navigate("/");
-        }else{
-            // ID重複などのエラー表示
-            alert(response.data);
-        }
+            if(response.data){
+                alert("新規登録しました");
+                setNewUsers({ name: '', userId: '', pw: ''});
+                setConfirmPassword("");
+                
+                createFrequency(response.data.id);
+                navigate("/");
+            }else{
+                alert("登録に失敗しました");
+            }
+        })
+        .catch(error => {
+            console.error("ユーザー登録エラー", error);
         });
     }
+
     return(
         <div className="register-page">
         <div className="login-container2">
@@ -82,7 +107,7 @@ const Register = () => {
             <p className="form-group2">PW
             <input type="password" name="pw" value={newUsers.pw} onChange={inputNewUsers} placeholder="8文字以上50文字以下"></input></p>
             <p className="form-group2">PW（確認用）
-            <input type="password" name="confirmPassword" value={confirmPassword} onChange={inputConfirmPassword}placeholder="確認用"></input></p>
+            <input type="password" name="confirmPassword" value={confirmPassword} onChange={inputConfirmPassword} placeholder="確認用"></input></p>
             <button className="login-button2" onClick={handleClick}>新規登録</button>
             <Link to="/" className="back-login">
             前の画面に戻る
