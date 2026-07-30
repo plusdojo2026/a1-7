@@ -12,34 +12,34 @@ INSERT IGNORE INTO Category(category_type) VALUES ('その他');
 -- 2. Products テーブル（家計簿データ）
 -- =========================================================================
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 0, 0, 'コンビニスイーツ', '2026-06-03', 1, 480, '2', 0, '2026-06-03 00:00:00');
+VALUES (1, 5, 0, 'コンビニスイーツ', '2026-06-03', 1, 480, '2', 0, '2026-06-03 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 0, 0, 'エナジードリンク', '2026-06-05', 1, 230, '2', 0, '2026-06-05 00:00:00');
+VALUES (1, 5, 0, 'エナジードリンク', '2026-06-05', 1, 230, '2', 0, '2026-06-05 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 0, 0, 'ポテトチップス', '2026-06-07', 1, 198, '3', 0, '2026-06-07 00:00:00');
+VALUES (1, 5, 0, 'ポテトチップス', '2026-06-07', 1, 198, '3', 0, '2026-06-07 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
 VALUES (1, 0, 0, 'サンダル', '2026-06-10', 2, 2980, '4', 1800, '2026-06-10 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 0, 0, 'ワイヤレスイヤホン', '2026-06-12', 4, 6980, '5', 4500, '2026-06-12 00:00:00');
+VALUES (1, 2, 4, 'ワイヤレスイヤホン', '2026-06-12', 4, 6980, '5', 4500, '2026-06-12 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 0, 0, 'スマホケース', '2026-06-15', 4, 1980, '3', 800, '2026-06-15 00:00:00');
+VALUES (1, 4, 0, 'スマホケース', '2026-06-15', 4, 1980, '3', 800, '2026-06-15 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 0, 0, 'アクリルスタンド', '2026-06-17', 6, 1650, '4', 500, '2026-06-17 00:00:00');
+VALUES (1, 3, 0, 'アクリルスタンド', '2026-06-17', 6, 1650, '4', 500, '2026-06-17 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 0, 0, 'ゲーム課金', '2026-06-20', 5, 5000, '5', 0, '2026-06-20 00:00:00');
+VALUES (1, 5, 0, 'ゲーム課金', '2026-06-20', 5, 5000, '5', 0, '2026-06-20 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
 VALUES (1, 0, 0, 'ガチャガチャ', '2026-06-21', 6, 500, '3', 0, '2026-06-21 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 0, 0, '漫画', '2026-06-24', 5, 770, '4', 300, '2026-06-24 00:00:00');
+VALUES (1, 2, 1, '漫画', '2026-06-24', 5, 770, '4', 300, '2026-06-24 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
 VALUES (1, 0, 0, 'キャップ', '2026-06-27', 2, 3200, '4', 1800, '2026-06-27 00:00:00');
@@ -51,7 +51,7 @@ INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, sel
 VALUES (1, 0, 0, 'キーホルダー', '2026-07-04', 6, 980, '3', 300, '2026-07-04 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 0, 0, '折りたたみ傘', '2026-07-08', 3, 2200, '4', 1200, '2026-07-08 00:00:00');
+VALUES (1, 2, 2, '折りたたみ傘', '2026-07-08', 3, 2200, '4', 1200, '2026-07-08 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
 VALUES (1, 0, 0, 'Bluetoothスピーカー', '2026-07-13', 4, 5980, '5', 3800, '2026-07-13 00:00:00');
@@ -66,10 +66,10 @@ INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, sel
 VALUES (1, 0, 0, 'タンブラー', '2026-07-20', 4, 2500, '3', 1000, '2026-07-20 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 0, 0, 'Tシャツ', '2026-07-23', 2, 3900, '4', 2200, '2026-07-23 00:00:00');
+VALUES (1, 3, 0, 'Tシャツ', '2026-07-23', 2, 3900, '4', 2200, '2026-07-23 00:00:00');
 
 INSERT INTO Products(user_id, ap_type, separation, name, buy_date, category, selling_price, valuation, purchase_price, created_at)
-VALUES (1, 0, 0, 'お菓子詰め合わせ', '2026-07-28', 1, 1280, '3', 0, '2026-07-28 00:00:00');
+VALUES (1, 5, 0, 'お菓子詰め合わせ', '2026-07-28', 1, 1280, '3', 0, '2026-07-28 00:00:00');
 -- =========================================================================
 -- 3. comment テーブル（アドバイスシステム）
 -- =========================================================================
