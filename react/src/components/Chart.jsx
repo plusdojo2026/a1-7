@@ -33,6 +33,8 @@ export default function Chart(){
 
   const [spendingTotal, setSpendingTotal] = useState(0);
 
+  const [lastTotal, setLastTotal] = useState(0);
+
   useEffect(() => {
   document.body.classList.add("chart-screen");
 
@@ -85,11 +87,17 @@ export default function Chart(){
 
       //総浪費額保存
       setSpendingTotal(data.total)
+
+       // 先月総浪費額保存
+      setLastTotal(data.lastTotal);
     });
+
+   
 
 }, [month]);
 
- 
+ const diff = spendingTotal - lastTotal;
+
   return(
     
   <div className="chart-page">
@@ -112,6 +120,11 @@ export default function Chart(){
       </div>
       <div className="total-card">
       <p className="total-title">総浪費額：{spendingTotal}円</p>
+      <p>
+      {diff > 0
+      ? `先月より${diff}円多く浪費しました`
+      : `先月より${Math.abs(diff)}円浪費を抑えられました`}
+      </p>
       </div>
     
       <BottomNav />

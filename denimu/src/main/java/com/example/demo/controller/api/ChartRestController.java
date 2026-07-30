@@ -1,5 +1,6 @@
 package com.example.demo.controller.api;
 
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +38,12 @@ public class ChartRestController {
 	    public Map<String,Object> graph(
 	            @RequestParam String month,
 	            @RequestParam Integer userId,
+	           
 	            HttpSession session
 	    ) {
+		  //前月
+	        YearMonth current = YearMonth.parse(month);
+	        String lastMonth = current.minusMonths(1).toString();
 		//  System.out.println("受け取った月：" + month);
 
 	        // DBから月とuserId指定で取得
@@ -46,11 +51,16 @@ public class ChartRestController {
 	                productsRepository.findByUserIdAndMonth(userId,month);
 
 	        //System.out.println("件数：" + products.size());
-
+	        
+	     // 前月データ取得
+	        List<Products> lastProducts =
+	            productsRepository.findByUserIdAndMonth(userId, lastMonth);
 
 
 	      //カテゴリごとの集計用
 	        Map<Integer, Map<String,Object>> result = new HashMap<>();
+	        
+	      
 
 	        int totalBuy = 0;
 	        int totalSell = 0;
@@ -96,6 +106,19 @@ public class ChartRestController {
 
 	            data.put("sell", sell);
 	        }
+	        
+	     // 前月合計
+	        int lastBuy = 0;
+	        int lastSell = 0;
+
+	        for(Products p : lastProducts){
+
+	            lastBuy += p.getSellingPrice();
+	            lastSell += p.getPurchasePrice();
+
+	        }
+
+	        int lastTotalWaste = lastBuy - lastSell;
 
 
 
@@ -117,7 +140,10 @@ public class ChartRestController {
 	            "total",totalWaste
 
 	        );
-
+	        response.put(
+	        	    "lastTotal",
+	        	    lastTotalWaste
+	        	);
 
 	        return response;
 	    }
