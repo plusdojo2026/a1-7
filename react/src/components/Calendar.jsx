@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Calendar from 'react-calendar';
 import Select from 'react-select';
 import axios from 'axios';
@@ -81,10 +81,20 @@ const MyCalendar = () => {
     return date.getDay(); 
   };
 
-  const getGarbageForDate = (date) => {
+  // 31日まである月や曜日回数を考慮した正確な第何週目（第1〜第5）の判定
+  const getGarbageForDate = useCallback((date) => {
     if (!date) return [];
-    const dayOfWeek = getDayOfWeek(date);
-    const weekNum = Math.ceil(date.getDate() / 7);
+    const dayOfWeek = getDayOfWeek(date); 
+    const day = date.getDate();
+    
+    let count = 0;
+    for (let d = 1; d <= day; d++) {
+      const tempDate = new Date(date.getFullYear(), date.getMonth(), d);
+      if (tempDate.getDay() === dayOfWeek) {
+        count++;
+      }
+    }
+    const weekNum = count; 
 
     return frequencies.filter(f => {
       const isMatchingDay = (
@@ -98,10 +108,11 @@ const MyCalendar = () => {
       if (weekNum === 2 && f.secondWeek) isMatchingWeek = true;
       if (weekNum === 3 && f.thirdWeek) isMatchingWeek = true;
       if (weekNum === 4 && f.fourthWeek) isMatchingWeek = true;
+      if (weekNum === 5 && f.fifthWeek) isMatchingWeek = true; // 第5週
       
       return isMatchingWeek;
     });
-  };
+  }, [frequencies]);
 
   const selectedDateGarbage = getGarbageForDate(selectedDate);
 
@@ -147,27 +158,13 @@ const MyCalendar = () => {
   const inputModWaste = (e) => {
     setModWaste({ ...modWaste, [e.target.name]: e.target.value })
   };
-  
-  const handleSelectChange = (selectedOption) => {
-    setNewWaste({
-      ...newWaste,
-      category: selectedOption ? selectedOption.value : ''
-    });
-  };
 
   const modWasteStart = (index) => {
     setModWaste(dailyWastes[index]);
     setModalStep(2);
   };
 
-  useEffect(() => {
-    if (id) {
-      refreshWasteList();
-      refreshFrequencyList();
-    }
-  }, [id]);
-
-  const refreshWasteList = () => {
+  const refreshWasteList = useCallback(() => {
     if (!id) return;
     fetch(`/api/waste/?id=${id}`)
       .then(response => {
@@ -178,9 +175,9 @@ const MyCalendar = () => {
       })
       .then(json => setWaste(json || []))
       .catch(err => console.error("データ取得エラー:", err));
-  };
+  }, [id]);
 
-  const refreshFrequencyList = () => {
+  const refreshFrequencyList = useCallback(() => {
     if (!id) return;
     fetch(`/api/frequency/?id=${id}`)
       .then(response => {
@@ -191,7 +188,14 @@ const MyCalendar = () => {
       })
       .then(json => setFrequencies(json || []))
       .catch(err => console.error("スケジュール取得エラー：", err));
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      refreshWasteList();
+      refreshFrequencyList();
+    }
+  }, [id, refreshWasteList, refreshFrequencyList]);
 
   const RegisterCheck = (targetData) => {
     if (!targetData.name) {
@@ -231,7 +235,7 @@ const MyCalendar = () => {
     };
 
     axios.post('/api/waste/add/', wasteWithDateTime)
-    .then(response => {
+    .then(() => {
       refreshWasteList();
       setNewWaste(firstForm);
       alert('保存しました！');
@@ -255,7 +259,7 @@ const MyCalendar = () => {
     };
 
     axios.post('/api/waste/mod/', formattedModWaste)
-    .then(response => {
+    .then(() => {
       refreshWasteList();
       alert('保存しました！');
       setShowModal(false);
@@ -269,7 +273,7 @@ const MyCalendar = () => {
   const deleteWaste = () => {
     if (!modWaste.id) return;
     axios.post('/api/waste/del/', { id: modWaste.id })
-    .then(response => {
+    .then(() => {
       refreshWasteList();
       alert('削除しました!');
       setShowModal(false);
@@ -296,7 +300,8 @@ const MyCalendar = () => {
 
     setNewWaste({
       ...firstForm,
-      buyDate: clickedDateStr
+      buyDate: clickedDateStr,
+      userId: id
     });
 
     setShowModal(true);
@@ -306,7 +311,8 @@ const MyCalendar = () => {
     if (modalStep === 1) {
       setNewWaste({
         ...firstForm,
-        buyDate: formattedSelectedDate
+        buyDate: formattedSelectedDate,
+        userId: id
       });
     } else if (modalStep === 2) {
       setModWaste(secondForm);
@@ -353,7 +359,6 @@ const MyCalendar = () => {
     <>
       <Header />
 
-      {/* 通知モーダル */}
       {noticeVisible && (
         <div className="notice-container">
           <div className="notice-card">
@@ -501,7 +506,10 @@ const MyCalendar = () => {
                       <label>カテゴリー</label>
                       <Select
                         options={options}
-                        onChange={handleSelectChange}
+                        onChange={(selectedOption) => setNewWaste({
+                          ...newWaste,
+                          category: selectedOption ? selectedOption.value : ''
+                        })}
                         value={options.find(opt => opt.value === String(newWaste.category)) || null}
                         placeholder="選択してください"
                         isClearable 
@@ -560,9 +568,7 @@ const MyCalendar = () => {
                     <div className="form-actions">
                       <button className="btn-back" onClick={() => setModalStep(0)}>◀ 戻る</button>
                       <button className="btn-reset" onClick={handleReset}>リセット</button>
-                      <button className="btn-submit" onClick={() => {
-                        addNewWaste();
-                      }}>登録</button>
+                      <button className="btn-submit" onClick={addNewWaste}>登録</button>
                     </div>
                   </div>
                 )}
@@ -661,12 +667,8 @@ const MyCalendar = () => {
                     <div className="form-actions">
                       <button className="btn-back" onClick={() => setModalStep(0)}>◀ 戻る</button>
                       <button className="btn-reset" onClick={handleReset}>リセット</button>
-                      <button className="btn-submit" onClick={() => {
-                        updateWaste();
-                      }}>保存</button>
-                      <button className="btn-delete" onClick={() => {
-                        deleteWaste();
-                      }}>削除</button>
+                      <button className="btn-submit" onClick={updateWaste}>保存</button>
+                      <button className="btn-delete" onClick={deleteWaste}>削除</button>
                     </div>
                   </div>
                 )}

@@ -20,6 +20,7 @@ const Mypage = () => {
             secondWeek: false,
             thirdWeek: false,
             fourthWeek: false,
+            fifthWeek: false,
             dayOfWeek: 0,
             dayOfWeek2: 0
         }
@@ -381,8 +382,13 @@ const Mypage = () => {
                             <input type="checkbox" name="fourthWeek" defaultChecked={frequency.find(item => item.gabageType === 1)?.fourthWeek} onChange={(event) => inputFrequency(event,1)}/>
                             第4週
                         </label>
+
+                        <label>
+                            <input type="checkbox" name="fifthWeek" defaultChecked={frequency.find(item => item.gabageType === 1)?.fifthWeek} onChange={(event) => inputFrequency(event,1)}/>
+                            第5週
+                        </label>
                     </div>
-                        ♻️資源ごみ：
+                    💎不燃ごみ：
                         <select className="p" name="nofireGarbage" value={frequency.find(item => item.gabageType === 4)?.dayOfWeek} onChange={(event) => inputFrequencyDay(event,4)}>
                             <option value="">選択してください</option>
                             <option value="1">月曜日</option>
@@ -414,8 +420,13 @@ const Mypage = () => {
                             <input type="checkbox" name="fourthWeek" defaultChecked={frequency.find(item => item.gabageType === 4)?.fourthWeek} onChange={(event) => inputFrequency(event,4)}/>
                             第4週
                         </label>
+
+                        <label>
+                            <input type="checkbox" name="fifthWeek" defaultChecked={frequency.find(item => item.gabageType === 4)?.fifthWeek} onChange={(event) => inputFrequency(event,1)}/>
+                            第5週
+                        </label>
                     </div>
-                        💎不燃ごみ：
+                        ♻️埋め立てごみ：
                         <select className="p" name="landfillGarbage" value={frequency.find(item => item.gabageType === 2)?.dayOfWeek} onChange={(event) => inputFrequencyDay(event,2)}>
                             <option value="0">選択してください</option>
                             <option value="1">月曜日</option>
@@ -447,8 +458,13 @@ const Mypage = () => {
                             <input type="checkbox" name="fourthWeek" defaultChecked={frequency.find(item => item.gabageType === 2)?.fourthWeek} onChange={(event) => inputFrequency(event,2)}/>
                             第4週
                         </label>
+
+                        <label>
+                            <input type="checkbox" name="fifthWeek" defaultChecked={frequency.find(item => item.gabageType === 1)?.fifthWeek} onChange={(event) => inputFrequency(event,1)}/>
+                            第5週
+                        </label>
                     </div>
-                        🪵埋め立てごみ：
+                        🪵その他：
                         <select className="p" name="recycleGarbage" value={frequency.find(item => item.gabageType === 3)?.dayOfWeek} onChange={(event) => inputFrequencyDay(event,3)}><option value="">選択してください</option>
                             <option value="1">月曜日</option>
                             <option value="2">火曜日</option>
@@ -478,6 +494,11 @@ const Mypage = () => {
                         <label>
                             <input type="checkbox" name="fourthWeek" defaultChecked={frequency.find(item => item.gabageType === 3)?.fourthWeek} onChange={(event) => inputFrequency(event,3)}/>
                             第4週
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="fifthWeek" defaultChecked={frequency.find(item => item.gabageType === 1)?.fifthWeek} onChange={(event) => inputFrequency(event,1)}/>
+                            第5週
                         </label>
                     </div>
 
