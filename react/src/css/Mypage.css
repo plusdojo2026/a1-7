@@ -210,6 +210,7 @@ position: absolute;
     position: relative;
     min-height: 100vh;
     z-index: 0;
+    padding-top: 30px;
 }
 
 .mypage-page::before {
